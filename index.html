@@ -35,10 +35,10 @@
   html,body{height:100%;}
   body{
     margin:0;
-    background:
+    background-color: var(--ink);
+    background-image:
       radial-gradient(1200px 600px at 15% -10%, #241c14 0%, transparent 60%),
-      radial-gradient(1000px 700px at 110% 10%, #251b16 0%, transparent 55%),
-      var(--ink);
+      radial-gradient(1000px 700px at 110% 10%, #251b16 0%, transparent 55%);
     color:var(--text-hi);
     font-family:'Inter',sans-serif;
     -webkit-font-smoothing:antialiased;
@@ -100,6 +100,7 @@
   #login-view{
     min-height:100vh;display:flex;align-items:center;justify-content:center;
     padding:30px 22px;
+    background-color: var(--ink);
   }
   .login-wrap{max-width:520px;width:100%;text-align:center;}
   .login-brand{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:8px;}
@@ -192,11 +193,11 @@
     overscroll-behavior:contain;
     border:1px solid rgba(246,239,225,0.1);
     border-radius:10px;
-    background:
+    background-color: #1a1510;
+    background-image:
       linear-gradient(rgba(246,239,225,0.05) 1px, transparent 1px) 0 0/100px 100px,
       linear-gradient(90deg, rgba(246,239,225,0.05) 1px, transparent 1px) 0 0/100px 100px,
-      radial-gradient(1200px 500px at 30% 0%, #241d15 0%, transparent 60%),
-      #1a1510;
+      radial-gradient(1200px 500px at 30% 0%, #241d15 0%, transparent 60%);
     padding:20px;
   }
   .floor{
@@ -822,12 +823,11 @@
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCOeKqKPDWA_Ha9jzZnveQaHcFtx4wWZGE",
   authDomain: "kobo-2aea4.firebaseapp.com",
-  databaseURL: "https://gatsbys-stocks.github.io/kobo/",
+  databaseURL: "PENDIENTE_CREAR_REALTIME_DATABASE", // ← ver instrucciones abajo
   projectId: "kobo-2aea4",
   storageBucket: "kobo-2aea4.firebasestorage.app",
   messagingSenderId: "490070778149",
   appId: "1:490070778149:web:6fc91223d6fe9f04697acc"
-  measurementId: "G-RBPYGDXZ2T"
 };
 let firebaseReady = false;
 let db = null;
