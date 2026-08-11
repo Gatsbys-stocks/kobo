@@ -576,8 +576,54 @@
   .ticket-total .lbl{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-ink-lo);}
   .ticket-total .val{font-family:'Shippori Mincho',serif;font-weight:800;font-size:22px;}
   .ticket-count{font-size:11px;color:var(--text-ink-lo);}
+  .park-btn{
+    width:100%;margin-top:12px;
+    background:rgba(28,21,14,0.06);border:1px solid rgba(28,21,14,0.16);
+    color:var(--text-ink-hi);padding:10px;border-radius:10px;
+    font-size:12.5px;font-weight:700;cursor:pointer;
+  }
+  .park-btn:hover{background:rgba(28,21,14,0.1);}
 
   .mobile-ticket-toggle{display:none;}
+
+  /* picker de mesas (juntar / recuperar tiquet) */
+  .picker-box{
+    background:var(--paper);color:#000;border-radius:14px;
+    padding:22px;max-width:420px;width:100%;
+    box-shadow:var(--shadow);text-align:center;
+  }
+  .picker-box p{margin:0 0 16px;font-size:14px;font-weight:700;line-height:1.4;}
+  .picker-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;
+    max-height:50vh;overflow-y:auto;
+  }
+  .picker-chip{
+    background:rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.12);
+    border-radius:8px;padding:10px 4px;font-size:12.5px;font-weight:700;
+    color:#000;cursor:pointer;
+  }
+  .picker-chip.busy{background:rgba(178,58,46,0.12);border-color:rgba(178,58,46,0.4);color:var(--stamp-dark);}
+  .picker-chip:hover{border-color:var(--gold);}
+  .picker-cancel{
+    width:100%;padding:11px 10px;border-radius:8px;font-size:13.5px;font-weight:700;
+    cursor:pointer;border:none;background:rgba(0,0,0,0.08);color:#000;
+  }
+
+  /* prompt (aparcar tiquet) */
+  .prompt-input{
+    width:100%;background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.16);
+    color:#000;padding:11px 14px;border-radius:10px;font-size:14px;
+    margin-bottom:16px;outline:none;text-align:center;
+  }
+  .prompt-input:focus{border-color:var(--gold);}
+
+  /* acciones dentro de un tiquet aparcado */
+  .parked-actions{display:flex;gap:8px;margin-top:10px;}
+  .parked-resume, .parked-delete{
+    flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;
+  }
+  .parked-resume{background:var(--stamp);color:var(--text-hi);}
+  .parked-delete{background:rgba(0,0,0,0.07);color:#000;}
 
   /* scrollbars */
   .cat-rail::-webkit-scrollbar, .items-area::-webkit-scrollbar, .ticket-items::-webkit-scrollbar{width:8px;}
@@ -779,6 +825,7 @@
               <span class="val" id="ticket-total">0.00 €</span>
             </div>
             <div class="ticket-count" id="ticket-count">0 artículos</div>
+            <button class="park-btn" id="park-btn">📦 Aparcar</button>
           </div>
         </div>
       </aside>
@@ -838,6 +885,7 @@ const SESSION_CODES = ["0220", "3040", "6090"];
 let currentSession = null;
 let ordersRef = null;
 let historyRef = null;
+let parkedRef = null;
 
 /* ===================== DATA (multi-idioma) ===================== */
 const MENU_SRC = [
@@ -1061,6 +1109,28 @@ const I18N = {
     toastNoSaldo: "No hay pedidos abiertos en sala.",
     toastTickets: "Tickets aparcados: función no incluida en esta demo.",
     toastJuntar: "Juntar mesas: función no incluida en esta demo.",
+    parkBtn: "📦 Aparcar",
+    toastNoOrderToPark: "Esta mesa no tiene pedido para aparcar.",
+    parkPrompt: "Ponle un nombre a este tiquet (ej. Terraza, Para llevar…).",
+    parkPlaceholder: "Nombre del tiquet",
+    parkOk: "Aparcar",
+    toastParked: "Tiquet aparcado.",
+    parkedTitle: "Tickets aparcados",
+    parkedEmpty: "No hay tickets aparcados.",
+    parkedResume: "Recuperar",
+    parkedDelete: "Eliminar",
+    confirmDeleteParked: "¿Eliminar este tiquet aparcado? No se puede deshacer.",
+    deleteOk: "Eliminar",
+    toastParkedDeleted: "Tiquet eliminado.",
+    pickResumeTarget: "Elige la mesa donde quieres recuperar este tiquet.",
+    toastResumed: (label)=> "Tiquet recuperado en " + label + ".",
+    pickSourceMerge: "Elige la mesa de ORIGEN (se vaciará).",
+    pickDestMerge: "Elige la mesa de DESTINO (se juntará aquí).",
+    confirmMerge: (a,b)=> "¿Juntar todo el pedido de " + a.toLowerCase() + " con " + b.toLowerCase() + "? " + a + " quedará libre.",
+    mergeOk: "Juntar",
+    toastMerged: (a,b)=> a + " juntada con " + b + ".",
+    toastMergeEmptySource: "Esa mesa está vacía, no hay nada que juntar.",
+    toastMergeSame: "Elige dos mesas distintas.",
     historyTitle: "Historial de pagos",
     historyCount: (n)=> n + " pago(s) registrados",
     historyEmpty: "Todavía no hay pagos registrados.<br>Cuando marques una mesa como pagada, aparecerá aquí.",
@@ -1110,6 +1180,28 @@ const I18N = {
     toastNoSaldo: "No hi ha comandes obertes a la sala.",
     toastTickets: "Tiquets aparcats: funció no inclosa en aquesta demo.",
     toastJuntar: "Ajuntar taules: funció no inclosa en aquesta demo.",
+    parkBtn: "📦 Aparcar",
+    toastNoOrderToPark: "Aquesta taula no té comanda per aparcar.",
+    parkPrompt: "Posa un nom a aquest tiquet (ex. Terrassa, Per emportar…).",
+    parkPlaceholder: "Nom del tiquet",
+    parkOk: "Aparcar",
+    toastParked: "Tiquet aparcat.",
+    parkedTitle: "Tiquets aparcats",
+    parkedEmpty: "No hi ha tiquets aparcats.",
+    parkedResume: "Recuperar",
+    parkedDelete: "Eliminar",
+    confirmDeleteParked: "Vols eliminar aquest tiquet aparcat? No es pot desfer.",
+    deleteOk: "Eliminar",
+    toastParkedDeleted: "Tiquet eliminat.",
+    pickResumeTarget: "Tria la taula on vols recuperar aquest tiquet.",
+    toastResumed: (label)=> "Tiquet recuperat a " + label + ".",
+    pickSourceMerge: "Tria la taula d'ORIGEN (es buidarà).",
+    pickDestMerge: "Tria la taula de DESTÍ (s'ajuntarà aquí).",
+    confirmMerge: (a,b)=> "Vols ajuntar tota la comanda de " + a.toLowerCase() + " amb " + b.toLowerCase() + "? " + a + " quedarà lliure.",
+    mergeOk: "Ajuntar",
+    toastMerged: (a,b)=> a + " ajuntada amb " + b + ".",
+    toastMergeEmptySource: "Aquesta taula està buida, no hi ha res per ajuntar.",
+    toastMergeSame: "Tria dues taules diferents.",
     historyTitle: "Historial de pagaments",
     historyCount: (n)=> n + " pagament(s) registrats",
     historyEmpty: "Encara no hi ha pagaments registrats.<br>Quan marquis una taula com a pagada, apareixerà aquí.",
@@ -1159,6 +1251,28 @@ const I18N = {
     toastNoSaldo: "No open orders on the floor.",
     toastTickets: "Parked tickets: not included in this demo.",
     toastJuntar: "Merge tables: not included in this demo.",
+    parkBtn: "📦 Park",
+    toastNoOrderToPark: "This table has no order to park.",
+    parkPrompt: "Give this ticket a name (e.g. Terrace, Takeaway…).",
+    parkPlaceholder: "Ticket name",
+    parkOk: "Park",
+    toastParked: "Ticket parked.",
+    parkedTitle: "Parked tickets",
+    parkedEmpty: "No parked tickets.",
+    parkedResume: "Resume",
+    parkedDelete: "Delete",
+    confirmDeleteParked: "Delete this parked ticket? This can't be undone.",
+    deleteOk: "Delete",
+    toastParkedDeleted: "Ticket deleted.",
+    pickResumeTarget: "Pick the table to resume this ticket on.",
+    toastResumed: (label)=> "Ticket resumed on " + label + ".",
+    pickSourceMerge: "Pick the SOURCE table (it will be cleared).",
+    pickDestMerge: "Pick the DESTINATION table (everything moves here).",
+    confirmMerge: (a,b)=> "Merge the whole order from " + a.toLowerCase() + " into " + b.toLowerCase() + "? " + a + " will become free.",
+    mergeOk: "Merge",
+    toastMerged: (a,b)=> a + " merged into " + b + ".",
+    toastMergeEmptySource: "That table is empty, nothing to merge.",
+    toastMergeSame: "Pick two different tables.",
     historyTitle: "Payment history",
     historyCount: (n)=> n + " payment(s) recorded",
     historyEmpty: "No payments recorded yet.<br>Once you mark a table as paid, it will show up here.",
@@ -1217,6 +1331,8 @@ function tableLabel(id){ return (isBarra(id) ? I18N[currentLang].barraLabel : I1
 
 let history = [];             // pagos registrados: { id, table, ts, items:[{name,qty,price}], total }
 let historyCounter = 1;
+let parked = [];              // tiquets aparcados: { id, label, ts, items:{itemId:qty}, total }
+let parkedCounter = 1;
 
 /* ===================== HELPERS ===================== */
 const eur = n => n.toFixed(2).replace(".", ",") + " €";
@@ -1244,6 +1360,13 @@ function historyFromSnapshot(val){
   return Object.keys(val).sort().map(k => ({
     id: k, table: val[k].table, ts: val[k].ts,
     items: val[k].items || [], total: val[k].total || 0
+  }));
+}
+function parkedFromSnapshot(val){
+  if(!val) return [];
+  return Object.keys(val).sort().map(k => ({
+    id: k, label: val[k].label, ts: val[k].ts,
+    items: val[k].items || {}, total: val[k].total || 0
   }));
 }
 function refreshAfterOrdersChange(){
@@ -1287,6 +1410,7 @@ function attachSessionListeners(code){
   detachSessionListeners();
   ordersRef = db.ref("sessions/" + code + "/orders");
   historyRef = db.ref("sessions/" + code + "/history");
+  parkedRef = db.ref("sessions/" + code + "/parked");
   ordersRef.on("value", snap=>{
     const val = snap.val() || {};
     const next = {};
@@ -1297,12 +1421,17 @@ function attachSessionListeners(code){
   historyRef.on("value", snap=>{
     history = historyFromSnapshot(snap.val());
   });
+  parkedRef.on("value", snap=>{
+    parked = parkedFromSnapshot(snap.val());
+  });
 }
 function detachSessionListeners(){
   if(ordersRef) ordersRef.off();
   if(historyRef) historyRef.off();
+  if(parkedRef) parkedRef.off();
   ordersRef = null;
   historyRef = null;
+  parkedRef = null;
 }
 // Entrar en una sesión (código de sala compartida).
 function joinSession(code){
@@ -1310,6 +1439,7 @@ function joinSession(code){
   orders = {};
   ALL_IDS.forEach(id => orders[id] = {});
   history = [];
+  parked = [];
   document.getElementById("current-session-label").textContent = code;
   if(firebaseReady){
     attachSessionListeners(code);
@@ -1326,6 +1456,7 @@ function leaveSession(){
   orders = {};
   ALL_IDS.forEach(id => orders[id] = {});
   history = [];
+  parked = [];
   currentTable = null;
   document.getElementById("home-view").hidden = true;
   document.getElementById("table-view").hidden = true;
@@ -1344,8 +1475,7 @@ function writeQty(tableId, itemId, qty){
   } else {
     if(qty <= 0) delete orders[tableId][itemId];
     else orders[tableId][itemId] = qty;
-    renderItems();
-    renderTicket();
+    refreshAfterOrdersChange();
   }
 }
 function writeClearTable(tableId){
@@ -1353,8 +1483,7 @@ function writeClearTable(tableId){
     db.ref("sessions/" + currentSession + "/orders/" + tableId).remove();
   } else {
     orders[tableId] = {};
-    renderItems();
-    renderTicket();
+    refreshAfterOrdersChange();
   }
 }
 function writePay(tableId, record){
@@ -1371,11 +1500,57 @@ function writeCloseDay(){
   if(firebaseReady && currentSession){
     db.ref("sessions/" + currentSession + "/orders").remove();
     db.ref("sessions/" + currentSession + "/history").remove();
+    db.ref("sessions/" + currentSession + "/parked").remove();
   } else {
     orders = {};
     ALL_IDS.forEach(id => orders[id] = {});
     history = [];
+    parked = [];
   }
+}
+function writePark(tableId, label){
+  const items = Object.assign({}, orders[tableId]);
+  const localeMap = { es:"es-ES", ca:"ca-ES", en:"en-GB" };
+  const record = {
+    label: label,
+    ts: new Date().toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}),
+    items: items,
+    total: tableTotal(tableId)
+  };
+  if(firebaseReady && currentSession){
+    db.ref("sessions/" + currentSession + "/parked").push(record);
+    db.ref("sessions/" + currentSession + "/orders/" + tableId).remove();
+  } else {
+    record.id = "p" + (parkedCounter++);
+    parked.push(record);
+    orders[tableId] = {};
+  }
+}
+function writeRemoveParked(key){
+  if(firebaseReady && currentSession){
+    db.ref("sessions/" + currentSession + "/parked/" + key).remove();
+  } else {
+    parked = parked.filter(p => p.id !== key);
+  }
+}
+function resumeParked(key, targetId){
+  const rec = parked.find(p => p.id === key);
+  if(!rec) return;
+  Object.keys(rec.items).forEach(id=>{
+    const addQty = rec.items[id];
+    const cur = orders[targetId][id] || 0;
+    writeQty(targetId, id, cur + addQty);
+  });
+  writeRemoveParked(key);
+}
+function mergeTables(source, dest){
+  const items = orders[source] || {};
+  Object.keys(items).forEach(id=>{
+    const addQty = items[id];
+    const cur = orders[dest][id] || 0;
+    writeQty(dest, id, cur + addQty);
+  });
+  writeClearTable(source);
 }
 
 /* ===================== RENDER: HOME (plano de sala) ===================== */
@@ -1463,6 +1638,60 @@ function showConfirm(msg, okLabel, onYes){
   });
 }
 
+function showPrompt(msg, placeholder, okLabel, onSubmit){
+  const overlay = document.createElement("div");
+  overlay.className = "confirm-overlay";
+  overlay.innerHTML = `
+    <div class="confirm-box">
+      <p>${msg}</p>
+      <input type="text" class="prompt-input" placeholder="${placeholder}" maxlength="30">
+      <div class="confirm-actions">
+        <button class="confirm-cancel">${I18N[currentLang].cancel}</button>
+        <button class="confirm-ok">${okLabel}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  const input = overlay.querySelector(".prompt-input");
+  setTimeout(()=>input.focus(), 50);
+  const submit = ()=>{
+    const val = input.value.trim();
+    overlay.remove();
+    onSubmit(val);
+  };
+  overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
+  overlay.querySelector(".confirm-cancel").addEventListener("click", ()=>overlay.remove());
+  overlay.querySelector(".confirm-ok").addEventListener("click", submit);
+  input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); submit(); } });
+}
+
+// Selector de mesa/barra genérico (para juntar mesas y recuperar tiquets aparcados).
+function openTablePicker(promptText, onPick, excludeId){
+  const overlay = document.createElement("div");
+  overlay.className = "confirm-overlay";
+  const chips = ALL_IDS.filter(id => id !== excludeId).map(id=>{
+    const busy = tableCount(id) > 0;
+    return `<button class="picker-chip${busy ? " busy" : ""}" data-id="${id}">${tableLabel(id)}</button>`;
+  }).join("");
+  overlay.innerHTML = `
+    <div class="picker-box">
+      <p>${promptText}</p>
+      <div class="picker-grid">${chips}</div>
+      <button class="picker-cancel">${I18N[currentLang].cancel}</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
+  overlay.querySelector(".picker-cancel").addEventListener("click", ()=>overlay.remove());
+  overlay.querySelectorAll(".picker-chip").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = Number(btn.dataset.id);
+      overlay.remove();
+      onPick(id);
+    });
+  });
+}
+
 document.getElementById("btn-saldo").addEventListener("click", ()=>{
   const activeIds = ALL_IDS.filter(id=>tableCount(id)>0);
   const total = activeIds.reduce((s,id)=>s+tableTotal(id),0);
@@ -1471,11 +1700,28 @@ document.getElementById("btn-saldo").addEventListener("click", ()=>{
     : I18N[currentLang].toastNoSaldo);
 });
 document.getElementById("btn-salon").addEventListener("click", renderHome);
-document.getElementById("btn-tickets").addEventListener("click", ()=>{
-  showToast(I18N[currentLang].toastTickets);
-});
+document.getElementById("btn-tickets").addEventListener("click", openParkedList);
 document.getElementById("btn-juntar").addEventListener("click", ()=>{
-  showToast(I18N[currentLang].toastJuntar);
+  openTablePicker(I18N[currentLang].pickSourceMerge, (source)=>{
+    if(tableCount(source) === 0){
+      showToast(I18N[currentLang].toastMergeEmptySource);
+      return;
+    }
+    openTablePicker(I18N[currentLang].pickDestMerge, (dest)=>{
+      if(dest === source){
+        showToast(I18N[currentLang].toastMergeSame);
+        return;
+      }
+      showConfirm(
+        I18N[currentLang].confirmMerge(tableLabel(source), tableLabel(dest)),
+        I18N[currentLang].mergeOk,
+        ()=>{
+          mergeTables(source, dest);
+          showToast(I18N[currentLang].toastMerged(tableLabel(source), tableLabel(dest)));
+        }
+      );
+    }, source);
+  });
 });
 document.getElementById("btn-historial").addEventListener("click", openHistory);
 
@@ -1498,6 +1744,7 @@ function applyStaticText(){
   document.getElementById("back-btn").textContent = t.back;
   document.getElementById("search-input").placeholder = t.searchPh;
   document.getElementById("pay-btn").textContent = t.pay;
+  document.getElementById("park-btn").textContent = t.parkBtn;
   document.getElementById("clear-mesa-btn").textContent = t.clear;
   document.getElementById("ticket-brand-mark").textContent = t.ticketMark;
   document.getElementById("ticket-total-label").textContent = t.total;
@@ -1587,6 +1834,91 @@ function openHistory(){
   overlay.querySelectorAll(".history-entry-head").forEach(head=>{
     head.addEventListener("click", ()=>{
       head.parentElement.classList.toggle("open");
+    });
+  });
+}
+
+function openParkedList(){
+  const overlay = document.createElement("div");
+  overlay.className = "confirm-overlay";
+
+  const listHtml = parked.length === 0
+    ? `<div class="history-empty">${I18N[currentLang].parkedEmpty}</div>`
+    : [...parked].reverse().map(p => {
+        const itemsHtml = Object.keys(p.items).map(id=>{
+          const item = FLAT.find(f=>f.id===id);
+          if(!item) return "";
+          const qty = p.items[id];
+          return `
+            <div class="hdet-line">
+              <span><span class="q">${qty}×</span>${item.name}</span>
+              <span>${eur(item.price * qty)}</span>
+            </div>
+          `;
+        }).join("");
+        return `
+          <div class="history-entry" data-pid="${p.id}">
+            <div class="history-entry-head">
+              <div>
+                <div class="htitle">${p.label}</div>
+                <div class="hmeta">${p.ts}</div>
+              </div>
+              <div class="htotal">${eur(p.total)}</div>
+              <div class="chev">▾</div>
+            </div>
+            <div class="history-entry-detail">
+              ${itemsHtml}
+              <div class="parked-actions">
+                <button class="parked-resume" data-pid="${p.id}">${I18N[currentLang].parkedResume}</button>
+                <button class="parked-delete" data-pid="${p.id}">${I18N[currentLang].parkedDelete}</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+  overlay.innerHTML = `
+    <div class="history-box">
+      <div class="history-head">
+        <h3>${I18N[currentLang].parkedTitle}</h3>
+        <button id="parked-close">✕</button>
+      </div>
+      <div class="history-summary">
+        <span>${I18N[currentLang].historyCount(parked.length)}</span>
+      </div>
+      <div class="history-list">${listHtml}</div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
+  overlay.querySelector("#parked-close").addEventListener("click", ()=>overlay.remove());
+  overlay.querySelectorAll(".history-entry-head").forEach(head=>{
+    head.addEventListener("click", ()=>{
+      head.parentElement.classList.toggle("open");
+    });
+  });
+  overlay.querySelectorAll(".parked-resume").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      const pid = btn.dataset.pid;
+      overlay.remove();
+      openTablePicker(I18N[currentLang].pickResumeTarget, (targetId)=>{
+        resumeParked(pid, targetId);
+        showToast(I18N[currentLang].toastResumed(tableLabel(targetId)));
+        openTable(targetId);
+      });
+    });
+  });
+  overlay.querySelectorAll(".parked-delete").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      const pid = btn.dataset.pid;
+      showConfirm(I18N[currentLang].confirmDeleteParked, I18N[currentLang].deleteOk, ()=>{
+        writeRemoveParked(pid);
+        overlay.remove();
+        showToast(I18N[currentLang].toastParkedDeleted);
+      });
     });
   });
 }
@@ -1770,6 +2102,20 @@ document.getElementById("pay-btn").addEventListener("click", ()=>{
     };
     writePay(t, record);
     showToast(I18N[currentLang].toastPaid(tableLabel(t), eur(total)));
+    backToHome();
+  });
+});
+
+document.getElementById("park-btn").addEventListener("click", ()=>{
+  const t = currentTable;
+  if(tableCount(t)===0){
+    showToast(I18N[currentLang].toastNoOrderToPark);
+    return;
+  }
+  showPrompt(I18N[currentLang].parkPrompt, I18N[currentLang].parkPlaceholder, I18N[currentLang].parkOk, (label)=>{
+    const finalLabel = label || tableLabel(t);
+    writePark(t, finalLabel);
+    showToast(I18N[currentLang].toastParked);
     backToHome();
   });
 });
