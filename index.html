@@ -30,6 +30,68 @@
     --text-ink-lo: rgba(28,21,14,0.6);
     --radius: 14px;
     --shadow: 0 12px 30px rgba(0,0,0,0.35);
+    /* tokens de identidad visual (varían con cada tema) */
+    --font-display: 'Shippori Mincho', serif;
+    --wood-1:#8a7458;    --wood-2:#5f4d38;
+    --wood-busy-1:#7a4234; --wood-busy-2:#522a20;
+    --wood-chair-1:#e7ddc9; --wood-chair-2:#b9ac8f;
+    --deco-1:#c9973f;    --deco-2:#a9762c;
+    --barra-1:#4c4238;   --barra-2:#2b241c;
+    --barra-busy-1:#5c2c22; --barra-busy-2:#341a15;
+    --badge-1:#e8c3cf;   --badge-2:#cf9fb0; --badge-text:#3a1f27;
+    --btn-accent-1:#d9ac52; --btn-accent-2:#b9862f; --btn-accent-text:#2a1d0c;
+    --floor-1:#1a1510;   --floor-2:#241d15;
+  }
+ 
+  /* ===== TEMA "MODERNO": azul/cian sobre grafito frío, tipografía sans ===== */
+  html.theme-modern{
+    color-scheme: dark;
+    --ink:#0b0e14; --ink-2:#12161f; --ink-3:#1a2030;
+    --paper:#eef1f5; --paper-2:#e2e7ee;
+    --paper-line: rgba(11,14,20,0.12);
+    --stamp:#3b82f6; --stamp-dark:#1d4ed8;
+    --gold:#22d3ee; --gold-soft: rgba(34,211,238,0.35);
+    --text-hi:#eef2f7; --text-lo: rgba(238,242,247,0.6);
+    --text-ink-hi:#0b0e14; --text-ink-lo: rgba(11,14,20,0.62);
+    --font-display: 'Inter', sans-serif;
+    --wood-1:#232833; --wood-2:#161a22;
+    --wood-busy-1:#1d4ed8; --wood-busy-2:#1e3a8a;
+    --wood-chair-1:#3b4252; --wood-chair-2:#232833;
+    --deco-1:#2a3040; --deco-2:#181c26;
+    --barra-1:#1a2030; --barra-2:#0f131b;
+    --barra-busy-1:#2563eb; --barra-busy-2:#1e3a8a;
+    --badge-1:#bfe0ff; --badge-2:#8fc6f7; --badge-text:#0b2540;
+    --btn-accent-1:#38bdf8; --btn-accent-2:#0ea5e9; --btn-accent-text:#062033;
+    --floor-1:#0d1017; --floor-2:#141925;
+  }
+  html.theme-modern .items-heading,
+  html.theme-modern .home-head h2,
+  html.theme-modern .login-brand h1,
+  html.theme-modern .table-title h2,
+  html.theme-modern .history-head h3{
+    letter-spacing:0.01em; font-weight:800;
+  }
+ 
+  /* ===== TEMA "CLÁSICO": vino y oro antiguo, tipografía serif ===== */
+  html.theme-classic{
+    color-scheme: dark;
+    --ink:#180d0f; --ink-2:#221215; --ink-3:#2e181b;
+    --paper:#f6ecd9; --paper-2:#eeddc0;
+    --paper-line: rgba(30,15,10,0.14);
+    --stamp:#7a1f2b; --stamp-dark:#4a1620;
+    --gold:#c9a227; --gold-soft: rgba(201,162,39,0.35);
+    --text-hi:#f3e6c8; --text-lo: rgba(243,230,200,0.6);
+    --text-ink-hi:#241207; --text-ink-lo: rgba(36,18,7,0.62);
+    --font-display: 'Shippori Mincho', serif;
+    --wood-1:#5c3a20; --wood-2:#3a2312;
+    --wood-busy-1:#6b1f2b; --wood-busy-2:#3f1119;
+    --wood-chair-1:#e9d6ad; --wood-chair-2:#b89a63;
+    --deco-1:#a97a2e; --deco-2:#6e4d1a;
+    --barra-1:#3a2416; --barra-2:#1e130b;
+    --barra-busy-1:#6b1f2b; --barra-busy-2:#3f1119;
+    --badge-1:#e6c8cf; --badge-2:#c99aa6; --badge-text:#3a141c;
+    --btn-accent-1:#c9a227; --btn-accent-2:#9c7d1a; --btn-accent-text:#241a02;
+    --floor-1:#170d0a; --floor-2:#241611;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{height:100%;}
@@ -37,8 +99,8 @@
     margin:0;
     background-color: var(--ink);
     background-image:
-      radial-gradient(1200px 600px at 15% -10%, #241c14 0%, transparent 60%),
-      radial-gradient(1000px 700px at 110% 10%, #251b16 0%, transparent 55%);
+      radial-gradient(1200px 600px at 15% -10%, var(--ink-2) 0%, transparent 60%),
+      radial-gradient(1000px 700px at 110% 10%, var(--ink-3) 0%, transparent 55%);
     color:var(--text-hi);
     font-family:'Inter',sans-serif;
     -webkit-font-smoothing:antialiased;
@@ -48,14 +110,14 @@
   }
   button, .mesa-tile, .barra-seat, .cat-btn, .lang-btn, .session-chip{touch-action:manipulation;}
   input, textarea{font-size:16px;} /* evita el zoom automático de iOS al enfocar */
-  .display{font-family:'Shippori Mincho', serif;}
+  .display{font-family:var(--font-display);}
   button{font-family:inherit;}
   input{font-family:inherit;}
-
+ 
   /* ---------- App shell ---------- */
   #app{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;}
   [hidden]{display:none !important;}
-
+ 
   .topbar{
     display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;
     padding:16px 20px;
@@ -70,14 +132,14 @@
     width:34px;height:34px;border-radius:50%;
     background:var(--stamp);
     display:flex;align-items:center;justify-content:center;
-    font-family:'Shippori Mincho',serif;font-weight:800;color:var(--text-hi);
+    font-family:var(--font-display);font-weight:800;color:var(--text-hi);
     font-size:15px; letter-spacing:0;
     box-shadow: inset 0 0 0 2px rgba(255,255,255,0.15);
     flex:none;
   }
   .brand h1{font-size:19px;margin:0;font-weight:700;letter-spacing:0.02em;}
   .brand small{color:var(--text-lo);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;}
-
+ 
   .lang-switch{display:flex;gap:6px;flex:none;}
   .sync-badge{
     margin-left:auto;flex:none;
@@ -86,7 +148,7 @@
   }
   .sync-badge.on{color:#8fd39e;border-color:rgba(143,211,158,.35);background:rgba(143,211,158,.08);}
   .sync-badge.off{color:#e0b064;border-color:rgba(224,176,100,.35);background:rgba(224,176,100,.08);}
-
+ 
   .session-chip{
     display:flex;align-items:center;gap:4px;
     background:transparent;border:1px solid rgba(246,239,225,0.16);
@@ -95,7 +157,7 @@
   }
   .session-chip b{color:var(--gold);font-weight:800;}
   .session-chip:hover{border-color:var(--gold-soft);color:var(--text-hi);}
-
+ 
   /* ---------- Login: código de sesión ---------- */
   #login-view{
     min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -108,11 +170,11 @@
     width:54px;height:54px;border-radius:50%;
     background:var(--stamp);
     display:flex;align-items:center;justify-content:center;
-    font-family:'Shippori Mincho',serif;font-weight:800;color:var(--text-hi);
+    font-family:var(--font-display);font-weight:800;color:var(--text-hi);
     font-size:24px;
     box-shadow: inset 0 0 0 2px rgba(255,255,255,0.15), var(--shadow);
   }
-  .login-brand h1{font-family:'Shippori Mincho',serif;font-size:28px;margin:0;font-weight:700;}
+  .login-brand h1{font-family:var(--font-display);font-size:28px;margin:0;font-weight:700;}
   .login-sub{color:var(--text-lo);font-size:13.5px;line-height:1.5;max-width:360px;margin:0 auto 30px;}
   .login-form{display:flex;flex-direction:column;align-items:center;gap:16px;}
   .session-input{
@@ -121,7 +183,7 @@
     border:2px solid rgba(246,239,225,0.16);
     border-radius:14px;
     color:var(--text-hi);
-    font-family:'Shippori Mincho',serif;
+    font-family:var(--font-display);
     font-size:32px;font-weight:700;
     letter-spacing:0.5em;
     text-align:center;
@@ -131,8 +193,8 @@
   .session-input::placeholder{color:rgba(246,239,225,0.25);letter-spacing:0.5em;}
   .session-input:focus{border-color:var(--gold);}
   .session-submit{
-    background:linear-gradient(160deg,#d9ac52,#b9862f);
-    color:#2a1d0c;border:none;border-radius:30px;
+    background:linear-gradient(160deg,var(--btn-accent-1),var(--btn-accent-2));
+    color:var(--btn-accent-text);border:none;border-radius:30px;
     font-weight:800;font-size:14px;letter-spacing:0.03em;
     padding:12px 34px;cursor:pointer;
     box-shadow:0 4px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.35);
@@ -169,7 +231,7 @@
       linear-gradient(transparent 42%, #c8102e 42% 58%, transparent 58%),
       linear-gradient(90deg, transparent 44%, #c8102e 44% 56%, transparent 56%);
   }
-
+ 
   /* ---------- Home: plano de sala ---------- */
   #home-view{padding:18px 22px 0;padding-bottom:env(safe-area-inset-bottom);max-width:1500px;margin:0 auto;width:100%;display:flex;flex-direction:column;flex:1;min-height:0;}
   .home-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap;}
@@ -177,7 +239,7 @@
     color:var(--gold);letter-spacing:0.24em;text-transform:uppercase;font-size:10.5px;font-weight:600;
   }
   .home-head h2{
-    font-family:'Shippori Mincho',serif;font-weight:700;font-size:22px;margin:3px 0 0;
+    font-family:var(--font-display);font-weight:700;font-size:22px;margin:3px 0 0;
   }
   .legend{display:flex;gap:16px;flex-wrap:wrap;}
   .legend span{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text-lo);}
@@ -185,7 +247,7 @@
   .legend i.free{background:#5b5044;border:1px solid rgba(246,239,225,0.25);}
   .legend i.busy{background:var(--stamp);}
   .legend i.barra{background:#4a4038;border:1px solid var(--gold-soft);border-radius:50%;}
-
+ 
   /* floor */
   .floor-wrap{
     flex:1;min-height:0;overflow:auto;
@@ -193,11 +255,11 @@
     overscroll-behavior:contain;
     border:1px solid rgba(246,239,225,0.1);
     border-radius:10px;
-    background-color: #1a1510;
+    background-color: var(--floor-1);
     background-image:
       linear-gradient(rgba(246,239,225,0.05) 1px, transparent 1px) 0 0/100px 100px,
       linear-gradient(90deg, rgba(246,239,225,0.05) 1px, transparent 1px) 0 0/100px 100px,
-      radial-gradient(1200px 500px at 30% 0%, #241d15 0%, transparent 60%);
+      radial-gradient(1200px 500px at 30% 0%, var(--floor-2) 0%, transparent 60%);
     padding:20px;
   }
   .floor{
@@ -212,7 +274,7 @@
     border-radius:5px;
     background:
       repeating-linear-gradient(100deg, rgba(0,0,0,0.06) 0 3px, transparent 3px 9px),
-      linear-gradient(160deg, #c9973f 0%, #a9762c 100%);
+      linear-gradient(160deg, var(--deco-1) 0%, var(--deco-2) 100%);
     box-shadow: inset 0 0 0 1px rgba(0,0,0,0.2), 0 6px 14px rgba(0,0,0,0.35);
     opacity:0.9;
   }
@@ -222,17 +284,17 @@
     align-self:center; justify-self:center;
     display:flex;align-items:center;justify-content:center;
     font-size:11.5px;font-weight:700;color:var(--text-hi);
-    background:radial-gradient(circle at 34% 30%, #4c4238 0%, #2b241c 75%);
+    background:radial-gradient(circle at 34% 30%, var(--barra-1) 0%, var(--barra-2) 75%);
     border:2px solid rgba(246,239,225,0.16);
     cursor:pointer;transition:.15s;
   }
   .barra-seat:hover{border-color:var(--gold-soft);transform:translateY(-2px);}
   .barra-seat.busy{
     border-color:var(--stamp);
-    background:radial-gradient(circle at 34% 30%, #5c2c22 0%, #341a15 75%);
+    background:radial-gradient(circle at 34% 30%, var(--barra-busy-1) 0%, var(--barra-busy-2) 75%);
     box-shadow:0 0 0 3px rgba(178,58,46,0.18);
   }
-
+ 
   .mesa-tile{
     position:relative;
     align-self:center; justify-self:center;
@@ -247,14 +309,14 @@
   }
   .mesa-tile .chair{
     width:9px;height:20px;flex:none;
-    background:linear-gradient(160deg,#e7ddc9,#b9ac8f);
+    background:linear-gradient(160deg,var(--wood-chair-1),var(--wood-chair-2));
     border:1px solid rgba(0,0,0,0.25);
     border-radius:2px;
   }
   .mesa-tile .top{
     flex:1;height:100%;position:relative;
     border-radius:4px;
-    background:linear-gradient(160deg, #8a7458 0%, #5f4d38 100%);
+    background:linear-gradient(160deg, var(--wood-1) 0%, var(--wood-2) 100%);
     border:1px solid rgba(0,0,0,0.3);
     box-shadow:inset 0 0 0 1px rgba(255,255,255,0.05), 0 4px 10px rgba(0,0,0,0.3);
     transition:.15s;
@@ -268,14 +330,14 @@
     display:none;
   }
   .mesa-tile.busy .top{
-    background:linear-gradient(160deg, #7a4234 0%, #522a20 100%);
+    background:linear-gradient(160deg, var(--wood-busy-1) 0%, var(--wood-busy-2) 100%);
     box-shadow:0 0 0 2px rgba(178,58,46,0.4), 0 6px 14px rgba(0,0,0,0.4);
   }
   .mesa-tile.busy .plate{display:block;}
   .mesa-badge{
     position:absolute;top:-11px;left:-8px;
-    background:linear-gradient(160deg,#e8c3cf,#cf9fb0);
-    color:#3a1f27;
+    background:linear-gradient(160deg,var(--badge-1),var(--badge-2));
+    color:var(--badge-text);
     font-size:11px;font-weight:800;
     width:24px;height:18px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
@@ -290,7 +352,7 @@
     position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);
     font-size:9.5px;font-weight:700;color:var(--gold);white-space:nowrap;
   }
-
+ 
   /* toolbar */
   .floor-toolbar{
     display:flex;align-items:stretch;gap:10px;
@@ -307,8 +369,8 @@
   .toolbar-btns{display:flex;gap:8px;flex-wrap:wrap;flex:1;}
   .tb-btn{
     flex:1;min-width:120px;
-    background:linear-gradient(160deg,#d9ac52,#b9862f);
-    color:#2a1d0c;border:none;border-radius:8px;
+    background:linear-gradient(160deg,var(--btn-accent-1),var(--btn-accent-2));
+    color:var(--btn-accent-text);border:none;border-radius:8px;
     font-weight:800;font-size:12px;letter-spacing:0.03em;
     padding:0 14px;cursor:pointer;
     box-shadow:0 4px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.35);
@@ -324,7 +386,7 @@
     color:#f6efe1;
     box-shadow:0 4px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
   }
-
+ 
   /* ---------- Table / comanda view ---------- */
   #table-view{flex:1;display:flex;flex-direction:column;min-height:0;}
   .table-topbar{
@@ -339,12 +401,12 @@
   .back-btn:hover{border-color:var(--gold-soft);}
   .table-title{display:flex;align-items:center;gap:10px;}
   .table-title .num{
-    font-family:'Shippori Mincho',serif;font-weight:800;font-size:22px;
+    font-family:var(--font-display);font-weight:800;font-size:22px;
     background:var(--stamp);width:38px;height:38px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
   }
   .table-title h2{margin:0;font-size:18px;font-weight:700;}
-
+ 
   .search-wrap{
     flex:1;min-width:220px;position:relative;
   }
@@ -361,7 +423,7 @@
   .search-wrap input::placeholder{color:var(--text-lo);}
   .search-wrap input:focus{border-color:var(--gold);}
   .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:0.5;}
-
+ 
   .table-actions{display:flex;gap:8px;flex:none;}
   .pay-btn{
     background:linear-gradient(160deg,#7fae6f,#4f7d43);
@@ -382,11 +444,11 @@
     color:#e8a49c;padding:9px 14px;border-radius:30px;font-size:13px;cursor:pointer;
   }
   .clear-mesa-btn:hover{background:rgba(178,58,46,0.12);}
-
+ 
   .table-body{
     flex:1;display:flex;min-height:0;
   }
-
+ 
   /* category rail */
   .cat-rail{
     width:190px;flex:none;
@@ -409,13 +471,13 @@
     padding:14px 12px 4px;
   }
   .cat-group-label:first-child{padding-top:4px;}
-
+ 
   /* items area */
   .items-area{
     flex:1;overflow-y:auto;padding:20px 22px 40px;
   }
   .items-heading{
-    font-family:'Shippori Mincho',serif;font-size:20px;font-weight:700;margin:0 0 4px;
+    font-family:var(--font-display);font-size:20px;font-weight:700;margin:0 0 4px;
   }
   .items-sub{color:var(--text-lo);font-size:12.5px;margin:0 0 16px;}
   .item-row{
@@ -452,7 +514,7 @@
     font-size:12.5px;font-weight:600;
   }
   .empty-state{color:var(--text-lo);font-size:13.5px;padding:30px 6px;text-align:center;}
-
+ 
   /* confirm dialog + toast (replacing native confirm/alert for compatibility) */
   .confirm-overlay{
     position:fixed;inset:0;background:rgba(0,0,0,0.55);
@@ -481,7 +543,7 @@
     z-index:210;max-width:80vw;text-align:center;
   }
   .toast.show{opacity:1;transform:translate(-50%,0);}
-
+ 
   /* historial de pagos */
   .history-box{
     color-scheme: light;
@@ -493,7 +555,7 @@
     display:flex;align-items:center;justify-content:space-between;
     padding:18px 20px;border-bottom:1px solid var(--paper-line);flex:none;
   }
-  .history-head h3{margin:0;font-family:'Shippori Mincho',serif;font-size:19px;}
+  .history-head h3{margin:0;font-family:var(--font-display);font-size:19px;}
   .history-head button{
     background:rgba(0,0,0,0.06);border:none;color:#000;
     width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:15px;
@@ -502,7 +564,7 @@
     padding:12px 20px;border-bottom:1px dashed var(--paper-line);
     display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-ink-lo);flex:none;
   }
-  .history-summary b{color:#000;font-size:15px;font-family:'Shippori Mincho',serif;}
+  .history-summary b{color:#000;font-size:15px;font-family:var(--font-display);}
   .history-list{overflow-y:auto;padding:8px 14px 18px;flex:1;}
   .history-entry{
     border:1px solid var(--paper-2);border-radius:10px;margin:8px 0;overflow:hidden;
@@ -527,7 +589,7 @@
   .hdet-line .q{color:var(--stamp-dark);font-weight:700;margin-right:5px;}
   .history-empty{color:var(--text-ink-lo);font-size:13px;text-align:center;padding:36px 10px;}
   .chev{transition:.15s;font-size:11px;color:var(--text-ink-lo);flex:none;}
-
+ 
   /* ticket / receipt panel */
   .ticket-panel{
     width:300px;flex:none;
@@ -556,8 +618,8 @@
   .ticket-head{
     padding:18px 18px 10px;text-align:center;border-bottom:1px dashed var(--paper-line);
   }
-  .ticket-head .mark{font-family:'Shippori Mincho',serif;font-weight:800;font-size:13px;letter-spacing:0.18em;}
-  .ticket-head .mesa-num{font-family:'Shippori Mincho',serif;font-weight:800;font-size:26px;margin-top:2px;}
+  .ticket-head .mark{font-family:var(--font-display);font-weight:800;font-size:13px;letter-spacing:0.18em;}
+  .ticket-head .mesa-num{font-family:var(--font-display);font-weight:800;font-size:26px;margin-top:2px;}
   .ticket-head .ts{font-size:10.5px;color:var(--text-ink-lo);margin-top:4px;}
   .ticket-items{
     flex:1;overflow-y:auto;padding:10px 18px;
@@ -580,10 +642,10 @@
     display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;
   }
   .ticket-total .lbl{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-ink-lo);}
-  .ticket-total .val{font-family:'Shippori Mincho',serif;font-weight:800;font-size:22px;}
+  .ticket-total .val{font-family:var(--font-display);font-weight:800;font-size:22px;}
   .ticket-count{font-size:11px;color:var(--text-ink-lo);}
   .mobile-ticket-toggle{display:none;}
-
+ 
   /* picker de mesas (juntar / recuperar tiquet) */
   .picker-box{
     background:var(--paper);color:#000;border-radius:14px;
@@ -606,7 +668,7 @@
     width:100%;padding:11px 10px;border-radius:8px;font-size:13.5px;font-weight:700;
     cursor:pointer;border:none;background:rgba(0,0,0,0.08);color:#000;
   }
-
+ 
   /* prompt (aparcar tiquet) */
   .prompt-input{
     width:100%;background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.16);
@@ -614,7 +676,7 @@
     margin-bottom:16px;outline:none;text-align:center;
   }
   .prompt-input:focus{border-color:var(--gold);}
-
+ 
   /* acciones dentro de un tiquet aparcado */
   .parked-actions{display:flex;gap:8px;margin-top:10px;}
   .parked-resume, .parked-delete{
@@ -622,12 +684,12 @@
   }
   .parked-resume{background:var(--stamp);color:var(--text-hi);}
   .parked-delete{background:rgba(0,0,0,0.07);color:#000;}
-
+ 
   /* scrollbars */
   .cat-rail::-webkit-scrollbar, .items-area::-webkit-scrollbar, .ticket-items::-webkit-scrollbar{width:8px;}
   .cat-rail::-webkit-scrollbar-thumb, .items-area::-webkit-scrollbar-thumb{background:rgba(246,239,225,0.12);border-radius:8px;}
   .ticket-items::-webkit-scrollbar-thumb{background:rgba(21,17,13,0.18);border-radius:8px;}
-
+ 
   /* responsive */
   @media (min-width: 1400px){
     .items-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0 12px;align-content:start;}
@@ -674,7 +736,7 @@
     .lang-btn{padding:5px 8px 5px 5px;font-size:10px;}
     .session-chip{font-size:10px;padding:5px 9px;}
     .sync-badge{font-size:9.5px;padding:4px 8px;}
-
+ 
     .table-topbar{padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top));}
     .table-title h2{font-size:15px;}
     .table-title .num{width:32px;height:32px;font-size:18px;}
@@ -682,7 +744,7 @@
     .table-actions{width:100%;flex-wrap:wrap;}
     .pay-btn, .clear-mesa-btn, .park-btn-top{flex:1 1 30%;text-align:center;padding:9px 6px;font-size:11.5px;}
     .search-wrap{width:100%;order:10;}
-
+ 
     .cat-rail{
       width:100%;height:auto;border-right:none;border-bottom:1px solid rgba(246,239,225,0.08);
       display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;
@@ -698,7 +760,7 @@
     .qty-btn{width:38px;height:38px;font-size:19px;}
     .qty-num{width:26px;font-size:15px;}
     .qty-btn.add-only{padding:0 16px;height:38px;}
-
+ 
     .login-sub{font-size:12.5px;}
     .session-input{width:100%;max-width:220px;font-size:28px;padding:14px 8px 14px 16px;}
     .history-box{max-height:88vh;}
@@ -717,7 +779,7 @@
 </head>
 <body>
 <div id="app">
-
+ 
   <!-- ===== LOGIN: código de sesión ===== -->
   <div id="login-view">
     <div class="login-wrap">
@@ -734,7 +796,7 @@
       <p class="login-error" id="login-error" hidden>Código incorrecto.</p>
     </div>
   </div>
-
+ 
   <!-- ===== HOME: 16 mesas ===== -->
   <div id="home-view" hidden>
     <div class="topbar" style="position:static;border:none;padding:0;background:none;margin-bottom:0;">
@@ -755,7 +817,7 @@
         <button class="lang-btn" data-lang="en"><span class="flag flag-en"></span>EN</button>
       </div>
     </div>
-
+ 
     <div class="home-head">
       <div>
         <div class="eyebrow" id="home-eyebrow">Plano de sala</div>
@@ -767,11 +829,11 @@
         <span><i class="barra"></i><span id="legend-barra">Barra</span></span>
       </div>
     </div>
-
+ 
     <div class="floor-wrap">
       <div class="floor" id="floor"></div>
     </div>
-
+ 
     <div class="floor-toolbar">
       <div class="status-key">
         <div><span class="sw" style="background:#5b5044;border:1px solid rgba(246,239,225,.25)"></span><b id="key-free">Libre</b></div>
@@ -787,7 +849,7 @@
       </div>
     </div>
   </div>
-
+ 
   <!-- ===== TABLE VIEW: carta + comanda ===== -->
   <div id="table-view" hidden>
     <div class="topbar table-topbar">
@@ -806,7 +868,7 @@
         <button class="clear-mesa-btn" id="clear-mesa-btn">Vaciar mesa</button>
       </div>
     </div>
-
+ 
     <div class="table-body">
       <nav class="cat-rail" id="cat-rail"></nav>
       <main class="items-area" id="items-area"></main>
@@ -829,19 +891,19 @@
       </aside>
     </div>
   </div>
-
+ 
   <button class="mobile-ticket-toggle" id="mobile-ticket-toggle" hidden>
     🧾 <span id="mobile-ticket-label">Ver comanda</span> <span id="mobile-ticket-badge"></span>
   </button>
-
+ 
 </div>
-
+ 
 <script>
 /* =====================================================================
    CONFIGURACIÓN DE SINCRONIZACIÓN (Firebase Realtime Database)
    ---------------------------------------------------------------------
    Para que TODOS los móviles vean las mismas mesas en tiempo real:
-
+ 
    1. Ve a https://console.firebase.google.com → "Crear proyecto"
       (es gratis, no hace falta tarjeta).
    2. Dentro del proyecto: icono "</>" → "Añadir app web" → dale un
@@ -860,7 +922,7 @@
           }
         }
       → "Publicar".
-
+ 
    Mientras dejes el apiKey de abajo tal cual ("TU_API_KEY"), la app
    funciona en modo local: cada móvil ve solo sus propios cambios,
    sin compartir nada (útil para probar antes de configurar Firebase).
@@ -876,7 +938,7 @@ const FIREBASE_CONFIG = {
 };
 let firebaseReady = false;
 let db = null;
-
+ 
 // Códigos de sesión: cada uno es una "sala" independiente y compartida.
 // Todo el que entre con el mismo código verá las mismas mesas.
 const SESSION_CODES = ["0220", "3040", "6090"];
@@ -884,7 +946,7 @@ let currentSession = null;
 let ordersRef = null;
 let historyRef = null;
 let parkedRef = null;
-
+ 
 /* ===================== DATA (multi-idioma) ===================== */
 const MENU_SRC = [
   { group:{es:"Cocina",ca:"Cuina",en:"Kitchen"}, cat:{es:"Entrantes",ca:"Entrants",en:"Starters"}, items:[
@@ -1050,7 +1112,7 @@ const MENU_SRC = [
     { price:15.5, es:["Hakutsuru tokubetsu junmai yamadanishiki",""], ca:["Hakutsuru tokubetsu junmai yamadanishiki",""], en:["Hakutsuru tokubetsu junmai yamadanishiki",""] },
   ]},
 ];
-
+ 
 function buildMenu(lang){
   return MENU_SRC.map(function(sec, si){
     return {
@@ -1070,7 +1132,7 @@ function buildFlat(menu){
   });
   return flat;
 }
-
+ 
 /* ===================== TEXTOS DE INTERFAZ (ES / CA / EN) ===================== */
 const I18N = {
   es: {
@@ -1080,6 +1142,7 @@ const I18N = {
     legendFree: "Libre", legendBusy: "Con pedido", legendBarra: "Barra",
     keyFree: "Libre", keyBusy: "Ocupada",
     btnSaldo: "Saldo sala", btnHistorial: "📖 Historial", btnSalon: "Salón",
+    themeNames: ["🎨 Diseño: Kobe original", "🎨 Diseño: Moderno", "🎨 Diseño: Clásico"],
     btnTickets: "Tickets aparcados", btnJuntar: "Juntar mesas",
     back: "← Mesas",
     comanda: "Comanda", comandaBarra: "Comanda de barra",
@@ -1151,6 +1214,7 @@ const I18N = {
     legendFree: "Lliure", legendBusy: "Amb comanda", legendBarra: "Barra",
     keyFree: "Lliure", keyBusy: "Ocupada",
     btnSaldo: "Saldo de sala", btnHistorial: "📖 Historial", btnSalon: "Sala",
+    themeNames: ["🎨 Disseny: Kobe original", "🎨 Disseny: Modern", "🎨 Disseny: Clàssic"],
     btnTickets: "Tiquets aparcats", btnJuntar: "Ajuntar taules",
     back: "← Taules",
     comanda: "Comanda", comandaBarra: "Comanda de barra",
@@ -1222,6 +1286,7 @@ const I18N = {
     legendFree: "Free", legendBusy: "Order open", legendBarra: "Bar",
     keyFree: "Free", keyBusy: "Occupied",
     btnSaldo: "Floor balance", btnHistorial: "📖 History", btnSalon: "Floor",
+    themeNames: ["🎨 Theme: Kobe original", "🎨 Theme: Modern", "🎨 Theme: Classic"],
     btnTickets: "Parked tickets", btnJuntar: "Merge tables",
     back: "← Tables",
     comanda: "Order", comandaBarra: "Bar order",
@@ -1287,7 +1352,7 @@ const I18N = {
     sessionChipLabel: "Session", changeLabel: "Change",
   },
 };
-
+ 
 /* ===================== STATE ===================== */
 // Posiciones en el plano de sala (columna 1-13 / fila 1-5), según la foto de referencia
 const FLOOR_LAYOUT = [
@@ -1315,23 +1380,25 @@ const BARRA_LAYOUT = [
   { id:503, col:6, row:1 },
 ];
 const ALL_IDS = [...FLOOR_LAYOUT.map(t=>t.id), ...BARRA_LAYOUT.map(b=>b.id)];
-
+ 
 let orders = {};              // orders[tableId] = { itemId: qty }
 ALL_IDS.forEach(id => orders[id] = {});
 let currentTable = null;
 let currentLang = "es";
+const THEME_CLASSES = ["", "theme-modern", "theme-classic"];
+let themeIndex = 0;
 let MENU = buildMenu(currentLang);
 let FLAT = buildFlat(MENU);
 let currentCat = MENU[0].cat;
 let searchTerm = "";
 function isBarra(id){ return id >= 500; }
 function tableLabel(id){ return (isBarra(id) ? I18N[currentLang].barraLabel : I18N[currentLang].mesaLabel) + " " + id; }
-
+ 
 let history = [];             // pagos registrados: { id, table, ts, items:[{name,qty,price}], total }
 let historyCounter = 1;
 let parked = [];              // tiquets aparcados: { id, label, ts, items:{itemId:qty}, total }
 let parkedCounter = 1;
-
+ 
 /* ===================== HELPERS ===================== */
 const eur = n => n.toFixed(2).replace(".", ",") + " €";
 function tableTotal(t){
@@ -1344,8 +1411,16 @@ function tableTotal(t){
 function tableCount(t){
   return Object.values(orders[t]).reduce((a,b)=>a+b,0);
 }
-
+ 
 /* ===================== SINCRONIZACIÓN (Firebase, por sesión) ===================== */
+/* ===================== TEMA VISUAL (Salón) ===================== */
+function cycleTheme(){
+  themeIndex = (themeIndex + 1) % THEME_CLASSES.length;
+  const cls = THEME_CLASSES[themeIndex];
+  document.documentElement.className = cls;
+  showToast(I18N[currentLang].themeNames[themeIndex]);
+}
+ 
 function updateSyncBadge(on){
   const el = document.getElementById("sync-badge");
   if(!el) return;
@@ -1550,25 +1625,25 @@ function mergeTables(source, dest){
   });
   writeClearTable(source);
 }
-
+ 
 /* ===================== RENDER: HOME (plano de sala) ===================== */
 function renderHome(){
   const floor = document.getElementById("floor");
   floor.innerHTML = "";
-
+ 
   // barras decorativas de madera (como en la foto)
   const decoTop = document.createElement("div");
   decoTop.className = "deco-bar";
   decoTop.style.gridColumn = "1 / span 3";
   decoTop.style.gridRow = "2";
   floor.appendChild(decoTop);
-
+ 
   const decoBottom = document.createElement("div");
   decoBottom.className = "deco-bar";
   decoBottom.style.gridColumn = "5 / span 3";
   decoBottom.style.gridRow = "5";
   floor.appendChild(decoBottom);
-
+ 
   // asientos de barra 500-503
   BARRA_LAYOUT.forEach(b=>{
     const busy = tableCount(b.id) > 0;
@@ -1581,7 +1656,7 @@ function renderHome(){
     seat.addEventListener("click", ()=>openTable(b.id));
     floor.appendChild(seat);
   });
-
+ 
   // mesas 1-16
   FLOOR_LAYOUT.forEach(t=>{
     const busy = tableCount(t.id) > 0;
@@ -1602,7 +1677,7 @@ function renderHome(){
     floor.appendChild(tile);
   });
 }
-
+ 
 /* ===================== CONFIRM / TOAST (propios, sin confirm()/alert() nativos) ===================== */
 function showToast(msg){
   const t = document.createElement("div");
@@ -1635,7 +1710,7 @@ function showConfirm(msg, okLabel, onYes){
     onYes();
   });
 }
-
+ 
 function showPrompt(msg, placeholder, okLabel, onSubmit){
   const overlay = document.createElement("div");
   overlay.className = "confirm-overlay";
@@ -1662,7 +1737,7 @@ function showPrompt(msg, placeholder, okLabel, onSubmit){
   overlay.querySelector(".confirm-ok").addEventListener("click", submit);
   input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); submit(); } });
 }
-
+ 
 // Selector de mesa/barra genérico (para juntar mesas y recuperar tiquets aparcados).
 function openTablePicker(promptText, onPick, excludeId){
   const overlay = document.createElement("div");
@@ -1689,7 +1764,7 @@ function openTablePicker(promptText, onPick, excludeId){
     });
   });
 }
-
+ 
 document.getElementById("btn-saldo").addEventListener("click", ()=>{
   const activeIds = ALL_IDS.filter(id=>tableCount(id)>0);
   const total = activeIds.reduce((s,id)=>s+tableTotal(id),0);
@@ -1697,7 +1772,7 @@ document.getElementById("btn-saldo").addEventListener("click", ()=>{
     ? I18N[currentLang].toastSaldo(activeIds.length, eur(total))
     : I18N[currentLang].toastNoSaldo);
 });
-document.getElementById("btn-salon").addEventListener("click", renderHome);
+document.getElementById("btn-salon").addEventListener("click", cycleTheme);
 document.getElementById("btn-tickets").addEventListener("click", openParkedList);
 document.getElementById("btn-juntar").addEventListener("click", ()=>{
   openTablePicker(I18N[currentLang].pickSourceMerge, (source)=>{
@@ -1722,7 +1797,7 @@ document.getElementById("btn-juntar").addEventListener("click", ()=>{
   });
 });
 document.getElementById("btn-historial").addEventListener("click", openHistory);
-
+ 
 /* ===================== IDIOMA ===================== */
 function applyStaticText(){
   const t = I18N[currentLang];
@@ -1758,7 +1833,7 @@ function applyStaticText(){
     b.classList.toggle("active", b.dataset.lang === currentLang);
   });
 }
-
+ 
 function setLang(lang){
   if(lang === currentLang) return;
   currentLang = lang;
@@ -1781,14 +1856,14 @@ function setLang(lang){
 document.querySelectorAll(".lang-btn").forEach(btn=>{
   btn.addEventListener("click", ()=>setLang(btn.dataset.lang));
 });
-
+ 
 /* ===================== HISTORIAL DE PAGOS ===================== */
 function openHistory(){
   const overlay = document.createElement("div");
   overlay.className = "confirm-overlay";
-
+ 
   const totalHoy = history.reduce((s,h)=>s+h.total,0);
-
+ 
   const listHtml = history.length === 0
     ? `<div class="history-empty">${I18N[currentLang].historyEmpty}</div>`
     : [...history].reverse().map(h => `
@@ -1811,7 +1886,7 @@ function openHistory(){
           </div>
         </div>
       `).join("");
-
+ 
   overlay.innerHTML = `
     <div class="history-box">
       <div class="history-head">
@@ -1826,7 +1901,7 @@ function openHistory(){
     </div>
   `;
   document.body.appendChild(overlay);
-
+ 
   overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
   overlay.querySelector("#history-close").addEventListener("click", ()=>overlay.remove());
   overlay.querySelectorAll(".history-entry-head").forEach(head=>{
@@ -1835,11 +1910,11 @@ function openHistory(){
     });
   });
 }
-
+ 
 function openParkedList(){
   const overlay = document.createElement("div");
   overlay.className = "confirm-overlay";
-
+ 
   const listHtml = parked.length === 0
     ? `<div class="history-empty">${I18N[currentLang].parkedEmpty}</div>`
     : [...parked].reverse().map(p => {
@@ -1874,7 +1949,7 @@ function openParkedList(){
           </div>
         `;
       }).join("");
-
+ 
   overlay.innerHTML = `
     <div class="history-box">
       <div class="history-head">
@@ -1888,7 +1963,7 @@ function openParkedList(){
     </div>
   `;
   document.body.appendChild(overlay);
-
+ 
   overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
   overlay.querySelector("#parked-close").addEventListener("click", ()=>overlay.remove());
   overlay.querySelectorAll(".history-entry-head").forEach(head=>{
@@ -1920,7 +1995,7 @@ function openParkedList(){
     });
   });
 }
-
+ 
 /* ===================== RENDER: TABLE VIEW ===================== */
 function openTable(n){
   currentTable = n;
@@ -1939,7 +2014,7 @@ function openTable(n){
   renderItems();
   renderTicket();
 }
-
+ 
 function backToHome(){
   currentTable = null;
   document.getElementById("ticket-panel").classList.remove("open");
@@ -1948,7 +2023,7 @@ function backToHome(){
   document.getElementById("mobile-ticket-toggle").hidden = true;
   renderHome();
 }
-
+ 
 function renderCatRail(){
   const rail = document.getElementById("cat-rail");
   rail.innerHTML = "";
@@ -1974,12 +2049,12 @@ function renderCatRail(){
     rail.appendChild(btn);
   });
 }
-
+ 
 function renderItems(){
   const area = document.getElementById("items-area");
   const heading = document.getElementById("items-heading");
   let list, title, sub;
-
+ 
   if(searchTerm.trim()){
     const q = searchTerm.trim().toLowerCase();
     list = FLAT.filter(f => f.name.toLowerCase().includes(q) || f.desc.toLowerCase().includes(q) || f.cat.toLowerCase().includes(q));
@@ -1990,14 +2065,14 @@ function renderItems(){
     title = currentCat;
     sub = I18N[currentLang].catSub(list.length);
   }
-
+ 
   area.innerHTML = `<h3 class="items-heading">${title}</h3><p class="items-sub">${sub}</p>`;
-
+ 
   if(list.length===0){
     area.innerHTML += `<div class="empty-state">${I18N[currentLang].noResults}</div>`;
     return;
   }
-
+ 
   const wrap = document.createElement("div");
   wrap.className = "items-wrap";
   list.forEach(item=>{
@@ -2023,7 +2098,7 @@ function renderItems(){
     wrap.appendChild(row);
   });
   area.appendChild(wrap);
-
+ 
   area.querySelectorAll(".qty-ctrl").forEach(ctrl=>{
     const id = ctrl.dataset.id;
     const plus = ctrl.querySelector(".plus, .add-only");
@@ -2032,13 +2107,13 @@ function renderItems(){
     if(minus) minus.addEventListener("click", ()=>changeQty(id, -1));
   });
 }
-
+ 
 function changeQty(id, delta){
   const cur = orders[currentTable][id] || 0;
   const next = cur + delta;
   writeQty(currentTable, id, next);
 }
-
+ 
 function renderTicket(){
   const itemsEl = document.getElementById("ticket-items");
   const o = orders[currentTable];
@@ -2069,16 +2144,16 @@ function renderTicket(){
   const badge = document.getElementById("mobile-ticket-badge");
   badge.textContent = count>0 ? "· " + count : "";
 }
-
+ 
 /* ===================== EVENTS ===================== */
 document.getElementById("back-btn").addEventListener("click", backToHome);
-
+ 
 document.getElementById("search-input").addEventListener("input", (e)=>{
   searchTerm = e.target.value;
   renderCatRail();
   renderItems();
 });
-
+ 
 document.getElementById("pay-btn").addEventListener("click", ()=>{
   const t = currentTable;
   if(tableCount(t)===0){
@@ -2103,7 +2178,7 @@ document.getElementById("pay-btn").addEventListener("click", ()=>{
     backToHome();
   });
 });
-
+ 
 document.getElementById("park-btn").addEventListener("click", ()=>{
   const t = currentTable;
   if(tableCount(t)===0){
@@ -2117,7 +2192,7 @@ document.getElementById("park-btn").addEventListener("click", ()=>{
     backToHome();
   });
 });
-
+ 
 document.getElementById("clear-mesa-btn").addEventListener("click", ()=>{
   if(tableCount(currentTable)===0){
     showToast(I18N[currentLang].toastTableEmptyAlready);
@@ -2128,7 +2203,7 @@ document.getElementById("clear-mesa-btn").addEventListener("click", ()=>{
     showToast(I18N[currentLang].toastCleared);
   });
 });
-
+ 
 document.getElementById("btn-cerrar-dia").addEventListener("click", ()=>{
   showConfirm(I18N[currentLang].confirmCloseDay, I18N[currentLang].closeDayOk, ()=>{
     writeCloseDay();
@@ -2136,9 +2211,9 @@ document.getElementById("btn-cerrar-dia").addEventListener("click", ()=>{
     backToHome();
   });
 });
-
+ 
 document.getElementById("change-session-btn").addEventListener("click", leaveSession);
-
+ 
 document.getElementById("login-form").addEventListener("submit", (e)=>{
   e.preventDefault();
   const input = document.getElementById("session-input");
@@ -2158,14 +2233,15 @@ document.getElementById("login-form").addEventListener("submit", (e)=>{
     input.focus();
   }
 });
-
+ 
 document.getElementById("mobile-ticket-toggle").addEventListener("click", ()=>{
   document.getElementById("ticket-panel").classList.toggle("open");
 });
-
+ 
 /* ===================== INIT ===================== */
 applyStaticText();
 connectFirebase();
 </script>
 </body>
 </html>
+ 
