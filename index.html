@@ -1948,7 +1948,10 @@ function historyFromSnapshot(val){
     method: val[k].method || null,
     paidAmount: val[k].paidAmount != null ? val[k].paidAmount : null,
     change: val[k].change != null ? val[k].change : null,
-    people: val[k].people || null
+    people: val[k].people || null,
+    date: val[k].date || null,
+    time: val[k].time || null,
+    ticketNo: val[k].ticketNo || null
   }));
 }
 function parkedFromSnapshot(val){
@@ -2212,6 +2215,7 @@ function writeCloseDay(){
     history = [];
     parked = [];
   }
+  resetTicketCounter();
 }
 function writePark(tableId, label){
   const items = Object.assign({}, orders[tableId]);
@@ -2459,13 +2463,22 @@ function printHTML(bodyHtml){
   doc.open();
   doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Kobe BCN</title>
     <style>
-      body{font-family:'Courier New',monospace;font-size:12px;width:280px;margin:0 auto;padding:10px;color:#000;}
+      body{font-family:'Courier New',monospace;font-size:11.5px;width:280px;margin:0 auto;padding:10px;color:#000;}
       h1,h2,h3{text-align:center;margin:4px 0;}
-      .line{display:flex;justify-content:space-between;padding:2px 0;}
-      hr{border:none;border-top:1px dashed #000;margin:8px 0;}
+      p{margin:2px 0;}
+      hr{border:none;border-top:1px dashed #000;margin:6px 0;}
       .center{text-align:center;}
-      .total{font-weight:bold;font-size:14px;}
+      .strong{font-weight:bold;}
       .muted{color:#444;font-size:10.5px;}
+      .line{display:flex;justify-content:space-between;padding:2px 0;}
+      .total{font-weight:bold;font-size:14px;}
+      /* filas de artículos: UNIT / DESCRIPCIO / PREU / IMPORT */
+      .frow{display:grid;grid-template-columns:20px 1fr 42px 48px;gap:3px;font-size:10.5px;padding:1.5px 0;}
+      .frow .fprice, .frow .fimport{text-align:right;}
+      .frow.fhead{font-weight:bold;}
+      .frow2{display:flex;justify-content:space-between;font-size:11px;padding:2px 0;}
+      .frow2.strong{font-weight:bold;font-size:13px;}
+      .frow3{display:flex;justify-content:space-between;font-size:11px;padding:2px 0;}
     </style>
     </head><body>${bodyHtml}</body></html>`);
   doc.close();
@@ -2476,59 +2489,147 @@ function printHTML(bodyHtml){
   }, 250);
 }
 
-// Construye y manda a imprimir el ticket de una mesa (a partir de su comanda actual,
-// o de un registro ya pagado del historial).
-function buildReceiptHTML(opts){
-  const linesHtml = opts.items.map(it=>`
-    <div class="line"><span>${it.qty}× ${it.name}</span><span>${eur(it.price*it.qty)}</span></div>
-  `).join("");
-  let payHtml = "";
-  if(opts.method){
-    payHtml += `<hr>
-      <div class="line"><span>Pago</span><span>${opts.method === "efectivo" ? "Efectivo" : "Tarjeta"}</span></div>`;
-    if(opts.method === "efectivo" && opts.paidAmount != null){
-      payHtml += `<div class="line"><span>Entregado</span><span>${eur(opts.paidAmount)}</span></div>
-        <div class="line"><span>Cambio</span><span>${eur(opts.change)}</span></div>`;
-    }
+// Datos fiscales del negocio, tal y como aparecen en el ticket impreso.
+const BIZ_NAME = "KOBE";
+const BIZ_ADDRESS = ["CARRER DE BRUNIQUER 51", "08024 BARCELONA"];
+const BIZ_LEGAL = "IBUKA FIVE BROTHERS S.L.";
+const BIZ_CIF = "B10921658";
+const IVA_RATE = 10; // % IVA incluido en los precios
+
+// Formatea un número como "1234,56" (sin símbolo de moneda), como en el ticket fiscal.
+function money(n){ return (Math.round((n + Number.EPSILON) * 100) / 100).toFixed(2).replace(".", ","); }
+
+// Numeración de tickets: cada mesa/comanda abierta en Caja obtiene un número
+// correlativo (001, 002, 003…) que se mantiene mientras esa comanda siga abierta,
+// tanto si se imprime el "pendiente de cobro" como el recibo final ya cobrado.
+let ticketCounter = 1;
+try{
+  const savedTicketCounter = localStorage.getItem("kobe_ticket_counter");
+  if(savedTicketCounter) ticketCounter = parseInt(savedTicketCounter, 10) || 1;
+}catch(e){}
+function saveTicketCounter(){
+  try{ localStorage.setItem("kobe_ticket_counter", String(ticketCounter)); }catch(e){}
+}
+let tableTicketNumbers = {}; // tableId -> nº de ticket asignado a la comanda actual
+function getTicketNumberForTable(tableId){
+  if(!tableTicketNumbers[tableId]){
+    tableTicketNumbers[tableId] = ticketCounter++;
+    saveTicketCounter();
   }
+  return tableTicketNumbers[tableId];
+}
+function clearTicketNumberForTable(tableId){
+  delete tableTicketNumbers[tableId];
+}
+function resetTicketCounter(){
+  ticketCounter = 1;
+  saveTicketCounter();
+  tableTicketNumbers = {};
+}
+
+// Construye el HTML del ticket con el mismo formato que la impresora fiscal del
+// restaurante: cabecera con datos del negocio, nº de ticket, fecha/hora, líneas de
+// artículos (UNIT./DESCRIPCIO/PREU/IMPORT), desglose de BASE/%IVA/IMP.IVA, total,
+// importe por comensal y, según el caso, "pendiente de cobro" o la forma de pago.
+function buildReceiptHTML(opts){
+  const total = opts.total;
+  const base = total / (1 + IVA_RATE/100);
+  const ivaAmount = total - base;
+  const perPerson = opts.people ? total / opts.people : null;
+  const itemsHtml = opts.items.length ? opts.items.map(it=>`
+    <div class="frow">
+      <span class="funit">${it.qty}</span>
+      <span class="fdesc">${String(it.name).toUpperCase()}</span>
+      <span class="fprice">${money(it.price)}</span>
+      <span class="fimport">${money(it.price*it.qty)}</span>
+    </div>
+  `).join("") : `<p class="center muted">Sin artículos</p>`;
+
+  let payBlock;
+  if(opts.pending){
+    payBlock = `<div class="frow2 strong"><span>PENDIENTE DE COBRO</span><span>${money(total)}</span></div>`;
+  } else {
+    payBlock = `
+      <div class="frow2"><span>FORMA DE PAGO</span><span>${opts.method === "efectivo" ? "EFECTIVO" : "TARJETA"}</span></div>
+      ${opts.method === "efectivo" ? `
+        <div class="frow2"><span>ENTREGADO</span><span>${money(opts.paidAmount)}</span></div>
+        <div class="frow2"><span>CAMBIO</span><span>${money(opts.change)}</span></div>
+      ` : ""}
+    `;
+  }
+
   return `
-    <h2>KOBE BCN</h2>
-    <p class="center muted">${opts.tableLabel}</p>
-    <p class="center muted">${opts.ts}</p>
-    ${opts.people ? `<p class="center muted">${opts.people} personas</p>` : ""}
+    <p class="center strong">*** ${BIZ_NAME} ***</p>
+    <p class="center">${BIZ_ADDRESS[0]}</p>
+    <p class="center">${BIZ_ADDRESS[1]}</p>
+    <p class="center">${BIZ_LEGAL}</p>
+    <p class="center">CIF: ${BIZ_CIF}</p>
     <hr>
-    ${linesHtml || `<p class="center muted">Sin artículos</p>`}
+    <p class="center strong">${String(opts.ticketNo).padStart(3,"0")}</p>
     <hr>
-    <div class="line total"><span>TOTAL</span><span>${eur(opts.total)}</span></div>
-    ${payHtml}
+    <div class="frow2"><span>FRA SIM:COMPROBANTE</span><span>HORA:${opts.time}</span></div>
+    <div class="frow2"><span>DATA:${opts.date}</span><span></span></div>
     <hr>
-    <p class="center muted">Gracias por su visita</p>
+    <div class="frow fhead"><span class="funit">UNIT.</span><span class="fdesc">DESCRIPCIO</span><span class="fprice">PREU</span><span class="fimport">IMPORT</span></div>
+    <hr>
+    ${itemsHtml}
+    <hr>
+    <div class="frow3"><span>BASE</span><span>%IVA</span><span>IMP.IVA</span></div>
+    <div class="frow3"><span>${money(base)}</span><span>${IVA_RATE.toFixed(2).replace(".",",")}</span><span>${money(ivaAmount)}</span></div>
+    <hr>
+    <div class="frow2 strong"><span>TOTAL EUROS</span><span>${money(total)}</span></div>
+    ${perPerson != null ? `<div class="frow2"><span>IMPORT PER COMENÇAL</span><span>${money(perPerson)}</span></div>` : ""}
+    <hr>
+    ${payBlock}
+    <hr>
+    <p class="center">GRACIES PER LA SEVA VISITA</p>
+    <p class="center">${IVA_RATE}% IVA INCLOS</p>
   `;
 }
+
+// Fecha/hora en el formato del ticket fiscal: DD/MM/AAAA y HH:MM.
+function ticketDateParts(d){
+  const pad = n => String(n).padStart(2,"0");
+  return {
+    date: `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`,
+    time: `${pad(d.getHours())}:${pad(d.getMinutes())}`
+  };
+}
+
+// Imprime el "comprobante" (pendiente de cobro) de la comanda actual de una mesa.
 function printTableTicket(tableId){
   const items = Object.keys(orders[tableId] || {}).filter(isItemId).map(id=>{
     const item = FLAT.find(f=>f.id===id);
     return item ? { name: item.name, qty: orders[tableId][id], price: item.price } : null;
   }).filter(Boolean);
-  const localeMap = { es:"es-ES", ca:"ca-ES", en:"en-GB" };
+  const { date, time } = ticketDateParts(new Date());
   printHTML(buildReceiptHTML({
-    tableLabel: tableLabel(tableId),
-    ts: new Date().toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}),
+    ticketNo: getTicketNumberForTable(tableId),
+    date, time,
     people: getTablePeople(tableId),
     items,
-    total: tableTotal(tableId)
+    total: tableTotal(tableId),
+    pending: true
   }));
 }
+// Reimprime el ticket final (ya cobrado) de un registro del historial.
 function printHistoryRecord(record){
+  let date = record.date, time = record.time;
+  if(!date || !time){
+    // Registros antiguos (antes de este formato) no guardan date/time por separado;
+    // se usa el texto ya formateado que tuvieran como aproximación.
+    date = record.ts || ""; time = "";
+  }
   printHTML(buildReceiptHTML({
-    tableLabel: record.table,
-    ts: record.ts,
+    ticketNo: record.ticketNo || "—",
+    date, time,
     people: record.people || null,
     items: record.items,
     total: record.total,
     method: record.method || null,
     paidAmount: record.paidAmount != null ? record.paidAmount : null,
-    change: record.change != null ? record.change : null
+    change: record.change != null ? record.change : null,
+    pending: false
   }));
 }
 
@@ -3315,9 +3416,13 @@ document.getElementById("pay-btn").addEventListener("click", ()=>{
       return { name:item.name, qty:orders[t][id], price:item.price };
     });
     const localeMap = { es:"es-ES", ca:"ca-ES", en:"en-GB" };
+    const now = new Date();
+    const { date, time } = ticketDateParts(now);
+    const ticketNo = getTicketNumberForTable(t);
     const record = {
       table: tableLabel(t),
-      ts: new Date().toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}),
+      ts: now.toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}),
+      date, time, ticketNo,
       items,
       total,
       method,
@@ -3326,10 +3431,11 @@ document.getElementById("pay-btn").addEventListener("click", ()=>{
       people: getTablePeople(t)
     };
     printHTML(buildReceiptHTML({
-      tableLabel: record.table, ts: record.ts, people: record.people,
-      items, total, method, paidAmount, change
+      ticketNo, date, time, people: record.people,
+      items, total, method, paidAmount, change, pending: false
     }));
     writePay(t, record);
+    clearTicketNumberForTable(t);
     showToast(I18N[currentLang].toastPaid(tableLabel(t), eur(total)));
     backToHome();
   });
@@ -3348,6 +3454,7 @@ document.getElementById("park-btn").addEventListener("click", ()=>{
   showPrompt(I18N[currentLang].parkPrompt, I18N[currentLang].parkPlaceholder, I18N[currentLang].parkOk, (label)=>{
     const finalLabel = label || tableLabel(t);
     writePark(t, finalLabel);
+    clearTicketNumberForTable(t);
     showToast(I18N[currentLang].toastParked);
     backToHome();
   });
@@ -3365,6 +3472,7 @@ document.getElementById("clear-mesa-btn").addEventListener("click", ()=>{
   }
   showConfirm(I18N[currentLang].confirmClear(tableLabel(currentTable)), I18N[currentLang].clearOk, ()=>{
     writeClearTable(currentTable);
+    clearTicketNumberForTable(currentTable);
     showToast(I18N[currentLang].toastCleared);
   });
 });
