@@ -170,6 +170,9 @@
   }
   .session-chip b{color:var(--gold);font-weight:800;}
   .session-chip:hover{border-color:var(--gold-soft);color:var(--text-hi);}
+  #connect-drawer-btn.drawer-on{color:#8fd39e;border-color:rgba(143,211,158,.35);background:rgba(143,211,158,.08);}
+  #connect-drawer-btn.drawer-off{color:#e0b064;border-color:rgba(224,176,100,.35);background:rgba(224,176,100,.08);}
+  #connect-drawer-btn.drawer-error{color:#e08a7a;border-color:rgba(224,138,122,.4);background:rgba(224,138,122,.1);}
 
   /* ---------- Login: código de sesión ---------- */
   #login-view{
@@ -3890,6 +3893,25 @@ connectFirebase();
   let drawerEndpoint = null;
   let drawerInterfaceNumber = null;
 
+  // Refleja en el botón "Conectar caja" si la impresora/cajón está realmente
+  // enlazada ahora mismo (verde), vinculada pero sin confirmar aún (ámbar),
+  // o falló la última conexión (rojo) — así se ve de un vistazo sin tener que probar a cobrar.
+  function updateDrawerButtonStatus(state){
+    const btn = document.getElementById("connect-drawer-btn");
+    if(!btn) return;
+    btn.classList.remove("drawer-on", "drawer-off", "drawer-error");
+    if(state === "on"){
+      btn.classList.add("drawer-on");
+      btn.innerHTML = '🗄️ Caja conectada ✓';
+    } else if(state === "error"){
+      btn.classList.add("drawer-error");
+      btn.innerHTML = '🗄️ Caja sin conectar';
+    } else {
+      btn.classList.add("drawer-off");
+      btn.innerHTML = '🗄️ Conectar caja';
+    }
+  }
+
   function findOutEndpoint(device){
     for(const conf of device.configurations){
       for(const iface of conf.interfaces){
@@ -3914,6 +3936,7 @@ connectFirebase();
     drawerEndpoint = found.endpointNumber;
     drawerInterfaceNumber = found.interfaceNumber;
     try{ localStorage.setItem("kobe_drawer_paired", "1"); }catch(e){}
+    updateDrawerButtonStatus("on");
   }
 
   async function connectDrawerPrinter(showMessages){
@@ -3929,6 +3952,7 @@ connectFirebase();
     }catch(err){
       console.warn("Conexión USB cancelada o fallida:", err);
       if(showMessages) showToast("No se pudo conectar la impresora");
+      updateDrawerButtonStatus("error");
       return false;
     }
   }
@@ -3939,9 +3963,14 @@ connectFirebase();
       const devices = await navigator.usb.getDevices();
       if(devices.length > 0){
         await openDeviceForUse(devices[0]);
+      } else {
+        let paired = false;
+        try{ paired = localStorage.getItem("kobe_drawer_paired") === "1"; }catch(e){}
+        updateDrawerButtonStatus(paired ? "error" : "off");
       }
     }catch(err){
       console.warn("No se pudo reconectar la impresora automáticamente:", err);
+      updateDrawerButtonStatus("error");
     }
   }
 
@@ -3963,6 +3992,7 @@ connectFirebase();
     }catch(err){
       console.warn("No se pudo abrir el cajón:", err);
       showToast("No se pudo abrir el cajón (revisa el cable USB)");
+      updateDrawerButtonStatus("error");
     }
   }
 
@@ -3976,11 +4006,16 @@ connectFirebase();
       if(drawerDevice && e.device === drawerDevice){
         drawerDevice = null;
         drawerEndpoint = null;
+        showToast("Impresora/cajón desconectados");
+        updateDrawerButtonStatus("error");
       }
     });
   }
 
   window.openCashDrawer = openCashDrawer;
+  let paired0 = false;
+  try{ paired0 = localStorage.getItem("kobe_drawer_paired") === "1"; }catch(e){}
+  updateDrawerButtonStatus(paired0 ? "error" : "off");
   tryAutoReconnectDrawer();
 })();
 </script>
