@@ -601,6 +601,8 @@
     color:var(--text-hi);
     font-size:12.5px;font-weight:600;
   }
+  .qty-btn.note-btn{margin-left:6px;font-size:13px;}
+  .item-info .ticket-note{margin-top:4px;}
   .empty-state{color:var(--text-lo);font-size:13.5px;padding:30px 6px;text-align:center;}
 
   /* confirm dialog + toast (replacing native confirm/alert for compatibility) */
@@ -3302,10 +3304,12 @@ function renderItems(){
       : (orders[currentTable][item.id] || 0);
     const row = document.createElement("div");
     row.className = "item-row" + (qty>0 ? " in-order" : "");
+    const note = (!hasOptions && qty>0) ? getOrderNote(currentTable, item.id) : "";
     row.innerHTML = `
       <div class="item-info">
         <div class="name">${item.name}${searchTerm.trim() ? `<span class="cat-pill">${item.cat}</span>` : ""}</div>
         ${item.desc ? `<div class="desc">${item.desc}</div>` : ""}
+        ${note ? `<div class="ticket-note">📝 ${note.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>` : ""}
       </div>
       <div class="item-price">${eur(item.price)}</div>
       <div class="qty-ctrl" data-id="${item.id}" ${hasOptions ? `data-opt-suffix="${optSuffix}"` : ''}>
@@ -3313,6 +3317,7 @@ function renderItems(){
           <button class="qty-btn minus">−</button>
           <span class="qty-num">${qty}</span>
           <button class="qty-btn plus">+</button>
+          ${!hasOptions ? `<button class="qty-btn note-btn" title="${I18N[currentLang].note}">📝</button>` : ""}
         ` : `
           <button class="qty-btn add-only">${I18N[currentLang].add}</button>
         `}
@@ -3327,6 +3332,11 @@ function renderItems(){
     const optSuffix = ctrl.dataset.optSuffix || null;
     const plus = ctrl.querySelector(".plus, .add-only");
     const minus = ctrl.querySelector(".minus");
+    const noteBtn = ctrl.querySelector(".note-btn");
+    if(noteBtn) noteBtn.addEventListener("click", ()=>{
+      const item = FLAT.find(f => f.id === baseId);
+      if(item) openNoteEditor(baseId, item.name, ()=> renderItems());
+    });
     if(plus) plus.addEventListener("click", ()=>{
       if(optSuffix){
         const baseItem = FLAT.find(f => f.id === baseId);
@@ -3453,7 +3463,6 @@ function renderTicket(){
       const item = FLAT.find(f=>f.id===id);
       const qty = o[id];
       const note = getOrderNote(currentTable, id);
-      const isMixer = id.endsWith("-mx0") || id.includes("-mx");
       return `
         <div class="ticket-line" data-id="${id}">
           <div class="l-name">
@@ -3461,7 +3470,7 @@ function renderTicket(){
             ${note ? `<span class="ticket-note">📝 ${note.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</span>` : ""}
           </div>
           <div class="l-price">${eur(item.price*qty)}</div>
-          ${isMixer ? `<button class="l-remove l-note-btn" title="${I18N[currentLang].note}">📝</button>` : ""}
+          <button class="l-remove l-note-btn" title="${I18N[currentLang].note}">📝</button>
           <button class="l-remove" title="Quitar">✕</button>
         </div>
       `;
