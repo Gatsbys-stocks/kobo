@@ -2463,7 +2463,12 @@ function printHTML(bodyHtml){
   doc.open();
   doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Kobe BCN</title>
     <style>
-      body{font-family:'Courier New',Courier,monospace;font-size:12.5px;font-weight:700;width:300px;margin:0 auto;padding:10px;color:#000;}
+      /* Quita el margen de página que pone el navegador por defecto al
+         imprimir: en un rollo de papel continuo (impresora de tickets) eso
+         se traduce en un hueco en blanco antes de que empiece el texto. */
+      @page{ size:80mm auto; margin:0; }
+      html,body{margin:0;padding:0;}
+      body{font-family:'Courier New',Courier,monospace;font-size:12.5px;font-weight:700;width:300px;margin:0 auto;padding:6px 10px 10px;color:#000;}
       h1,h2,h3{text-align:center;margin:4px 0;}
       p{margin:2px 0;}
       hr{border:none;border-top:2px dashed #000;margin:6px 0;}
