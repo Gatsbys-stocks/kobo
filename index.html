@@ -654,7 +654,7 @@
   }
   .picker-box p{margin:0 0 16px;font-size:14px;font-weight:700;line-height:1.4;}
   .picker-grid{
-    display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;
+    display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px;
     max-height:50vh;overflow-y:auto;
   }
   .picker-chip{
@@ -2016,14 +2016,18 @@ function openOptionPicker(promptText, options, onPick, noteCallback){
   overlay.querySelector(".picker-cancel").addEventListener("click", ()=>overlay.remove());
 
   if(noteCallback){
-    overlay.querySelector(".picker-variable-btn").addEventListener("click", ()=>{
+    overlay.querySelector(".picker-variable-btn").addEventListener("click", (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
       overlay.remove();
       noteCallback();
     });
   }
 
-  overlay.querySelectorAll(".picker-chip").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
+  overlay.querySelectorAll(".picker-chip[data-idx]").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
       const idx = Number(btn.dataset.idx);
       overlay.remove();
       onPick(idx);
@@ -2413,12 +2417,10 @@ function renderItems(){
       if(optSuffix){
         const baseItem = FLAT.find(f => f.id === baseId);
         const optList = optSuffix === 'mx' ? baseItem.mixers : baseItem.extras;
-        let pendingNote = "";
         const openPicker = ()=>{
           openOptionPicker(baseItem.name, optList, (optIndex)=>{
             const variant = optSuffix === 'mx' ? getMixerVariant(baseItem, optIndex) : getExtraVariant(baseItem, optIndex);
             changeQty(variant.id, 1);
-            if(pendingNote) writeOrderNote(currentTable, variant.id, pendingNote);
           }, optSuffix === 'mx' ? ()=>{
             const variableOverlay = document.createElement("div");
             variableOverlay.className = "confirm-overlay";
@@ -2459,7 +2461,7 @@ function renderItems(){
                 extras: null
               };
               FLAT.push(variant);
-              changeQty(variant.id, 1);
+              writeQty(currentTable, variant.id, 1);
               variableOverlay.remove();
             });
           } : null);
