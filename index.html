@@ -42,7 +42,7 @@
     --btn-accent-1:#d9ac52; --btn-accent-2:#b9862f; --btn-accent-text:#2a1d0c;
     --floor-1:#1a1510;   --floor-2:#241d15;
   }
- 
+
   /* ===== TEMA "MODERNO": azul/cian sobre grafito frío, tipografía sans ===== */
   html.theme-modern{
     color-scheme: dark;
@@ -71,7 +71,7 @@
   html.theme-modern .history-head h3{
     letter-spacing:0.01em; font-weight:800;
   }
- 
+
   /* ===== TEMA "CLÁSICO": vino y oro antiguo, tipografía serif ===== */
   html.theme-classic{
     color-scheme: dark;
@@ -113,11 +113,11 @@
   .display{font-family:var(--font-display);}
   button{font-family:inherit;}
   input{font-family:inherit;}
- 
+
   /* ---------- App shell ---------- */
   #app{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;}
   [hidden]{display:none !important;}
- 
+
   .topbar{
     display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;
     padding:16px 20px;
@@ -139,7 +139,7 @@
   }
   .brand h1{font-size:19px;margin:0;font-weight:700;letter-spacing:0.02em;}
   .brand small{color:var(--text-lo);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;}
- 
+
   .lang-switch{display:flex;gap:6px;flex:none;}
   .sync-badge{
     margin-left:auto;flex:none;
@@ -148,7 +148,7 @@
   }
   .sync-badge.on{color:#8fd39e;border-color:rgba(143,211,158,.35);background:rgba(143,211,158,.08);}
   .sync-badge.off{color:#e0b064;border-color:rgba(224,176,100,.35);background:rgba(224,176,100,.08);}
- 
+
   .session-chip{
     display:flex;align-items:center;gap:4px;
     background:transparent;border:1px solid rgba(246,239,225,0.16);
@@ -157,7 +157,7 @@
   }
   .session-chip b{color:var(--gold);font-weight:800;}
   .session-chip:hover{border-color:var(--gold-soft);color:var(--text-hi);}
- 
+
   /* ---------- Login: código de sesión ---------- */
   #login-view{
     min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -231,7 +231,7 @@
       linear-gradient(transparent 42%, #c8102e 42% 58%, transparent 58%),
       linear-gradient(90deg, transparent 44%, #c8102e 44% 56%, transparent 56%);
   }
- 
+
   /* ---------- Home: plano de sala ---------- */
   #home-view{padding:18px 22px 0;padding-bottom:env(safe-area-inset-bottom);max-width:1500px;margin:0 auto;width:100%;display:flex;flex-direction:column;flex:1;min-height:0;}
   .home-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap;}
@@ -247,7 +247,7 @@
   .legend i.free{background:#5b5044;border:1px solid rgba(246,239,225,0.25);}
   .legend i.busy{background:var(--stamp);}
   .legend i.barra{background:#4a4038;border:1px solid var(--gold-soft);border-radius:50%;}
- 
+
   /* floor */
   .floor-wrap{
     flex:1;min-height:0;overflow:auto;
@@ -294,7 +294,7 @@
     background:radial-gradient(circle at 34% 30%, var(--barra-busy-1) 0%, var(--barra-busy-2) 75%);
     box-shadow:0 0 0 3px rgba(178,58,46,0.18);
   }
- 
+
   .mesa-tile{
     position:relative;
     align-self:center; justify-self:center;
@@ -352,7 +352,7 @@
     position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);
     font-size:9.5px;font-weight:700;color:var(--gold);white-space:nowrap;
   }
- 
+
   /* toolbar */
   .floor-toolbar{
     display:flex;align-items:stretch;gap:10px;
@@ -386,7 +386,7 @@
     color:#f6efe1;
     box-shadow:0 4px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
   }
- 
+
   /* ---------- Table / comanda view ---------- */
   #table-view{flex:1;display:flex;flex-direction:column;min-height:0;}
   .table-topbar{
@@ -406,7 +406,7 @@
     display:flex;align-items:center;justify-content:center;
   }
   .table-title h2{margin:0;font-size:18px;font-weight:700;}
- 
+
   .search-wrap{
     flex:1;min-width:220px;position:relative;
   }
@@ -423,7 +423,7 @@
   .search-wrap input::placeholder{color:var(--text-lo);}
   .search-wrap input:focus{border-color:var(--gold);}
   .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:0.5;}
- 
+
   .table-actions{display:flex;gap:8px;flex:none;}
   .pay-btn{
     background:linear-gradient(160deg,#7fae6f,#4f7d43);
@@ -444,11 +444,11 @@
     color:#e8a49c;padding:9px 14px;border-radius:30px;font-size:13px;cursor:pointer;
   }
   .clear-mesa-btn:hover{background:rgba(178,58,46,0.12);}
- 
+
   .table-body{
     flex:1;display:flex;min-height:0;
   }
- 
+
   /* category rail */
   .cat-rail{
     width:190px;flex:none;
@@ -471,7 +471,7 @@
     padding:14px 12px 4px;
   }
   .cat-group-label:first-child{padding-top:4px;}
- 
+
   /* items area */
   .items-area{
     flex:1;overflow-y:auto;padding:20px 22px 40px;
@@ -499,6 +499,11 @@
     text-transform:uppercase;letter-spacing:0.06em;vertical-align:middle;
   }
   .item-info .desc{font-size:12px;color:#000;opacity:0.62;margin-top:2px;line-height:1.4;}
+  .mixer-select{
+    margin-top:6px;font-size:12px;font-weight:600;color:#000;
+    background:var(--paper-2);border:1px solid rgba(0,0,0,0.18);border-radius:8px;
+    padding:5px 8px;max-width:100%;
+  }
   .item-price{font-size:13.5px;color:var(--stamp-dark);font-weight:800;min-width:58px;text-align:right;}
   .qty-ctrl{display:flex;align-items:center;gap:0;flex:none;}
   .qty-btn{
@@ -514,7 +519,7 @@
     font-size:12.5px;font-weight:600;
   }
   .empty-state{color:var(--text-lo);font-size:13.5px;padding:30px 6px;text-align:center;}
- 
+
   /* confirm dialog + toast (replacing native confirm/alert for compatibility) */
   .confirm-overlay{
     position:fixed;inset:0;background:rgba(0,0,0,0.55);
@@ -543,7 +548,7 @@
     z-index:210;max-width:80vw;text-align:center;
   }
   .toast.show{opacity:1;transform:translate(-50%,0);}
- 
+
   /* historial de pagos */
   .history-box{
     color-scheme: light;
@@ -589,7 +594,7 @@
   .hdet-line .q{color:var(--stamp-dark);font-weight:700;margin-right:5px;}
   .history-empty{color:var(--text-ink-lo);font-size:13px;text-align:center;padding:36px 10px;}
   .chev{transition:.15s;font-size:11px;color:var(--text-ink-lo);flex:none;}
- 
+
   /* ticket / receipt panel */
   .ticket-panel{
     width:300px;flex:none;
@@ -645,7 +650,7 @@
   .ticket-total .val{font-family:var(--font-display);font-weight:800;font-size:22px;}
   .ticket-count{font-size:11px;color:var(--text-ink-lo);}
   .mobile-ticket-toggle{display:none;}
- 
+
   /* picker de mesas (juntar / recuperar tiquet) */
   .picker-box{
     background:var(--paper);color:#000;border-radius:14px;
@@ -668,7 +673,7 @@
     width:100%;padding:11px 10px;border-radius:8px;font-size:13.5px;font-weight:700;
     cursor:pointer;border:none;background:rgba(0,0,0,0.08);color:#000;
   }
- 
+
   /* prompt (aparcar tiquet) */
   .prompt-input{
     width:100%;background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.16);
@@ -676,7 +681,7 @@
     margin-bottom:16px;outline:none;text-align:center;
   }
   .prompt-input:focus{border-color:var(--gold);}
- 
+
   /* acciones dentro de un tiquet aparcado */
   .parked-actions{display:flex;gap:8px;margin-top:10px;}
   .parked-resume, .parked-delete{
@@ -684,12 +689,12 @@
   }
   .parked-resume{background:var(--stamp);color:var(--text-hi);}
   .parked-delete{background:rgba(0,0,0,0.07);color:#000;}
- 
+
   /* scrollbars */
   .cat-rail::-webkit-scrollbar, .items-area::-webkit-scrollbar, .ticket-items::-webkit-scrollbar{width:8px;}
   .cat-rail::-webkit-scrollbar-thumb, .items-area::-webkit-scrollbar-thumb{background:rgba(246,239,225,0.12);border-radius:8px;}
   .ticket-items::-webkit-scrollbar-thumb{background:rgba(21,17,13,0.18);border-radius:8px;}
- 
+
   /* responsive */
   @media (min-width: 1400px){
     .items-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0 12px;align-content:start;}
@@ -736,7 +741,7 @@
     .lang-btn{padding:5px 8px 5px 5px;font-size:10px;}
     .session-chip{font-size:10px;padding:5px 9px;}
     .sync-badge{font-size:9.5px;padding:4px 8px;}
- 
+
     .table-topbar{padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top));}
     .table-title h2{font-size:15px;}
     .table-title .num{width:32px;height:32px;font-size:18px;}
@@ -744,7 +749,7 @@
     .table-actions{width:100%;flex-wrap:wrap;}
     .pay-btn, .clear-mesa-btn, .park-btn-top{flex:1 1 30%;text-align:center;padding:9px 6px;font-size:11.5px;}
     .search-wrap{width:100%;order:10;}
- 
+
     .cat-rail{
       width:100%;height:auto;border-right:none;border-bottom:1px solid rgba(246,239,225,0.08);
       display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;
@@ -760,7 +765,7 @@
     .qty-btn{width:38px;height:38px;font-size:19px;}
     .qty-num{width:26px;font-size:15px;}
     .qty-btn.add-only{padding:0 16px;height:38px;}
- 
+
     .login-sub{font-size:12.5px;}
     .session-input{width:100%;max-width:220px;font-size:28px;padding:14px 8px 14px 16px;}
     .history-box{max-height:88vh;}
@@ -779,7 +784,7 @@
 </head>
 <body>
 <div id="app">
- 
+
   <!-- ===== LOGIN: código de sesión ===== -->
   <div id="login-view">
     <div class="login-wrap">
@@ -796,7 +801,7 @@
       <p class="login-error" id="login-error" hidden>Código incorrecto.</p>
     </div>
   </div>
- 
+
   <!-- ===== HOME: 16 mesas ===== -->
   <div id="home-view" hidden>
     <div class="topbar" style="position:static;border:none;padding:0;background:none;margin-bottom:0;">
@@ -817,7 +822,7 @@
         <button class="lang-btn" data-lang="en"><span class="flag flag-en"></span>EN</button>
       </div>
     </div>
- 
+
     <div class="home-head">
       <div>
         <div class="eyebrow" id="home-eyebrow">Plano de sala</div>
@@ -829,11 +834,11 @@
         <span><i class="barra"></i><span id="legend-barra">Barra</span></span>
       </div>
     </div>
- 
+
     <div class="floor-wrap">
       <div class="floor" id="floor"></div>
     </div>
- 
+
     <div class="floor-toolbar">
       <div class="status-key">
         <div><span class="sw" style="background:#5b5044;border:1px solid rgba(246,239,225,.25)"></span><b id="key-free">Libre</b></div>
@@ -849,7 +854,7 @@
       </div>
     </div>
   </div>
- 
+
   <!-- ===== TABLE VIEW: carta + comanda ===== -->
   <div id="table-view" hidden>
     <div class="topbar table-topbar">
@@ -868,7 +873,7 @@
         <button class="clear-mesa-btn" id="clear-mesa-btn">Vaciar mesa</button>
       </div>
     </div>
- 
+
     <div class="table-body">
       <nav class="cat-rail" id="cat-rail"></nav>
       <main class="items-area" id="items-area"></main>
@@ -891,19 +896,19 @@
       </aside>
     </div>
   </div>
- 
+
   <button class="mobile-ticket-toggle" id="mobile-ticket-toggle" hidden>
     🧾 <span id="mobile-ticket-label">Ver comanda</span> <span id="mobile-ticket-badge"></span>
   </button>
- 
+
 </div>
- 
+
 <script>
 /* =====================================================================
    CONFIGURACIÓN DE SINCRONIZACIÓN (Firebase Realtime Database)
    ---------------------------------------------------------------------
    Para que TODOS los móviles vean las mismas mesas en tiempo real:
- 
+
    1. Ve a https://console.firebase.google.com → "Crear proyecto"
       (es gratis, no hace falta tarjeta).
    2. Dentro del proyecto: icono "</>" → "Añadir app web" → dale un
@@ -922,7 +927,7 @@
           }
         }
       → "Publicar".
- 
+
    Mientras dejes el apiKey de abajo tal cual ("TU_API_KEY"), la app
    funciona en modo local: cada móvil ve solo sus propios cambios,
    sin compartir nada (útil para probar antes de configurar Firebase).
@@ -938,7 +943,7 @@ const FIREBASE_CONFIG = {
 };
 let firebaseReady = false;
 let db = null;
- 
+
 // Códigos de sesión: cada uno es una "sala" independiente y compartida.
 // Todo el que entre con el mismo código verá las mismas mesas.
 const SESSION_CODES = ["0220", "3040", "6090"];
@@ -946,7 +951,7 @@ let currentSession = null;
 let ordersRef = null;
 let historyRef = null;
 let parkedRef = null;
- 
+
 /* ===================== DATA (multi-idioma) ===================== */
 const MENU_SRC = [
   { group:{es:"Cocina",ca:"Cuina",en:"Kitchen"}, cat:{es:"Entrantes",ca:"Entrants",en:"Starters"}, items:[
@@ -1136,20 +1141,72 @@ const MENU_SRC = [
   ]},
   { group:{es:"Bebidas",ca:"Begudes",en:"Drinks"}, cat:{es:"Cócteles",ca:"Còctels",en:"Cocktails"}, items:[
     { price:4.0, es:["Sangría",""], ca:["Sangria",""], en:["Sangria",""] },
+    { price:16.0, es:["Jarra de sangría",""], ca:["Gerra de sangria",""], en:["Sangria jug",""] },
     { price:6.5, es:["Aperol spritz",""], ca:["Aperol spritz",""], en:["Aperol spritz",""] },
+    { price:5.2, es:["Cóctel sin alcohol",""], ca:["Còctel sense alcohol",""], en:["Non-alcoholic cocktail",""] },
+    { price:7.5, es:["Mojito lima",""], ca:["Mojito llima",""], en:["Lime mojito",""] },
+    { price:7.5, es:["Mojito fresa",""], ca:["Mojito maduixa",""], en:["Strawberry mojito",""] },
+    { price:7.5, es:["Mojito mango",""], ca:["Mojito mango",""], en:["Mango mojito",""] },
+    { price:7.5, es:["Mojito maracuyá",""], ca:["Mojito maracujà",""], en:["Passion fruit mojito",""] },
+    { price:7.5, es:["Caipirinha lima",""], ca:["Caipirinha llima",""], en:["Lime caipirinha",""] },
+    { price:7.5, es:["Caipirinha fresa",""], ca:["Caipirinha maduixa",""], en:["Strawberry caipirinha",""] },
+    { price:7.5, es:["Caipirinha mango",""], ca:["Caipirinha mango",""], en:["Mango caipirinha",""] },
+    { price:7.5, es:["Caipirinha maracuyá",""], ca:["Caipirinha maracujà",""], en:["Passion fruit caipirinha",""] },
+    { price:7.5, es:["Sakerinha lima",""], ca:["Sakerinha llima",""], en:["Lime sakerinha",""] },
+    { price:7.5, es:["Sakerinha fresa",""], ca:["Sakerinha maduixa",""], en:["Strawberry sakerinha",""] },
+    { price:7.5, es:["Sakerinha mango",""], ca:["Sakerinha mango",""], en:["Mango sakerinha",""] },
+    { price:7.5, es:["Sakerinha maracuyá",""], ca:["Sakerinha maracujà",""], en:["Passion fruit sakerinha",""] },
+  ]},
+  { group:{es:"Bebidas",ca:"Begudes",en:"Drinks"}, cat:{es:"Chupitos",ca:"Xopets",en:"Shots"}, items:[
+    { price:2.5, es:["Chupito Baileys",""], ca:["Xopet Baileys",""], en:["Baileys shot",""] },
+    { price:2.0, es:["Chupito hierbas",""], ca:["Xopet herbes",""], en:["Herbal liqueur shot",""] },
+    { price:2.0, es:["Chupito limoncello",""], ca:["Xopet limoncello",""], en:["Limoncello shot",""] },
+    { price:2.5, es:["Chupito Jägermeister",""], ca:["Xopet Jägermeister",""], en:["Jägermeister shot",""] },
+    { price:2.5, es:["Chupito J&B",""], ca:["Xopet J&B",""], en:["J&B shot",""] },
+    { price:2.6, es:["Chupito Johnnie Walker",""], ca:["Xopet Johnnie Walker",""], en:["Johnnie Walker shot",""] },
+    { price:2.6, es:["Chupito Jameson",""], ca:["Xopet Jameson",""], en:["Jameson shot",""] },
+    { price:3.0, es:["Chupito Cardhu",""], ca:["Xopet Cardhu",""], en:["Cardhu shot",""] },
+    { price:2.6, es:["Chupito Havana Club",""], ca:["Xopet Havana Club",""], en:["Havana Club shot",""] },
+    { price:2.5, es:["Chupito Cacique",""], ca:["Xopet Cacique",""], en:["Cacique shot",""] },
+    { price:2.5, es:["Chupito sake",""], ca:["Xopet de sake",""], en:["Sake shot",""] },
+    { price:3.5, es:["Chupito Jack Daniel's",""], ca:["Xopet Jack Daniel's",""], en:["Jack Daniel's shot",""] },
+  ]},
+  { group:{es:"Bebidas",ca:"Begudes",en:"Drinks"}, cat:{es:"Combinados (copas)",ca:"Combinats (copes)",en:"Mixed Drinks"}, items:[
+    { price:6.0, es:["Combinado J&B","Whisky + refresco a elegir"], ca:["Combinat J&B","Whisky + refresc a triar"], en:["J&B mixed drink","Whisky + choice of mixer"],
+      mixers:{ es:["Agua","Sprite","Coca-Cola","Coca-Cola Zero"], ca:["Aigua","Sprite","Coca-Cola","Coca-Cola Zero"], en:["Water","Sprite","Coca-Cola","Coca-Cola Zero"] } },
+    { price:7.0, es:["Combinado Johnnie Walker","Whisky + refresco a elegir"], ca:["Combinat Johnnie Walker","Whisky + refresc a triar"], en:["Johnnie Walker mixed drink","Whisky + choice of mixer"],
+      mixers:{ es:["Agua","Coca-Cola","Coca-Cola Zero","Sprite"], ca:["Aigua","Coca-Cola","Coca-Cola Zero","Sprite"], en:["Water","Coca-Cola","Coca-Cola Zero","Sprite"] } },
+    { price:7.0, es:["Combinado Jameson","Whisky + refresco a elegir"], ca:["Combinat Jameson","Whisky + refresc a triar"], en:["Jameson mixed drink","Whisky + choice of mixer"],
+      mixers:{ es:["Agua","Coca-Cola","Coca-Cola Zero","Sprite"], ca:["Aigua","Coca-Cola","Coca-Cola Zero","Sprite"], en:["Water","Coca-Cola","Coca-Cola Zero","Sprite"] } },
+    { price:7.0, es:["Combinado Jack Daniel's","Whisky + refresco a elegir"], ca:["Combinat Jack Daniel's","Whisky + refresc a triar"], en:["Jack Daniel's mixed drink","Whisky + choice of mixer"],
+      mixers:{ es:["Agua","Coca-Cola","Coca-Cola Zero","Sprite"], ca:["Aigua","Coca-Cola","Coca-Cola Zero","Sprite"], en:["Water","Coca-Cola","Coca-Cola Zero","Sprite"] } },
+    { price:7.0, es:["Combinado Cacique","Ron + refresco a elegir"], ca:["Combinat Cacique","Rom + refresc a triar"], en:["Cacique mixed drink","Rum + choice of mixer"],
+      mixers:{ es:["Agua","Coca-Cola","Coca-Cola Zero","Zumo de piña"], ca:["Aigua","Coca-Cola","Coca-Cola Zero","Suc de pinya"], en:["Water","Coca-Cola","Coca-Cola Zero","Pineapple juice"] } },
+    { price:7.5, es:["Combinado Havana Club 7","Ron + refresco a elegir"], ca:["Combinat Havana Club 7","Rom + refresc a triar"], en:["Havana Club 7 mixed drink","Rum + choice of mixer"],
+      mixers:{ es:["Agua","Coca-Cola","Coca-Cola Zero","Zumo de piña"], ca:["Aigua","Coca-Cola","Coca-Cola Zero","Suc de pinya"], en:["Water","Coca-Cola","Coca-Cola Zero","Pineapple juice"] } },
+    { price:7.0, es:["Combinado Bombay Sapphire","Ginebra + refresco a elegir"], ca:["Combinat Bombay Sapphire","Ginebra + refresc a triar"], en:["Bombay Sapphire mixed drink","Gin + choice of mixer"],
+      mixers:{ es:["Agua","Tónica"], ca:["Aigua","Tònica"], en:["Water","Tonic water"] } },
+    { price:7.0, es:["Combinado Tanqueray","Ginebra + refresco a elegir"], ca:["Combinat Tanqueray","Ginebra + refresc a triar"], en:["Tanqueray mixed drink","Gin + choice of mixer"],
+      mixers:{ es:["Agua","Tónica"], ca:["Aigua","Tònica"], en:["Water","Tonic water"] } },
+    { price:10.0, es:["Combinado Hendrick's","Ginebra + refresco a elegir"], ca:["Combinat Hendrick's","Ginebra + refresc a triar"], en:["Hendrick's mixed drink","Gin + choice of mixer"],
+      mixers:{ es:["Agua","Tónica"], ca:["Aigua","Tònica"], en:["Water","Tonic water"] } },
+    { price:10.0, es:["Combinado Martin Miller's","Ginebra + refresco a elegir"], ca:["Combinat Martin Miller's","Ginebra + refresc a triar"], en:["Martin Miller's mixed drink","Gin + choice of mixer"],
+      mixers:{ es:["Agua","Tónica"], ca:["Aigua","Tònica"], en:["Water","Tonic water"] } },
+    { price:7.0, es:["Combinado Absolut","Vodka + refresco a elegir"], ca:["Combinat Absolut","Vodka + refresc a triar"], en:["Absolut mixed drink","Vodka + choice of mixer"],
+      mixers:{ es:["Agua","Tónica","Zumo de naranja","Coca-Cola"], ca:["Aigua","Tònica","Suc de taronja","Coca-Cola"], en:["Water","Tonic water","Orange juice","Coca-Cola"] } },
   ]},
   { group:{es:"Bebidas",ca:"Begudes",en:"Drinks"}, cat:{es:"Sake",ca:"Sake",en:"Sake"}, items:[
     { price:6.2, es:["Jarra",""], ca:["Gerra",""], en:["Jug",""] },
     { price:15.5, es:["Hakutsuru tokubetsu junmai yamadanishiki",""], ca:["Hakutsuru tokubetsu junmai yamadanishiki",""], en:["Hakutsuru tokubetsu junmai yamadanishiki",""] },
   ]},
 ];
- 
+
 function buildMenu(lang){
   return MENU_SRC.map(function(sec, si){
     return {
       cat: sec.cat[lang], group: sec.group[lang],
       items: sec.items.map(function(it, ii){
-        return { id: si+'-'+ii, name: it[lang][0], desc: it[lang][1], price: it.price };
+        return { id: si+'-'+ii, name: it[lang][0], desc: it[lang][1], price: it.price, mixers: it.mixers ? it.mixers[lang] : null };
       })
     };
   });
@@ -1158,12 +1215,47 @@ function buildFlat(menu){
   const flat = [];
   menu.forEach(function(section){
     section.items.forEach(function(it){
-      flat.push({ id: it.id, cat: section.cat, group: section.group, name: it.name, desc: it.desc, price: it.price });
+      flat.push({ id: it.id, cat: section.cat, group: section.group, name: it.name, desc: it.desc, price: it.price, mixers: it.mixers || null });
     });
   });
   return flat;
 }
- 
+/* Devuelve (o crea) la línea de carta correspondiente a un combinado + refresco elegido.
+   Se guarda en FLAT con un id derivado, para que quede registrada igual que cualquier otro plato. */
+function getMixerVariant(baseItem, mixerIndex){
+  const idx = mixerIndex || 0;
+  const variantId = baseItem.id + '-mx' + idx;
+  let existing = FLAT.find(f => f.id === variantId);
+  if(existing) return existing;
+  const mixerName = baseItem.mixers ? baseItem.mixers[idx] : null;
+  const variant = {
+    id: variantId,
+    cat: baseItem.cat,
+    group: baseItem.group,
+    name: mixerName ? baseItem.name + ' · ' + mixerName : baseItem.name,
+    desc: baseItem.desc,
+    price: baseItem.price,
+    mixers: null
+  };
+  FLAT.push(variant);
+  return variant;
+}
+/* Tras reconstruir FLAT (cambio de idioma, sincronización...) hay que volver a crear
+   en FLAT las líneas de combinados+refresco que ya estén en alguna comanda, si no,
+   el ticket no encontraría el artículo. */
+function regenerateMixerVariants(){
+  const seen = new Set();
+  Object.keys(orders).forEach(function(tableId){
+    Object.keys(orders[tableId] || {}).forEach(function(id){
+      const m = id.match(/^(.*)-mx(\d+)$/);
+      if(!m || seen.has(id)) return;
+      seen.add(id);
+      const baseItem = FLAT.find(f => f.id === m[1]);
+      if(baseItem && baseItem.mixers) getMixerVariant(baseItem, parseInt(m[2], 10));
+    });
+  });
+}
+
 /* ===================== TEXTOS DE INTERFAZ (ES / CA / EN) ===================== */
 const I18N = {
   es: {
@@ -1184,6 +1276,7 @@ const I18N = {
     catSub: (n)=> n + " elementos",
     noResults: "Sin resultados. Prueba con otro término.",
     add: "Añadir",
+    mixerWith: "Con ",
     ticketMark: "KOBE BCN · COMANDA",
     ticketEmpty: "Aún no hay artículos<br>en esta mesa",
     total: "Total",
@@ -1256,6 +1349,7 @@ const I18N = {
     catSub: (n)=> n + " elements",
     noResults: "Sense resultats. Prova amb un altre terme.",
     add: "Afegir",
+    mixerWith: "Amb ",
     ticketMark: "KOBE BCN · COMANDA",
     ticketEmpty: "Encara no hi ha articles<br>en aquesta taula",
     total: "Total",
@@ -1328,6 +1422,7 @@ const I18N = {
     catSub: (n)=> n + " items",
     noResults: "No results. Try another term.",
     add: "Add",
+    mixerWith: "With ",
     ticketMark: "KOBE BCN · ORDER",
     ticketEmpty: "No items yet<br>for this table",
     total: "Total",
@@ -1383,7 +1478,7 @@ const I18N = {
     sessionChipLabel: "Session", changeLabel: "Change",
   },
 };
- 
+
 /* ===================== STATE ===================== */
 // Posiciones en el plano de sala (columna 1-13 / fila 1-5), según la foto de referencia
 const FLOOR_LAYOUT = [
@@ -1411,7 +1506,7 @@ const BARRA_LAYOUT = [
   { id:503, col:6, row:1 },
 ];
 const ALL_IDS = [...FLOOR_LAYOUT.map(t=>t.id), ...BARRA_LAYOUT.map(b=>b.id)];
- 
+
 let orders = {};              // orders[tableId] = { itemId: qty }
 ALL_IDS.forEach(id => orders[id] = {});
 let currentTable = null;
@@ -1422,14 +1517,19 @@ let MENU = buildMenu(currentLang);
 let FLAT = buildFlat(MENU);
 let currentCat = MENU[0].cat;
 let searchTerm = "";
+// Normaliza texto para la búsqueda: minúsculas y sin acentos, así "agua" encuentra "Água"/"AGUA" etc.
+// sin cruzarse con otras palabras que sólo comparten alguna letra.
+function normalizeText(s){
+  return (s || "").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 function isBarra(id){ return id >= 500; }
 function tableLabel(id){ return (isBarra(id) ? I18N[currentLang].barraLabel : I18N[currentLang].mesaLabel) + " " + id; }
- 
+
 let history = [];             // pagos registrados: { id, table, ts, items:[{name,qty,price}], total }
 let historyCounter = 1;
 let parked = [];              // tiquets aparcados: { id, label, ts, items:{itemId:qty}, total }
 let parkedCounter = 1;
- 
+
 /* ===================== HELPERS ===================== */
 const eur = n => n.toFixed(2).replace(".", ",") + " €";
 function tableTotal(t){
@@ -1442,7 +1542,7 @@ function tableTotal(t){
 function tableCount(t){
   return Object.values(orders[t]).reduce((a,b)=>a+b,0);
 }
- 
+
 /* ===================== SINCRONIZACIÓN (Firebase, por sesión) ===================== */
 /* ===================== TEMA VISUAL (Salón) ===================== */
 function cycleTheme(){
@@ -1451,7 +1551,7 @@ function cycleTheme(){
   document.documentElement.className = cls;
   showToast(I18N[currentLang].themeNames[themeIndex]);
 }
- 
+
 function updateSyncBadge(on){
   const el = document.getElementById("sync-badge");
   if(!el) return;
@@ -1474,6 +1574,7 @@ function parkedFromSnapshot(val){
   }));
 }
 function refreshAfterOrdersChange(){
+  regenerateMixerVariants();
   if(document.getElementById("home-view").hidden === false){
     renderHome();
   } else if(document.getElementById("table-view").hidden === false){
@@ -1656,25 +1757,25 @@ function mergeTables(source, dest){
   });
   writeClearTable(source);
 }
- 
+
 /* ===================== RENDER: HOME (plano de sala) ===================== */
 function renderHome(){
   const floor = document.getElementById("floor");
   floor.innerHTML = "";
- 
+
   // barras decorativas de madera (como en la foto)
   const decoTop = document.createElement("div");
   decoTop.className = "deco-bar";
   decoTop.style.gridColumn = "1 / span 3";
   decoTop.style.gridRow = "2";
   floor.appendChild(decoTop);
- 
+
   const decoBottom = document.createElement("div");
   decoBottom.className = "deco-bar";
   decoBottom.style.gridColumn = "5 / span 3";
   decoBottom.style.gridRow = "5";
   floor.appendChild(decoBottom);
- 
+
   // asientos de barra 500-503
   BARRA_LAYOUT.forEach(b=>{
     const busy = tableCount(b.id) > 0;
@@ -1687,7 +1788,7 @@ function renderHome(){
     seat.addEventListener("click", ()=>openTable(b.id));
     floor.appendChild(seat);
   });
- 
+
   // mesas 1-16
   FLOOR_LAYOUT.forEach(t=>{
     const busy = tableCount(t.id) > 0;
@@ -1708,7 +1809,7 @@ function renderHome(){
     floor.appendChild(tile);
   });
 }
- 
+
 /* ===================== CONFIRM / TOAST (propios, sin confirm()/alert() nativos) ===================== */
 function showToast(msg){
   const t = document.createElement("div");
@@ -1741,7 +1842,7 @@ function showConfirm(msg, okLabel, onYes){
     onYes();
   });
 }
- 
+
 function showPrompt(msg, placeholder, okLabel, onSubmit){
   const overlay = document.createElement("div");
   overlay.className = "confirm-overlay";
@@ -1768,7 +1869,7 @@ function showPrompt(msg, placeholder, okLabel, onSubmit){
   overlay.querySelector(".confirm-ok").addEventListener("click", submit);
   input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); submit(); } });
 }
- 
+
 // Selector de mesa/barra genérico (para juntar mesas y recuperar tiquets aparcados).
 function openTablePicker(promptText, onPick, excludeId){
   const overlay = document.createElement("div");
@@ -1795,7 +1896,7 @@ function openTablePicker(promptText, onPick, excludeId){
     });
   });
 }
- 
+
 document.getElementById("btn-saldo").addEventListener("click", ()=>{
   const activeIds = ALL_IDS.filter(id=>tableCount(id)>0);
   const total = activeIds.reduce((s,id)=>s+tableTotal(id),0);
@@ -1828,7 +1929,7 @@ document.getElementById("btn-juntar").addEventListener("click", ()=>{
   });
 });
 document.getElementById("btn-historial").addEventListener("click", openHistory);
- 
+
 /* ===================== IDIOMA ===================== */
 function applyStaticText(){
   const t = I18N[currentLang];
@@ -1864,12 +1965,13 @@ function applyStaticText(){
     b.classList.toggle("active", b.dataset.lang === currentLang);
   });
 }
- 
+
 function setLang(lang){
   if(lang === currentLang) return;
   currentLang = lang;
   MENU = buildMenu(currentLang);
   FLAT = buildFlat(MENU);
+  regenerateMixerVariants();
   currentCat = MENU[0].cat;
   searchTerm = "";
   applyStaticText();
@@ -1887,14 +1989,14 @@ function setLang(lang){
 document.querySelectorAll(".lang-btn").forEach(btn=>{
   btn.addEventListener("click", ()=>setLang(btn.dataset.lang));
 });
- 
+
 /* ===================== HISTORIAL DE PAGOS ===================== */
 function openHistory(){
   const overlay = document.createElement("div");
   overlay.className = "confirm-overlay";
- 
+
   const totalHoy = history.reduce((s,h)=>s+h.total,0);
- 
+
   const listHtml = history.length === 0
     ? `<div class="history-empty">${I18N[currentLang].historyEmpty}</div>`
     : [...history].reverse().map(h => `
@@ -1917,7 +2019,7 @@ function openHistory(){
           </div>
         </div>
       `).join("");
- 
+
   overlay.innerHTML = `
     <div class="history-box">
       <div class="history-head">
@@ -1932,7 +2034,7 @@ function openHistory(){
     </div>
   `;
   document.body.appendChild(overlay);
- 
+
   overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
   overlay.querySelector("#history-close").addEventListener("click", ()=>overlay.remove());
   overlay.querySelectorAll(".history-entry-head").forEach(head=>{
@@ -1941,11 +2043,11 @@ function openHistory(){
     });
   });
 }
- 
+
 function openParkedList(){
   const overlay = document.createElement("div");
   overlay.className = "confirm-overlay";
- 
+
   const listHtml = parked.length === 0
     ? `<div class="history-empty">${I18N[currentLang].parkedEmpty}</div>`
     : [...parked].reverse().map(p => {
@@ -1980,7 +2082,7 @@ function openParkedList(){
           </div>
         `;
       }).join("");
- 
+
   overlay.innerHTML = `
     <div class="history-box">
       <div class="history-head">
@@ -1994,7 +2096,7 @@ function openParkedList(){
     </div>
   `;
   document.body.appendChild(overlay);
- 
+
   overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
   overlay.querySelector("#parked-close").addEventListener("click", ()=>overlay.remove());
   overlay.querySelectorAll(".history-entry-head").forEach(head=>{
@@ -2026,7 +2128,7 @@ function openParkedList(){
     });
   });
 }
- 
+
 /* ===================== RENDER: TABLE VIEW ===================== */
 function openTable(n){
   currentTable = n;
@@ -2045,7 +2147,7 @@ function openTable(n){
   renderItems();
   renderTicket();
 }
- 
+
 function backToHome(){
   currentTable = null;
   document.getElementById("ticket-panel").classList.remove("open");
@@ -2054,7 +2156,7 @@ function backToHome(){
   document.getElementById("mobile-ticket-toggle").hidden = true;
   renderHome();
 }
- 
+
 function renderCatRail(){
   const rail = document.getElementById("cat-rail");
   rail.innerHTML = "";
@@ -2080,15 +2182,15 @@ function renderCatRail(){
     rail.appendChild(btn);
   });
 }
- 
+
 function renderItems(){
   const area = document.getElementById("items-area");
   const heading = document.getElementById("items-heading");
   let list, title, sub;
- 
+
   if(searchTerm.trim()){
-    const q = searchTerm.trim().toLowerCase();
-    list = FLAT.filter(f => f.name.toLowerCase().includes(q) || f.desc.toLowerCase().includes(q) || f.cat.toLowerCase().includes(q));
+    const q = normalizeText(searchTerm.trim());
+    list = FLAT.filter(f => normalizeText(f.name).includes(q) || normalizeText(f.desc).includes(q) || normalizeText(f.cat).includes(q));
     title = I18N[currentLang].resultsHeading;
     sub = I18N[currentLang].resultsSub(list.length, searchTerm);
   } else {
@@ -2096,27 +2198,36 @@ function renderItems(){
     title = currentCat;
     sub = I18N[currentLang].catSub(list.length);
   }
- 
+
   area.innerHTML = `<h3 class="items-heading">${title}</h3><p class="items-sub">${sub}</p>`;
- 
+
   if(list.length===0){
     area.innerHTML += `<div class="empty-state">${I18N[currentLang].noResults}</div>`;
     return;
   }
- 
+
   const wrap = document.createElement("div");
   wrap.className = "items-wrap";
   list.forEach(item=>{
-    const qty = orders[currentTable][item.id] || 0;
+    const hasMixers = item.mixers && item.mixers.length;
+    // Para combinados, la cantidad mostrada es la suma de todas sus variantes de refresco
+    const qty = hasMixers
+      ? item.mixers.reduce((sum,_,i)=> sum + (orders[currentTable][item.id+'-mx'+i] || 0), 0)
+      : (orders[currentTable][item.id] || 0);
     const row = document.createElement("div");
     row.className = "item-row" + (qty>0 ? " in-order" : "");
     row.innerHTML = `
       <div class="item-info">
         <div class="name">${item.name}${searchTerm.trim() ? `<span class="cat-pill">${item.cat}</span>` : ""}</div>
         ${item.desc ? `<div class="desc">${item.desc}</div>` : ""}
+        ${hasMixers ? `
+          <select class="mixer-select" data-base-id="${item.id}">
+            ${item.mixers.map((m,i)=>`<option value="${i}">${I18N[currentLang].mixerWith}${m}</option>`).join("")}
+          </select>
+        ` : ""}
       </div>
       <div class="item-price">${eur(item.price)}</div>
-      <div class="qty-ctrl" data-id="${item.id}">
+      <div class="qty-ctrl" data-id="${item.id}" ${hasMixers ? 'data-mixers="1"' : ''}>
         ${qty>0 ? `
           <button class="qty-btn minus">−</button>
           <span class="qty-num">${qty}</span>
@@ -2129,22 +2240,46 @@ function renderItems(){
     wrap.appendChild(row);
   });
   area.appendChild(wrap);
- 
+
   area.querySelectorAll(".qty-ctrl").forEach(ctrl=>{
-    const id = ctrl.dataset.id;
+    const baseId = ctrl.dataset.id;
+    const isMixer = ctrl.dataset.mixers === "1";
     const plus = ctrl.querySelector(".plus, .add-only");
     const minus = ctrl.querySelector(".minus");
-    if(plus) plus.addEventListener("click", ()=>changeQty(id, 1));
-    if(minus) minus.addEventListener("click", ()=>changeQty(id, -1));
+    if(plus) plus.addEventListener("click", ()=>{
+      if(isMixer){
+        const select = ctrl.closest(".item-row").querySelector(".mixer-select");
+        const mixerIndex = select ? parseInt(select.value, 10) : 0;
+        const baseItem = FLAT.find(f => f.id === baseId);
+        const variant = getMixerVariant(baseItem, mixerIndex);
+        changeQty(variant.id, 1);
+      } else {
+        changeQty(baseId, 1);
+      }
+    });
+    if(minus) minus.addEventListener("click", ()=>{
+      if(isMixer){
+        // Quita primero de la variante con más unidades (la última elegida con stock)
+        const baseItem = FLAT.find(f => f.id === baseId);
+        let targetId = null;
+        for(let i=0;i<baseItem.mixers.length;i++){
+          const vid = baseId+'-mx'+i;
+          if((orders[currentTable][vid]||0) > 0) targetId = vid;
+        }
+        if(targetId) changeQty(targetId, -1);
+      } else {
+        changeQty(baseId, -1);
+      }
+    });
   });
 }
- 
+
 function changeQty(id, delta){
   const cur = orders[currentTable][id] || 0;
   const next = cur + delta;
   writeQty(currentTable, id, next);
 }
- 
+
 function renderTicket(){
   const itemsEl = document.getElementById("ticket-items");
   const o = orders[currentTable];
@@ -2175,16 +2310,16 @@ function renderTicket(){
   const badge = document.getElementById("mobile-ticket-badge");
   badge.textContent = count>0 ? "· " + count : "";
 }
- 
+
 /* ===================== EVENTS ===================== */
 document.getElementById("back-btn").addEventListener("click", backToHome);
- 
+
 document.getElementById("search-input").addEventListener("input", (e)=>{
   searchTerm = e.target.value;
   renderCatRail();
   renderItems();
 });
- 
+
 document.getElementById("pay-btn").addEventListener("click", ()=>{
   const t = currentTable;
   if(tableCount(t)===0){
@@ -2209,7 +2344,7 @@ document.getElementById("pay-btn").addEventListener("click", ()=>{
     backToHome();
   });
 });
- 
+
 document.getElementById("park-btn").addEventListener("click", ()=>{
   const t = currentTable;
   if(tableCount(t)===0){
@@ -2223,7 +2358,7 @@ document.getElementById("park-btn").addEventListener("click", ()=>{
     backToHome();
   });
 });
- 
+
 document.getElementById("clear-mesa-btn").addEventListener("click", ()=>{
   if(tableCount(currentTable)===0){
     showToast(I18N[currentLang].toastTableEmptyAlready);
@@ -2234,7 +2369,7 @@ document.getElementById("clear-mesa-btn").addEventListener("click", ()=>{
     showToast(I18N[currentLang].toastCleared);
   });
 });
- 
+
 document.getElementById("btn-cerrar-dia").addEventListener("click", ()=>{
   showConfirm(I18N[currentLang].confirmCloseDay, I18N[currentLang].closeDayOk, ()=>{
     writeCloseDay();
@@ -2242,9 +2377,9 @@ document.getElementById("btn-cerrar-dia").addEventListener("click", ()=>{
     backToHome();
   });
 });
- 
+
 document.getElementById("change-session-btn").addEventListener("click", leaveSession);
- 
+
 document.getElementById("login-form").addEventListener("submit", (e)=>{
   e.preventDefault();
   const input = document.getElementById("session-input");
@@ -2264,15 +2399,14 @@ document.getElementById("login-form").addEventListener("submit", (e)=>{
     input.focus();
   }
 });
- 
+
 document.getElementById("mobile-ticket-toggle").addEventListener("click", ()=>{
   document.getElementById("ticket-panel").classList.toggle("open");
 });
- 
+
 /* ===================== INIT ===================== */
 applyStaticText();
 connectFirebase();
 </script>
 </body>
 </html>
- 
