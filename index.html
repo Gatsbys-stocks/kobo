@@ -233,6 +233,7 @@
   .role-btn.active[data-role="comanda"]{border-color:var(--gold);background:rgba(199,154,82,0.16);color:var(--gold);}
   .role-btn.active[data-role="cocina"]{border-color:#e0895a;background:rgba(224,137,90,0.18);color:#f0a97e;}
   .role-btn.active[data-role="sushi"]{border-color:#5aa9a3;background:rgba(90,169,163,0.18);color:#8fd6cd;}
+  .role-btn.active[data-role="caja"]{border-color:#7fd48a;background:rgba(127,212,138,0.18);color:#a8e8b0;}
 
   /* ---------- Vista de cocina / sushi ---------- */
   #kitchen-view{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;}
@@ -507,6 +508,12 @@
     font-size:13px;font-weight:700;cursor:pointer;
   }
   .park-btn-top:hover{background:rgba(199,154,82,0.22);}
+  .print-btn-top{
+    background:rgba(90,169,163,0.14);border:1px solid rgba(90,169,163,0.4);
+    color:#8fd6cd;padding:9px 14px;border-radius:30px;
+    font-size:13px;font-weight:700;cursor:pointer;
+  }
+  .print-btn-top:hover{background:rgba(90,169,163,0.22);}
   .clear-mesa-btn{
     background:transparent;border:1px solid rgba(178,58,46,0.4);
     color:#e8a49c;padding:9px 14px;border-radius:30px;font-size:13px;cursor:pointer;
@@ -764,6 +771,33 @@
     cursor:pointer;border:none;background:rgba(0,0,0,0.08);color:#000;
   }
 
+  /* caja: pago (efectivo/tarjeta) y asignar personas */
+  .pay-method-grid{display:flex;gap:10px;margin:6px 0 16px;}
+  .pay-method-btn{
+    flex:1;padding:16px 8px;border-radius:12px;border:1px solid rgba(0,0,0,0.16);
+    background:rgba(0,0,0,0.04);color:#000;font-size:14px;font-weight:800;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+  }
+  .pay-method-btn span.ico{font-size:22px;}
+  .pay-method-btn:hover{border-color:var(--gold);background:rgba(199,154,82,0.1);}
+  .pay-summary-row{display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0;}
+  .pay-summary-row b{font-size:15px;}
+  .pay-change-box{
+    margin-top:10px;padding:10px 12px;border-radius:10px;
+    background:rgba(79,125,67,0.12);border:1px solid rgba(79,125,67,0.35);
+    display:flex;justify-content:space-between;font-size:14px;font-weight:800;color:#3f6b36;
+  }
+  .people-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:6px 0 14px;}
+  .people-chip{
+    padding:14px 4px;border-radius:10px;border:1px solid rgba(0,0,0,0.16);
+    background:rgba(0,0,0,0.04);color:#000;font-size:16px;font-weight:800;cursor:pointer;
+  }
+  .people-chip:hover{border-color:var(--gold);background:rgba(199,154,82,0.12);}
+  .history-reprint{
+    margin-top:8px;width:100%;padding:9px;border-radius:8px;font-size:12px;font-weight:700;
+    cursor:pointer;border:1px solid rgba(90,169,163,0.4);background:rgba(90,169,163,0.1);color:#2f6a63;
+  }
+
   /* prompt (aparcar tiquet) */
   .prompt-input{
     width:100%;background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.16);
@@ -837,7 +871,7 @@
     .table-title .num{width:32px;height:32px;font-size:18px;}
     .back-btn{padding:8px 12px;font-size:12.5px;}
     .table-actions{width:100%;flex-wrap:wrap;}
-    .pay-btn, .clear-mesa-btn, .park-btn-top{flex:1 1 30%;text-align:center;padding:9px 6px;font-size:11.5px;}
+    .pay-btn, .clear-mesa-btn, .park-btn-top, .print-btn-top{flex:1 1 30%;text-align:center;padding:9px 6px;font-size:11.5px;}
     .search-wrap{width:100%;order:10;}
     .variable-btn{order:9;padding:8px 12px;font-size:11px;}
 
@@ -911,6 +945,7 @@
         <button class="role-btn" data-role="cocina">🍳 <span id="role-label-cocina">Cocina</span></button>
         <button class="role-btn" data-role="sushi">🍣 <span id="role-label-sushi">Sushi</span></button>
         <button class="role-btn active" data-role="comanda">📋 <span id="role-label-comanda">Comanda</span></button>
+        <button class="role-btn" data-role="caja">🧾 <span>Caja</span></button>
       </div>
       <div class="lang-switch" id="lang-switch">
         <button class="lang-btn active" data-lang="es"><span class="flag flag-es"></span>ES</button>
@@ -965,6 +1000,7 @@
       </div>
       <button class="variable-btn" id="variable-btn">➕ <span id="variable-btn-label">Variable</span></button>
       <div class="table-actions">
+        <button class="print-btn-top" id="print-btn" hidden>🖨️ Imprimir</button>
         <button class="pay-btn" id="pay-btn">✓ Pagado</button>
         <button class="park-btn-top" id="park-btn">📦 Aparcar</button>
         <button class="clear-mesa-btn" id="clear-mesa-btn">Vaciar mesa</button>
@@ -1008,6 +1044,7 @@
         <button class="role-btn" data-role="cocina">🍳 <span>Cocina</span></button>
         <button class="role-btn" data-role="sushi">🍣 <span>Sushi</span></button>
         <button class="role-btn" data-role="comanda">📋 <span>Comanda</span></button>
+        <button class="role-btn" data-role="caja">🧾 <span>Caja</span></button>
       </div>
     </div>
     <div class="kitchen-body" id="kitchen-body"></div>
@@ -1063,6 +1100,8 @@ let db = null;
 // Códigos de sesión: cada uno es una "sala" independiente y compartida.
 // Todo el que entre con el mismo código verá las mismas mesas.
 const SESSION_CODES = ["0220", "3040", "6090"];
+// Código para entrar en el rol de Caja (cobros, cierre de día, reimpresión de tickets).
+const CAJA_CODE = "67069";
 let currentSession = null;
 let ordersRef = null;
 let historyRef = null;
@@ -1469,6 +1508,21 @@ function writeItemDone(tableId, itemId, done){
   }
 }
 
+// Personas asignadas a una mesa (se pide al abrir una mesa vacía desde Comanda).
+function getTablePeople(tableId){
+  const o = orders[tableId] || {};
+  return o._people || null;
+}
+function writeTablePeople(tableId, n){
+  if(firebaseReady && currentSession){
+    db.ref("sessions/" + currentSession + "/orders/" + tableId + "/_people").set(n);
+  } else {
+    orders[tableId] = orders[tableId] || {};
+    orders[tableId]._people = n;
+    refreshAfterOrdersChange();
+  }
+}
+
 function openNoteEditor(itemId, itemName, onDone){
   const overlay = document.createElement("div");
   overlay.className = "confirm-overlay";
@@ -1857,7 +1911,7 @@ let parkedCounter = 1;
 /* ===================== HELPERS ===================== */
 const eur = n => n.toFixed(2).replace(".", ",") + " €";
 // Claves internas de orders[tableId] que no son artículos (notas, tick de cocina).
-const RESERVED_ORDER_KEYS = ["_notes", "_done"];
+const RESERVED_ORDER_KEYS = ["_notes", "_done", "_people"];
 function isItemId(id){ return RESERVED_ORDER_KEYS.indexOf(id) === -1; }
 function tableTotal(t){
   const o = orders[t];
@@ -1890,7 +1944,11 @@ function historyFromSnapshot(val){
   if(!val) return [];
   return Object.keys(val).sort().map(k => ({
     id: k, table: val[k].table, ts: val[k].ts,
-    items: val[k].items || [], total: val[k].total || 0
+    items: val[k].items || [], total: val[k].total || 0,
+    method: val[k].method || null,
+    paidAmount: val[k].paidAmount != null ? val[k].paidAmount : null,
+    change: val[k].change != null ? val[k].change : null,
+    people: val[k].people || null
   }));
 }
 function parkedFromSnapshot(val){
@@ -2017,6 +2075,8 @@ function showRoleView(){
     document.getElementById("table-view").hidden = true;
     document.getElementById("home-view").hidden = false;
     renderHome();
+    const heading = document.getElementById("home-heading");
+    if(heading) heading.textContent = appRole === "caja" ? "Toca una mesa para cobrar" : I18N[currentLang].heading;
   }
   updateRoleButtons();
 }
@@ -2036,14 +2096,21 @@ function setRole(role){
   if(role === appRole) return;
   appRole = role;
   try{
-    if(role === "comanda") localStorage.removeItem("kobe_role");
-    else localStorage.setItem("kobe_role", role);
+    if(role === "cocina" || role === "sushi") localStorage.setItem("kobe_role", role);
+    else localStorage.removeItem("kobe_role"); // "comanda" y "caja" no se recuerdan: caja siempre pide código
   }catch(e){}
   if(currentSession) showRoleView();
   else updateRoleButtons();
 }
 document.querySelectorAll(".role-btn").forEach(btn=>{
-  btn.addEventListener("click", ()=> setRole(btn.dataset.role));
+  btn.addEventListener("click", ()=>{
+    const role = btn.dataset.role;
+    if(role === "caja" && appRole !== "caja"){
+      openCajaCodeDialog(()=> setRole("caja"));
+    } else {
+      setRole(role);
+    }
+  });
 });
 
 // Cola de platos pendientes/preparados para Cocina o Sushi, agrupada por mesa.
@@ -2301,6 +2368,236 @@ function showPrompt(msg, placeholder, okLabel, onSubmit){
   overlay.querySelector(".confirm-cancel").addEventListener("click", ()=>overlay.remove());
   overlay.querySelector(".confirm-ok").addEventListener("click", submit);
   input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); submit(); } });
+}
+
+// Diálogo "¿Cuántas personas son?" — se muestra al abrir desde Comanda una mesa vacía
+// sin personas asignadas todavía.
+function openPeopleAssignDialog(tableId, onDone){
+  const overlay = document.createElement("div");
+  overlay.className = "confirm-overlay";
+  const chips = [1,2,3,4,5,6,7,8].map(n=>`<button class="people-chip" data-n="${n}">${n}</button>`).join("");
+  overlay.innerHTML = `
+    <div class="confirm-box">
+      <p>¿Cuántas personas son?</p>
+      <div class="people-grid">${chips}</div>
+      <input type="text" inputmode="numeric" pattern="[0-9]*" class="prompt-input people-other-input" placeholder="Otro número">
+      <div class="confirm-actions">
+        <button class="confirm-cancel">${I18N[currentLang].cancel}</button>
+        <button class="confirm-ok people-other-ok">Confirmar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  const finish = (n)=>{
+    overlay.remove();
+    writeTablePeople(tableId, n);
+    onDone();
+  };
+  overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
+  overlay.querySelector(".confirm-cancel").addEventListener("click", ()=>overlay.remove());
+  overlay.querySelectorAll(".people-chip").forEach(btn=>{
+    btn.addEventListener("click", ()=> finish(Number(btn.dataset.n)));
+  });
+  const otherInput = overlay.querySelector(".people-other-input");
+  const submitOther = ()=>{
+    const n = parseInt(otherInput.value, 10);
+    if(n && n > 0) finish(n);
+  };
+  overlay.querySelector(".people-other-ok").addEventListener("click", submitOther);
+  otherInput.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); submitOther(); } });
+}
+
+// Diálogo de código para entrar en el rol de Caja.
+function openCajaCodeDialog(onOk){
+  const overlay = document.createElement("div");
+  overlay.className = "confirm-overlay";
+  overlay.innerHTML = `
+    <div class="confirm-box">
+      <p>Introduce el código de caja</p>
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5"
+             class="prompt-input caja-code-input" placeholder="·····"
+             style="text-align:center;letter-spacing:0.4em;font-size:20px;">
+      <div class="confirm-actions">
+        <button class="confirm-cancel">${I18N[currentLang].cancel}</button>
+        <button class="confirm-ok">Entrar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  const input = overlay.querySelector(".caja-code-input");
+  setTimeout(()=>input.focus(), 50);
+  const submit = ()=>{
+    const val = input.value.trim();
+    if(val === CAJA_CODE){
+      overlay.remove();
+      onOk();
+    } else {
+      showToast("Código incorrecto");
+      input.value = "";
+      input.focus();
+    }
+  };
+  overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
+  overlay.querySelector(".confirm-cancel").addEventListener("click", ()=>overlay.remove());
+  overlay.querySelector(".confirm-ok").addEventListener("click", submit);
+  input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); submit(); } });
+}
+
+/* ===================== IMPRESIÓN (tickets y cierre de día) ===================== */
+// Manda a imprimir un fragmento HTML usando un iframe oculto (evita bloqueos de pop-ups
+// y no depende de ninguna impresora concreta: usa el diálogo de impresión del dispositivo).
+function printHTML(bodyHtml){
+  const iframe = document.createElement("iframe");
+  iframe.style.position = "fixed";
+  iframe.style.right = "0";
+  iframe.style.bottom = "0";
+  iframe.style.width = "0";
+  iframe.style.height = "0";
+  iframe.style.border = "0";
+  document.body.appendChild(iframe);
+  const doc = iframe.contentWindow.document;
+  doc.open();
+  doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Kobe BCN</title>
+    <style>
+      body{font-family:'Courier New',monospace;font-size:12px;width:280px;margin:0 auto;padding:10px;color:#000;}
+      h1,h2,h3{text-align:center;margin:4px 0;}
+      .line{display:flex;justify-content:space-between;padding:2px 0;}
+      hr{border:none;border-top:1px dashed #000;margin:8px 0;}
+      .center{text-align:center;}
+      .total{font-weight:bold;font-size:14px;}
+      .muted{color:#444;font-size:10.5px;}
+    </style>
+    </head><body>${bodyHtml}</body></html>`);
+  doc.close();
+  setTimeout(()=>{
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
+    setTimeout(()=>{ if(iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 1000);
+  }, 250);
+}
+
+// Construye y manda a imprimir el ticket de una mesa (a partir de su comanda actual,
+// o de un registro ya pagado del historial).
+function buildReceiptHTML(opts){
+  const linesHtml = opts.items.map(it=>`
+    <div class="line"><span>${it.qty}× ${it.name}</span><span>${eur(it.price*it.qty)}</span></div>
+  `).join("");
+  let payHtml = "";
+  if(opts.method){
+    payHtml += `<hr>
+      <div class="line"><span>Pago</span><span>${opts.method === "efectivo" ? "Efectivo" : "Tarjeta"}</span></div>`;
+    if(opts.method === "efectivo" && opts.paidAmount != null){
+      payHtml += `<div class="line"><span>Entregado</span><span>${eur(opts.paidAmount)}</span></div>
+        <div class="line"><span>Cambio</span><span>${eur(opts.change)}</span></div>`;
+    }
+  }
+  return `
+    <h2>KOBE BCN</h2>
+    <p class="center muted">${opts.tableLabel}</p>
+    <p class="center muted">${opts.ts}</p>
+    ${opts.people ? `<p class="center muted">${opts.people} personas</p>` : ""}
+    <hr>
+    ${linesHtml || `<p class="center muted">Sin artículos</p>`}
+    <hr>
+    <div class="line total"><span>TOTAL</span><span>${eur(opts.total)}</span></div>
+    ${payHtml}
+    <hr>
+    <p class="center muted">Gracias por su visita</p>
+  `;
+}
+function printTableTicket(tableId){
+  const items = Object.keys(orders[tableId] || {}).filter(isItemId).map(id=>{
+    const item = FLAT.find(f=>f.id===id);
+    return item ? { name: item.name, qty: orders[tableId][id], price: item.price } : null;
+  }).filter(Boolean);
+  const localeMap = { es:"es-ES", ca:"ca-ES", en:"en-GB" };
+  printHTML(buildReceiptHTML({
+    tableLabel: tableLabel(tableId),
+    ts: new Date().toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}),
+    people: getTablePeople(tableId),
+    items,
+    total: tableTotal(tableId)
+  }));
+}
+function printHistoryRecord(record){
+  printHTML(buildReceiptHTML({
+    tableLabel: record.table,
+    ts: record.ts,
+    people: record.people || null,
+    items: record.items,
+    total: record.total,
+    method: record.method || null,
+    paidAmount: record.paidAmount != null ? record.paidAmount : null,
+    change: record.change != null ? record.change : null
+  }));
+}
+
+// Diálogo de cobro desde Caja: elegir Efectivo/Tarjeta, calcular el cambio e imprimir.
+function openPaymentDialog(tableId, onPaid){
+  const total = tableTotal(tableId);
+  const overlay = document.createElement("div");
+  overlay.className = "confirm-overlay";
+  overlay.innerHTML = `
+    <div class="confirm-box">
+      <p>Cobrar ${tableLabel(tableId)} — <b>${eur(total)}</b></p>
+      <div class="pay-method-grid">
+        <button class="pay-method-btn" data-method="efectivo"><span class="ico">💵</span>Efectivo</button>
+        <button class="pay-method-btn" data-method="tarjeta"><span class="ico">💳</span>Tarjeta</button>
+      </div>
+      <button class="confirm-cancel" style="width:100%;">${I18N[currentLang].cancel}</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
+  overlay.querySelector(".confirm-cancel").addEventListener("click", ()=>overlay.remove());
+
+  const finish = (method, paidAmount, change)=>{
+    overlay.remove();
+    onPaid({ method, paidAmount, change });
+  };
+
+  overlay.querySelector('[data-method="tarjeta"]').addEventListener("click", ()=>{
+    finish("tarjeta", total, 0);
+  });
+  overlay.querySelector('[data-method="efectivo"]').addEventListener("click", ()=>{
+    overlay.innerHTML = `
+      <div class="confirm-box">
+        <p>Efectivo — ${tableLabel(tableId)}</p>
+        <div class="pay-summary-row"><span>Total a cobrar</span><b>${eur(total)}</b></div>
+        <input type="text" inputmode="decimal" class="prompt-input cash-paid-input" placeholder="¿Cuánto ha pagado?">
+        <div class="pay-change-box" hidden><span>Cambio</span><span class="cash-change-val">0,00 €</span></div>
+        <div class="confirm-actions">
+          <button class="confirm-cancel">${I18N[currentLang].cancel}</button>
+          <button class="confirm-ok cash-confirm">Cobrar e imprimir</button>
+        </div>
+      </div>
+    `;
+    const input = overlay.querySelector(".cash-paid-input");
+    const changeBox = overlay.querySelector(".pay-change-box");
+    const changeVal = overlay.querySelector(".cash-change-val");
+    setTimeout(()=>input.focus(), 50);
+    const updateChange = ()=>{
+      const paid = parseFloat((input.value||"").replace(",", "."));
+      if(!isNaN(paid) && paid >= total){
+        changeBox.hidden = false;
+        changeVal.textContent = eur(paid - total);
+      } else {
+        changeBox.hidden = true;
+      }
+    };
+    input.addEventListener("input", updateChange);
+    overlay.querySelector(".confirm-cancel").addEventListener("click", ()=>overlay.remove());
+    const submitCash = ()=>{
+      const paid = parseFloat((input.value||"").replace(",", "."));
+      if(isNaN(paid) || paid < total){
+        showToast("Introduce un importe igual o mayor al total");
+        return;
+      }
+      finish("efectivo", paid, paid - total);
+    };
+    overlay.querySelector(".cash-confirm").addEventListener("click", submitCash);
+    input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); submitCash(); } });
+  });
 }
 
 // Selector de opción genérico (refresco de un combinado, o hielo/limón de una bebida):
@@ -2572,6 +2869,7 @@ function openHistory(){
                 <span>${eur(it.price * it.qty)}</span>
               </div>
             `).join("")}
+            <button class="history-reprint" data-hid="${h.id}">🖨️ Reimprimir ticket</button>
           </div>
         </div>
       `).join("");
@@ -2596,6 +2894,14 @@ function openHistory(){
   overlay.querySelectorAll(".history-entry-head").forEach(head=>{
     head.addEventListener("click", ()=>{
       head.parentElement.classList.toggle("open");
+    });
+  });
+  overlay.querySelectorAll(".history-reprint").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      const hid = Number(btn.dataset.hid);
+      const record = history.find(h => h.id === hid);
+      if(record) printHistoryRecord(record);
     });
   });
 }
@@ -2687,7 +2993,16 @@ function openParkedList(){
 
 /* ===================== RENDER: TABLE VIEW ===================== */
 function openTable(n){
-  if(appRole !== "comanda") return; // Cocina/Sushi no pueden tomar pedidos.
+  if(appRole !== "comanda" && appRole !== "caja") return; // Cocina/Sushi no pueden tomar pedidos.
+  // En Comanda, si la mesa está vacía y no tiene personas asignadas todavía,
+  // primero se pregunta cuántas son antes de abrir la carta.
+  if(appRole === "comanda" && tableCount(n) === 0 && !getTablePeople(n)){
+    openPeopleAssignDialog(n, ()=> openTableNow(n));
+    return;
+  }
+  openTableNow(n);
+}
+function openTableNow(n){
   currentTable = n;
   searchTerm = "";
   currentCat = MENU[0].cat;
@@ -2700,6 +3015,11 @@ function openTable(n){
   document.getElementById("ticket-mesa-num").textContent = tableLabel(n);
   const localeMap = { es:"es-ES", ca:"ca-ES", en:"en-GB" };
   document.getElementById("ticket-ts").textContent = new Date().toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
+  // El botón de pagar, aparcar e imprimir solo se pueden usar desde Caja.
+  const isCaja = appRole === "caja";
+  document.getElementById("pay-btn").hidden = !isCaja;
+  document.getElementById("park-btn").hidden = !isCaja;
+  document.getElementById("print-btn").hidden = !isCaja;
   renderCatRail();
   renderItems();
   renderTicket();
@@ -2979,13 +3299,17 @@ document.getElementById("variable-btn").addEventListener("click", ()=>{
 });
 
 document.getElementById("pay-btn").addEventListener("click", ()=>{
+  if(appRole !== "caja"){
+    showToast("Solo se puede cobrar desde Caja");
+    return;
+  }
   const t = currentTable;
   if(tableCount(t)===0){
     showToast(I18N[currentLang].toastNoOrderToPay);
     return;
   }
   const total = tableTotal(t);
-  showConfirm(I18N[currentLang].confirmPay(tableLabel(t), eur(total)), I18N[currentLang].payOk, ()=>{
+  openPaymentDialog(t, ({method, paidAmount, change})=>{
     const items = Object.keys(orders[t]).filter(isItemId).map(id=>{
       const item = FLAT.find(f=>f.id===id);
       return { name:item.name, qty:orders[t][id], price:item.price };
@@ -2995,8 +3319,16 @@ document.getElementById("pay-btn").addEventListener("click", ()=>{
       table: tableLabel(t),
       ts: new Date().toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}),
       items,
-      total
+      total,
+      method,
+      paidAmount,
+      change,
+      people: getTablePeople(t)
     };
+    printHTML(buildReceiptHTML({
+      tableLabel: record.table, ts: record.ts, people: record.people,
+      items, total, method, paidAmount, change
+    }));
     writePay(t, record);
     showToast(I18N[currentLang].toastPaid(tableLabel(t), eur(total)));
     backToHome();
@@ -3004,6 +3336,10 @@ document.getElementById("pay-btn").addEventListener("click", ()=>{
 });
 
 document.getElementById("park-btn").addEventListener("click", ()=>{
+  if(appRole !== "caja"){
+    showToast("Solo se puede aparcar desde Caja");
+    return;
+  }
   const t = currentTable;
   if(tableCount(t)===0){
     showToast(I18N[currentLang].toastNoOrderToPark);
@@ -3015,6 +3351,11 @@ document.getElementById("park-btn").addEventListener("click", ()=>{
     showToast(I18N[currentLang].toastParked);
     backToHome();
   });
+});
+
+document.getElementById("print-btn").addEventListener("click", ()=>{
+  if(appRole !== "caja" || !currentTable) return;
+  printTableTicket(currentTable);
 });
 
 document.getElementById("clear-mesa-btn").addEventListener("click", ()=>{
@@ -3030,11 +3371,50 @@ document.getElementById("clear-mesa-btn").addEventListener("click", ()=>{
 
 document.getElementById("btn-cerrar-dia").addEventListener("click", ()=>{
   showConfirm(I18N[currentLang].confirmCloseDay, I18N[currentLang].closeDayOk, ()=>{
+    printCloseDaySummary();
     writeCloseDay();
     showToast(I18N[currentLang].toastDayClosed);
     backToHome();
   });
 });
+
+// Resumen impreso al cerrar el día: total facturado, nº de tickets, personas
+// atendidas y el plato más pedido. Se calcula con los datos de `history` antes
+// de que writeCloseDay() los borre.
+function printCloseDaySummary(){
+  const totalDay = history.reduce((s,h)=>s+h.total, 0);
+  const numTickets = history.length;
+  const totalPeople = history.reduce((s,h)=>s + (h.people || 0), 0);
+  const dishCounts = {};
+  history.forEach(h=>{
+    (h.items||[]).forEach(it=>{
+      dishCounts[it.name] = (dishCounts[it.name]||0) + it.qty;
+    });
+  });
+  let topDish = null, topQty = 0;
+  Object.keys(dishCounts).forEach(name=>{
+    if(dishCounts[name] > topQty){ topQty = dishCounts[name]; topDish = name; }
+  });
+  const cashTotal = history.filter(h=>h.method==="efectivo").reduce((s,h)=>s+h.total,0);
+  const cardTotal = history.filter(h=>h.method==="tarjeta").reduce((s,h)=>s+h.total,0);
+  const localeMap = { es:"es-ES", ca:"ca-ES", en:"en-GB" };
+  const now = new Date().toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  printHTML(`
+    <h2>KOBE BCN</h2>
+    <p class="center muted">Cierre de día — ${now}</p>
+    <hr>
+    <div class="line"><span>Tickets cobrados</span><span>${numTickets}</span></div>
+    <div class="line"><span>Personas atendidas</span><span>${totalPeople || "—"}</span></div>
+    <div class="line"><span>Efectivo</span><span>${eur(cashTotal)}</span></div>
+    <div class="line"><span>Tarjeta</span><span>${eur(cardTotal)}</span></div>
+    <hr>
+    <div class="line total"><span>TOTAL DEL DÍA</span><span>${eur(totalDay)}</span></div>
+    <hr>
+    <p class="center muted">Plato más pedido</p>
+    <p class="center" style="font-weight:800;">${topDish ? topDish + " (" + topQty + "×)" : "—"}</p>
+    <hr>
+  `);
+}
 
 document.getElementById("change-session-btn").addEventListener("click", leaveSession);
 
