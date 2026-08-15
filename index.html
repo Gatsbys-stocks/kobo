@@ -2532,17 +2532,20 @@ function printHTML(bodyHtml){
          se traduce en un hueco en blanco antes de que empiece el texto. */
       @page{ size:80mm auto; margin:0; }
       html,body{margin:0;padding:0;}
-      body{font-family:'Courier New',Courier,monospace;font-size:12.5px;font-weight:700;width:300px;margin:0 auto;padding:6px 10px 10px;color:#000;}
+      /* 'Matriz_A1': fuente de matriz de puntos (tipo ticket clásico) instalada
+         localmente en el TPV (no es un webfont, no depende de internet). Si
+         algún dispositivo no la tiene instalada, cae en Courier New/monospace. */
+      body{font-family:'Matriz_A1','Courier New',Courier,monospace;font-size:13px;font-weight:700;width:300px;margin:0 auto;padding:6px 10px 10px;color:#000;}
       h1,h2,h3{text-align:center;margin:4px 0;}
       p{margin:2px 0;}
       hr{border:none;border-top:2px dashed #000;margin:6px 0;}
       .center{text-align:center;}
       .strong{font-weight:800;font-size:15px;}
-      .muted{color:#333;font-size:11.5px;}
+      .muted{color:#333;font-size:12px;}
       .line{display:flex;justify-content:space-between;padding:2px 0;}
-      .total{font-weight:800;font-size:16px;}
-      .frow2{display:flex;justify-content:space-between;font-size:12.5px;padding:2px 0;}
-      .frow2.strong{font-weight:800;font-size:16px;}
+      .total{font-weight:800;font-size:17px;}
+      .frow2{display:flex;justify-content:space-between;font-size:13px;padding:2px 0;}
+      .frow2.strong{font-weight:800;font-size:17px;}
       /* filas de artículos (UNIT/DESCRIPCIO/PREU/IMPORT) y BASE/%IVA/IMP.IVA:
          tabla HTML con anchuras de columna fijas en vez de grid/flex o texto
          con espacios, porque grid/flex de +2 columnas y el relleno con
@@ -2555,9 +2558,9 @@ function printHTML(bodyHtml){
          más grandes) se consigue solo con el TAMAÑO de letra, no con pesos
          intermedios (como 500), que en la impresora fiscal salían demasiado
          finos y apenas visibles. */
-      table.rtable{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12.5px;font-weight:700;}
+      table.rtable{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px;font-weight:700;}
       table.rtable th, table.rtable td{padding:2px 0;vertical-align:top;}
-      table.rtable th{font-weight:800;font-size:12.5px;}
+      table.rtable th{font-weight:800;font-size:13px;}
       .rt-unit{width:14%;text-align:left;}
       .rt-desc{width:48%;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:4px;}
       .rt-preu{width:18%;text-align:right;}
