@@ -664,6 +664,32 @@
   }
   .picker-chip.busy{background:rgba(178,58,46,0.12);border-color:rgba(178,58,46,0.4);color:var(--stamp-dark);}
   .picker-chip:hover{border-color:var(--gold);}
+
+  .note-box{
+    background:var(--paper);color:#000;border-radius:14px;
+    padding:22px;max-width:420px;width:100%;
+    box-shadow:var(--shadow);text-align:left;
+  }
+  .note-box h3{margin:0 0 6px;font-size:16px;font-weight:800;}
+  .note-box p{margin:0 0 14px;font-size:12.5px;color:rgba(0,0,0,.62);}
+  .note-input{
+    width:100%;min-height:90px;resize:vertical;
+    background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.16);
+    color:#000;padding:11px 13px;border-radius:10px;font-size:14px;
+    outline:none;font-family:inherit;
+  }
+  .note-input:focus{border-color:var(--gold);}
+  .note-actions{display:flex;gap:10px;margin-top:14px;}
+  .note-actions button{
+    flex:1;padding:11px 10px;border-radius:8px;font-size:13.5px;
+    font-weight:700;cursor:pointer;border:none;
+  }
+  .note-cancel{background:rgba(0,0,0,.08);color:#000;}
+  .note-save{background:var(--stamp);color:var(--text-hi);}
+  .ticket-note{
+    display:block;margin:3px 0 2px 24px;font-size:11px;
+    color:var(--stamp-dark);font-style:italic;line-height:1.35;
+  }
   .picker-cancel{
     width:100%;padding:11px 10px;border-radius:8px;font-size:13.5px;font-weight:700;
     cursor:pointer;border:none;background:rgba(0,0,0,0.08);color:#000;
@@ -1259,6 +1285,60 @@ function getOptionVariant(baseItem, optionList, optionIndex, suffix){
 function getMixerVariant(baseItem, mixerIndex){
   return getOptionVariant(baseItem, baseItem.mixers, mixerIndex, 'mx');
 }
+
+function getOrderNote(tableId, itemId){
+  const order = orders[tableId] || {};
+  const notes = order._notes || {};
+  return notes[itemId] || "";
+}
+
+function writeOrderNote(tableId, itemId, note){
+  const clean = String(note || "").trim();
+  if(firebaseReady && currentSession){
+    const path = "sessions/" + currentSession + "/orders/" + tableId + "/_notes/" + itemId;
+    if(clean) db.ref(path).set(clean);
+    else db.ref(path).remove();
+  } else {
+    orders[tableId] = orders[tableId] || {};
+    orders[tableId]._notes = orders[tableId]._notes || {};
+    if(clean) orders[tableId]._notes[itemId] = clean;
+    else delete orders[tableId]._notes[itemId];
+    refreshAfterOrdersChange();
+  }
+}
+
+function openNoteEditor(itemId, itemName, onDone){
+  const overlay = document.createElement("div");
+  overlay.className = "confirm-overlay";
+  const current = getOrderNote(currentTable, itemId);
+  overlay.innerHTML = `
+    <div class="note-box">
+      <h3>${I18N[currentLang].note}: ${itemName}</h3>
+      <p>${I18N[currentLang].noNote}</p>
+      <textarea class="note-input" maxlength="180" placeholder="${I18N[currentLang].notePlaceholder}">${current.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</textarea>
+      <div class="note-actions">
+        <button class="note-cancel">${I18N[currentLang].cancel}</button>
+        <button class="note-save">${I18N[currentLang].noteSave}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  const input = overlay.querySelector(".note-input");
+  setTimeout(()=>{ input.focus(); input.setSelectionRange(input.value.length,input.value.length); },50);
+
+  const close = ()=>overlay.remove();
+  const save = ()=>{
+    writeOrderNote(currentTable, itemId, input.value);
+    close();
+    if(onDone) onDone();
+  };
+  overlay.addEventListener("click", e=>{ if(e.target===overlay) close(); });
+  overlay.querySelector(".note-cancel").addEventListener("click", close);
+  overlay.querySelector(".note-save").addEventListener("click", save);
+  input.addEventListener("keydown", e=>{
+    if((e.ctrlKey || e.metaKey) && e.key === "Enter"){ e.preventDefault(); save(); }
+  });
+}
 function getExtraVariant(baseItem, extraIndex){
   return getOptionVariant(baseItem, baseItem.extras, extraIndex, 'ex');
 }
@@ -1308,6 +1388,7 @@ const I18N = {
     noResults: "Sin resultados. Prueba con otro término.",
     add: "Añadir",
     mixerWith: "Con ",
+     note: "Nota", notePlaceholder: "Escribe una nota…", noteSave: "Guardar nota", noNote: "Sin nota",
     ticketMark: "KOBE BCN · COMANDA",
     ticketEmpty: "Aún no hay artículos<br>en esta mesa",
     total: "Total",
@@ -1381,6 +1462,7 @@ const I18N = {
     noResults: "Sense resultats. Prova amb un altre terme.",
     add: "Afegir",
     mixerWith: "Amb ",
+     note: "Nota", notePlaceholder: "Escriu una nota…", noteSave: "Desar nota", noNote: "Sense nota",
     ticketMark: "KOBE BCN · COMANDA",
     ticketEmpty: "Encara no hi ha articles<br>en aquesta taula",
     total: "Total",
@@ -1454,6 +1536,7 @@ const I18N = {
     noResults: "No results. Try another term.",
     add: "Add",
     mixerWith: "With ",
+     note: "Note", notePlaceholder: "Write a note…", noteSave: "Save note", noNote: "No note",
     ticketMark: "KOBE BCN · ORDER",
     ticketEmpty: "No items yet<br>for this table",
     total: "Total",
@@ -1553,6 +1636,17 @@ let searchTerm = "";
 function normalizeText(s){
   return (s || "").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
+// Comprueba si "query" aparece como palabra completa (o frase completa) dentro de "text".
+// Así, buscar "agua" no encuentra "aguacate" dentro de la descripción de otro plato: sólo
+// cuenta si "agua" está sola, separada por espacios u otros signos, no pegada a más letras.
+function wholeWordIncludes(text, query){
+  if(!query) return false;
+  const t = normalizeText(text);
+  const q = normalizeText(query);
+  const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const re = new RegExp("(^|[^a-z0-9])" + escaped + "($|[^a-z0-9])");
+  return re.test(t);
+}
 function isBarra(id){ return id >= 500; }
 function tableLabel(id){ return (isBarra(id) ? I18N[currentLang].barraLabel : I18N[currentLang].mesaLabel) + " " + id; }
 
@@ -1565,7 +1659,7 @@ let parkedCounter = 1;
 const eur = n => n.toFixed(2).replace(".", ",") + " €";
 function tableTotal(t){
   const o = orders[t];
-  return Object.keys(o).reduce((sum,id)=>{
+  return Object.keys(o).filter(id => id !== "_notes").reduce((sum,id)=>{
     const item = FLAT.find(f=>f.id===id);
     return sum + (item ? item.price*o[id] : 0);
   },0);
@@ -1903,20 +1997,31 @@ function showPrompt(msg, placeholder, okLabel, onSubmit){
 
 // Selector de opción genérico (refresco de un combinado, o hielo/limón de una bebida):
 // muestra una ventana con botones, uno por opción, y ejecuta onPick(index) al elegir.
-function openOptionPicker(promptText, options, onPick){
+function openOptionPicker(promptText, options, onPick, noteCallback){
   const overlay = document.createElement("div");
   overlay.className = "confirm-overlay";
   const chips = options.map((label, i)=>`<button class="picker-chip" data-idx="${i}">${label}</button>`).join("");
+  const variableButton = noteCallback
+    ? `<button class="picker-chip picker-variable-btn">Variable</button>`
+    : "";
   overlay.innerHTML = `
     <div class="picker-box">
       <p>${promptText}</p>
-      <div class="picker-grid">${chips}</div>
+      <div class="picker-grid">${chips}${variableButton}</div>
       <button class="picker-cancel">${I18N[currentLang].cancel}</button>
     </div>
   `;
   document.body.appendChild(overlay);
   overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
   overlay.querySelector(".picker-cancel").addEventListener("click", ()=>overlay.remove());
+
+  if(noteCallback){
+    overlay.querySelector(".picker-variable-btn").addEventListener("click", ()=>{
+      overlay.remove();
+      noteCallback();
+    });
+  }
+
   overlay.querySelectorAll(".picker-chip").forEach(btn=>{
     btn.addEventListener("click", ()=>{
       const idx = Number(btn.dataset.idx);
@@ -2245,8 +2350,12 @@ function renderItems(){
   let list, title, sub;
 
   if(searchTerm.trim()){
-    const q = normalizeText(searchTerm.trim());
-    list = FLAT.filter(f => normalizeText(f.name).includes(q) || normalizeText(f.desc).includes(q) || normalizeText(f.cat).includes(q));
+    const rawQ = searchTerm.trim();
+    const q = normalizeText(rawQ);
+    // El nombre del plato admite coincidencia parcial (para poder ir escribiendo, ej. "moji" -> Mojito).
+    // La descripción (ingredientes) y la categoría sólo cuentan si la palabra buscada aparece completa,
+    // así "agua" no encuentra "aguacate" en la descripción de otro plato.
+    list = FLAT.filter(f => normalizeText(f.name).includes(q) || wholeWordIncludes(f.desc, rawQ) || wholeWordIncludes(f.cat, rawQ));
     title = I18N[currentLang].resultsHeading;
     sub = I18N[currentLang].resultsSub(list.length, searchTerm);
   } else {
@@ -2304,10 +2413,58 @@ function renderItems(){
       if(optSuffix){
         const baseItem = FLAT.find(f => f.id === baseId);
         const optList = optSuffix === 'mx' ? baseItem.mixers : baseItem.extras;
-        openOptionPicker(baseItem.name, optList, (optIndex)=>{
-          const variant = optSuffix === 'mx' ? getMixerVariant(baseItem, optIndex) : getExtraVariant(baseItem, optIndex);
-          changeQty(variant.id, 1);
-        });
+        let pendingNote = "";
+        const openPicker = ()=>{
+          openOptionPicker(baseItem.name, optList, (optIndex)=>{
+            const variant = optSuffix === 'mx' ? getMixerVariant(baseItem, optIndex) : getExtraVariant(baseItem, optIndex);
+            changeQty(variant.id, 1);
+            if(pendingNote) writeOrderNote(currentTable, variant.id, pendingNote);
+          }, optSuffix === 'mx' ? ()=>{
+            const variableOverlay = document.createElement("div");
+            variableOverlay.className = "confirm-overlay";
+            variableOverlay.innerHTML = `
+              <div class="note-box">
+                <h3>Variable</h3>
+                <p>${baseItem.name}</p>
+                <textarea class="note-input" maxlength="100" placeholder="Escribe algo..."></textarea>
+                <div class="note-actions">
+                  <button class="note-cancel">${I18N[currentLang].cancel}</button>
+                  <button class="note-save">Añadir</button>
+                </div>
+              </div>
+            `;
+            document.body.appendChild(variableOverlay);
+            const input = variableOverlay.querySelector(".note-input");
+            setTimeout(()=>input.focus(),50);
+
+            const close = ()=>variableOverlay.remove();
+            variableOverlay.addEventListener("click", e=>{
+              if(e.target===variableOverlay) close();
+            });
+            variableOverlay.querySelector(".note-cancel").addEventListener("click", close);
+            variableOverlay.querySelector(".note-save").addEventListener("click", ()=>{
+              const text = input.value.trim();
+              if(!text) return;
+
+              // Create a custom variant with the text entered in Variable.
+              const variantId = baseItem.id + "-var-" + Date.now();
+              const variant = {
+                id: variantId,
+                cat: baseItem.cat,
+                group: baseItem.group,
+                name: baseItem.name + " · " + text,
+                desc: baseItem.desc,
+                price: baseItem.price,
+                mixers: null,
+                extras: null
+              };
+              FLAT.push(variant);
+              changeQty(variant.id, 1);
+              variableOverlay.remove();
+            });
+          } : null);
+        };
+        openPicker();
       } else {
         changeQty(baseId, 1);
       }
@@ -2339,23 +2496,36 @@ function changeQty(id, delta){
 function renderTicket(){
   const itemsEl = document.getElementById("ticket-items");
   const o = orders[currentTable];
-  const ids = Object.keys(o);
+  const ids = Object.keys(o).filter(id => id !== "_notes");
   if(ids.length===0){
     itemsEl.innerHTML = `<div class="ticket-empty">${I18N[currentLang].ticketEmpty}</div>`;
   } else {
     itemsEl.innerHTML = ids.map(id=>{
       const item = FLAT.find(f=>f.id===id);
       const qty = o[id];
+      const note = getOrderNote(currentTable, id);
+      const isMixer = id.endsWith("-mx0") || id.includes("-mx");
       return `
         <div class="ticket-line" data-id="${id}">
-          <div class="l-name"><span class="q">${qty}×</span>${item.name}</div>
+          <div class="l-name">
+            <span class="q">${qty}×</span>${item.name}
+            ${note ? `<span class="ticket-note">📝 ${note.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</span>` : ""}
+          </div>
           <div class="l-price">${eur(item.price*qty)}</div>
+          ${isMixer ? `<button class="l-remove l-note-btn" title="${I18N[currentLang].note}">📝</button>` : ""}
           <button class="l-remove" title="Quitar">✕</button>
         </div>
       `;
     }).join("");
     itemsEl.querySelectorAll(".ticket-line").forEach(line=>{
-      line.querySelector(".l-remove").addEventListener("click", ()=>{
+      const noteBtn = line.querySelector(".l-note-btn");
+      if(noteBtn){
+        noteBtn.addEventListener("click", ()=>{
+          const item = FLAT.find(f => f.id === line.dataset.id);
+          if(item) openNoteEditor(line.dataset.id, item.name, ()=>{});
+        });
+      }
+      line.querySelector(".l-remove:not(.l-note-btn)").addEventListener("click", ()=>{
         writeQty(currentTable, line.dataset.id, 0);
       });
     });
@@ -2384,7 +2554,7 @@ document.getElementById("pay-btn").addEventListener("click", ()=>{
   }
   const total = tableTotal(t);
   showConfirm(I18N[currentLang].confirmPay(tableLabel(t), eur(total)), I18N[currentLang].payOk, ()=>{
-    const items = Object.keys(orders[t]).map(id=>{
+    const items = Object.keys(orders[t]).filter(id => id !== "_notes").map(id=>{
       const item = FLAT.find(f=>f.id===id);
       return { name:item.name, qty:orders[t][id], price:item.price };
     });
