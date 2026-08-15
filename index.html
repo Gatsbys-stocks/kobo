@@ -246,6 +246,7 @@
   .role-btn.active[data-role="comanda"]{border-color:var(--gold);background:rgba(199,154,82,0.16);color:var(--gold);}
   .role-btn.active[data-role="cocina"]{border-color:#e0895a;background:rgba(224,137,90,0.18);color:#f0a97e;}
   .role-btn.active[data-role="sushi"]{border-color:#5aa9a3;background:rgba(90,169,163,0.18);color:#8fd6cd;}
+  .role-btn.active[data-role="postre"]{border-color:#d68fc9;background:rgba(214,143,201,0.18);color:#eab4de;}
   .role-btn.active[data-role="caja"]{border-color:#7fd48a;background:rgba(127,212,138,0.18);color:#a8e8b0;}
 
   /* ---------- Vista de cocina / sushi ---------- */
@@ -999,6 +1000,7 @@
       <div class="role-switch">
         <button class="role-btn" data-role="cocina">🍳 <span id="role-label-cocina">Cocina</span></button>
         <button class="role-btn" data-role="sushi">🍣 <span id="role-label-sushi">Sushi</span></button>
+        <button class="role-btn" data-role="postre">🍰 <span id="role-label-postre">Postre</span></button>
         <button class="role-btn active" data-role="comanda">📋 <span id="role-label-comanda">Comanda</span></button>
         <button class="role-btn" data-role="caja">🧾 <span>Caja</span></button>
       </div>
@@ -1098,6 +1100,7 @@
       <div class="role-switch">
         <button class="role-btn" data-role="cocina">🍳 <span>Cocina</span></button>
         <button class="role-btn" data-role="sushi">🍣 <span>Sushi</span></button>
+        <button class="role-btn" data-role="postre">🍰 <span>Postre</span></button>
         <button class="role-btn" data-role="comanda">📋 <span>Comanda</span></button>
         <button class="role-btn" data-role="caja">🧾 <span>Caja</span></button>
       </div>
@@ -1490,9 +1493,9 @@ function buildFlat(menu){
   });
   return flat;
 }
-// Identifica a qué puesto (Cocina / Sushi) pertenece un artículo, para la vista de cocina.
+// Identifica a qué puesto (Cocina / Sushi / Postres) pertenece un artículo, para la vista de cocina.
 function kitchenGroupOf(item){
-  return item && (item.groupKey === "Cocina" || item.groupKey === "Sushi") ? item.groupKey : null;
+  return item && (item.groupKey === "Cocina" || item.groupKey === "Sushi" || item.groupKey === "Postres") ? item.groupKey : null;
 }
 /* Devuelve (o crea) la línea de carta correspondiente a un artículo con una opción elegida
    (refresco de un combinado, o "con hielo / con limón / sin nada" de un refresco).
@@ -1677,7 +1680,7 @@ const I18N = {
     toastNoSaldo: "No hay pedidos abiertos en sala.",
     toastTickets: "Tickets aparcados: función no incluida en esta demo.",
     toastJuntar: "Juntar mesas: función no incluida en esta demo.",
-    roleCocina: "Cocina", roleSushi: "Sushi", roleComanda: "Comanda",
+    roleCocina: "Cocina", roleSushi: "Sushi", rolePostre: "Postre", roleComanda: "Comanda",
     kitchenTagline: "Pedidos pendientes",
     kitchenEmpty: "No hay platos pendientes.",
     kitchenTick: "Marcar como hecho",
@@ -1761,7 +1764,7 @@ const I18N = {
     toastNoSaldo: "No hi ha comandes obertes a la sala.",
     toastTickets: "Tiquets aparcats: funció no inclosa en aquesta demo.",
     toastJuntar: "Ajuntar taules: funció no inclosa en aquesta demo.",
-    roleCocina: "Cuina", roleSushi: "Sushi", roleComanda: "Comanda",
+    roleCocina: "Cuina", roleSushi: "Sushi", rolePostre: "Postres", roleComanda: "Comanda",
     kitchenTagline: "Comandes pendents",
     kitchenEmpty: "No hi ha plats pendents.",
     kitchenTick: "Marcar com a fet",
@@ -1845,7 +1848,7 @@ const I18N = {
     toastNoSaldo: "No open orders on the floor.",
     toastTickets: "Parked tickets: not included in this demo.",
     toastJuntar: "Merge tables: not included in this demo.",
-    roleCocina: "Kitchen", roleSushi: "Sushi", roleComanda: "Orders",
+    roleCocina: "Kitchen", roleSushi: "Sushi", rolePostre: "Desserts", roleComanda: "Orders",
     kitchenTagline: "Pending orders",
     kitchenEmpty: "No pending dishes.",
     kitchenTick: "Mark as done",
@@ -1926,12 +1929,12 @@ let orders = {};              // orders[tableId] = { itemId: qty }
 ALL_IDS.forEach(id => orders[id] = {});
 let currentTable = null;
 let currentLang = "es";
-// Rol del dispositivo: "comanda" (toma pedidos, plano de sala) o "cocina"/"sushi"
+// Rol del dispositivo: "comanda" (toma pedidos, plano de sala) o "cocina"/"sushi"/"postre"
 // (cola de platos por preparar, sin poder tomar pedidos). Se guarda por dispositivo.
 let appRole = "comanda";
 try{
   const savedRole = localStorage.getItem("kobe_role");
-  if(savedRole === "cocina" || savedRole === "sushi") appRole = savedRole;
+  if(savedRole === "cocina" || savedRole === "sushi" || savedRole === "postre") appRole = savedRole;
 }catch(e){}
 const THEME_CLASSES = ["", "theme-modern", "theme-classic"];
 let themeIndex = 0;
@@ -2122,7 +2125,7 @@ function leaveSession(){
 // "comanda" -> plano de sala (toma de pedidos). "cocina"/"sushi" -> cola de cocina, sin pedidos.
 function showRoleView(){
   document.getElementById("mobile-ticket-toggle").hidden = true;
-  if(appRole === "cocina" || appRole === "sushi"){
+  if(appRole === "cocina" || appRole === "sushi" || appRole === "postre"){
     currentTable = null;
     document.getElementById("home-view").hidden = true;
     document.getElementById("table-view").hidden = true;
@@ -2145,10 +2148,11 @@ function updateRoleButtons(){
   const drawerBtn = document.getElementById("connect-drawer-btn");
   if(drawerBtn) drawerBtn.hidden = appRole !== "caja";
   const t = I18N[currentLang];
-  if(appRole === "cocina" || appRole === "sushi"){
-    const isCocina = appRole === "cocina";
-    document.getElementById("kitchen-mark").textContent = isCocina ? "🍳" : "🍣";
-    document.getElementById("kitchen-title").textContent = isCocina ? t.roleCocina : t.roleSushi;
+  if(appRole === "cocina" || appRole === "sushi" || appRole === "postre"){
+    const marks = { cocina:"🍳", sushi:"🍣", postre:"🍰" };
+    const labels = { cocina:t.roleCocina, sushi:t.roleSushi, postre:t.rolePostre };
+    document.getElementById("kitchen-mark").textContent = marks[appRole];
+    document.getElementById("kitchen-title").textContent = labels[appRole];
     document.getElementById("kitchen-tagline").textContent = t.kitchenTagline;
   }
 }
@@ -2156,7 +2160,7 @@ function setRole(role){
   if(role === appRole) return;
   appRole = role;
   try{
-    if(role === "cocina" || role === "sushi") localStorage.setItem("kobe_role", role);
+    if(role === "cocina" || role === "sushi" || role === "postre") localStorage.setItem("kobe_role", role);
     else localStorage.removeItem("kobe_role"); // "comanda" y "caja" no se recuerdan: caja siempre pide código
   }catch(e){}
   if(currentSession) showRoleView();
@@ -2177,7 +2181,7 @@ document.querySelectorAll(".role-btn").forEach(btn=>{
 function renderKitchen(){
   const body = document.getElementById("kitchen-body");
   if(!body) return;
-  const groupKey = appRole === "cocina" ? "Cocina" : (appRole === "sushi" ? "Sushi" : null);
+  const groupKey = appRole === "cocina" ? "Cocina" : (appRole === "sushi" ? "Sushi" : (appRole === "postre" ? "Postres" : null));
   if(!groupKey){ body.innerHTML = ""; return; }
   const t = I18N[currentLang];
   const cards = [];
@@ -3017,6 +3021,7 @@ function applyStaticText(){
   });
   document.querySelectorAll('.role-btn[data-role="cocina"] span').forEach(el=>el.textContent = t.roleCocina);
   document.querySelectorAll('.role-btn[data-role="sushi"] span').forEach(el=>el.textContent = t.roleSushi);
+  document.querySelectorAll('.role-btn[data-role="postre"] span').forEach(el=>el.textContent = t.rolePostre);
   document.querySelectorAll('.role-btn[data-role="comanda"] span').forEach(el=>el.textContent = t.roleComanda);
   updateRoleButtons();
 }
@@ -3030,7 +3035,7 @@ function setLang(lang){
   currentCat = MENU[0].cat;
   searchTerm = "";
   applyStaticText();
-  if(appRole === "cocina" || appRole === "sushi"){
+  if(appRole === "cocina" || appRole === "sushi" || appRole === "postre"){
     renderKitchen();
   } else if(document.getElementById("table-view").hidden){
     renderHome();
