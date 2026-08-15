@@ -2463,24 +2463,34 @@ function printHTML(bodyHtml){
   doc.open();
   doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Kobe BCN</title>
     <style>
-      body{font-family:'Courier New',monospace;font-size:11.5px;width:280px;margin:0 auto;padding:10px;color:#000;}
+      body{font-family:'Courier New',Courier,monospace;font-size:13px;font-weight:700;width:300px;margin:0 auto;padding:10px;color:#000;}
       h1,h2,h3{text-align:center;margin:4px 0;}
       p{margin:2px 0;}
-      hr{border:none;border-top:1px dashed #000;margin:6px 0;}
+      hr{border:none;border-top:2px dashed #000;margin:6px 0;}
       .center{text-align:center;}
-      .strong{font-weight:bold;}
-      .muted{color:#444;font-size:10.5px;}
+      .strong{font-weight:800;}
+      .muted{color:#333;font-size:11.5px;}
       .line{display:flex;justify-content:space-between;padding:2px 0;}
-      .total{font-weight:bold;font-size:14px;}
-      .frow2{display:flex;justify-content:space-between;font-size:11px;padding:2px 0;}
-      .frow2.strong{font-weight:bold;font-size:13px;}
+      .total{font-weight:800;font-size:15px;}
+      .frow2{display:flex;justify-content:space-between;font-size:12.5px;padding:2px 0;}
+      .frow2.strong{font-weight:800;font-size:14px;}
       /* filas de artículos (UNIT/DESCRIPCIO/PREU/IMPORT) y BASE/%IVA/IMP.IVA:
-         texto monoespaciado con columnas alineadas por caracteres, en vez de
-         grid/flex, porque el motor de impresión de la impresora fiscal no
-         soporta bien layouts grid/flex de más de 2 columnas y descuadra las filas. */
-      .rline{font-family:'Courier New',monospace;white-space:pre;font-size:10.5px;padding:1.5px 0;}
-      .rline.rhead{font-weight:bold;}
-      .rline3{font-family:'Courier New',monospace;white-space:pre;font-size:11px;padding:2px 0;}
+         tabla HTML con anchuras de columna fijas en vez de grid/flex o texto
+         con espacios, porque grid/flex de +2 columnas y el relleno con
+         espacios (que depende de que el dispositivo tenga fuente
+         monoespaciada) no se renderizaban bien en la impresora fiscal. Una
+         tabla con <colgroup> es el método más compatible: alinea igual
+         aunque la fuente no sea monoespaciada. */
+      table.rtable{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12.5px;font-weight:700;}
+      table.rtable th, table.rtable td{padding:2px 0;vertical-align:top;}
+      table.rtable th{font-weight:800;}
+      .rt-unit{width:14%;text-align:left;}
+      .rt-desc{width:48%;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:4px;}
+      .rt-preu{width:18%;text-align:right;}
+      .rt-import{width:20%;text-align:right;}
+      .rb-a{width:34%;text-align:left;}
+      .rb-b{width:33%;text-align:left;}
+      .rb-c{width:33%;text-align:right;}
     </style>
     </head><body>${bodyHtml}</body></html>`);
   doc.close();
@@ -2501,35 +2511,8 @@ const IVA_RATE = 10; // % IVA incluido en los precios
 // Formatea un número como "1234,56" (sin símbolo de moneda), como en el ticket fiscal.
 function money(n){ return (Math.round((n + Number.EPSILON) * 100) / 100).toFixed(2).replace(".", ","); }
 
-/* Ayudas para construir líneas de texto monoespaciado con columnas alineadas
-   por caracteres (mismo criterio que usa la impresora fiscal real). */
 function escapeHtml(s){
   return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
-function padEnd(str, len){
-  str = String(str);
-  return str.length >= len ? str.slice(0, len) : str + " ".repeat(len - str.length);
-}
-function padStart(str, len){
-  str = String(str);
-  return str.length >= len ? str.slice(-len) : " ".repeat(len - str.length) + str;
-}
-// Anchuras de columna de la línea de artículo: UNIT / DESCRIPCIO / PREU / IMPORT
-// (COL_UNIT a 5 para que quepa la cabecera "UNIT." sin cortarse)
-const COL_UNIT = 6, COL_DESC = 18, COL_PREU = 7, COL_IMPORT = 8;
-function line4(a, b, c, d){
-  return padEnd(String(a), COL_UNIT)
-       + padEnd(String(b), COL_DESC)
-       + padStart(String(c), COL_PREU)
-       + padStart(String(d), COL_IMPORT);
-}
-function itemLine(qty, name, price, importe){
-  return line4(qty, String(name).toUpperCase(), money(price), money(importe));
-}
-// Anchuras de columna de la línea BASE / %IVA / IMP.IVA
-const COL_BASE = 13, COL_IVAPCT = 13, COL_IMPIVA = 13;
-function baseLine(a, b, c){
-  return padEnd(String(a), COL_BASE) + padEnd(String(b), COL_IVAPCT) + padStart(String(c), COL_IMPIVA);
 }
 
 // Numeración de tickets: cada mesa/comanda abierta en Caja obtiene un número
@@ -2569,9 +2552,14 @@ function buildReceiptHTML(opts){
   const base = total / (1 + IVA_RATE/100);
   const ivaAmount = total - base;
   const perPerson = opts.people ? total / opts.people : null;
-  const itemsHtml = opts.items.length ? opts.items.map(it=>`
-    <div class="rline">${escapeHtml(itemLine(it.qty, it.name, it.price, it.price*it.qty))}</div>
-  `).join("") : `<p class="center muted">Sin artículos</p>`;
+  const itemRowsHtml = opts.items.length ? opts.items.map(it=>`
+    <tr>
+      <td class="rt-unit">${it.qty}</td>
+      <td class="rt-desc">${escapeHtml(String(it.name).toUpperCase())}</td>
+      <td class="rt-preu">${money(it.price)}</td>
+      <td class="rt-import">${money(it.price*it.qty)}</td>
+    </tr>
+  `).join("") : `<tr><td colspan="4" class="center muted">Sin artículos</td></tr>`;
 
   let payBlock;
   if(opts.pending){
@@ -2598,12 +2586,32 @@ function buildReceiptHTML(opts){
     <div class="frow2"><span>FRA SIM:COMPROBANTE</span><span>HORA:${opts.time}</span></div>
     <div class="frow2"><span>DATA:${opts.date}</span><span></span></div>
     <hr>
-    <div class="rline rhead">${escapeHtml(line4("UNIT.","DESCRIPCIO","PREU","IMPORT"))}</div>
+    <table class="rtable">
+      <thead>
+        <tr>
+          <th class="rt-unit">UNIT.</th>
+          <th class="rt-desc">DESCRIPCIO</th>
+          <th class="rt-preu">PREU</th>
+          <th class="rt-import">IMPORT</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${itemRowsHtml}
+      </tbody>
+    </table>
     <hr>
-    ${itemsHtml}
-    <hr>
-    <div class="rline3">${escapeHtml(baseLine("BASE","%IVA","IMP.IVA"))}</div>
-    <div class="rline3">${escapeHtml(baseLine(money(base), IVA_RATE.toFixed(2).replace(".",","), money(ivaAmount)))}</div>
+    <table class="rtable">
+      <tr>
+        <td class="rb-a">BASE</td>
+        <td class="rb-b">%IVA</td>
+        <td class="rb-c">IMP.IVA</td>
+      </tr>
+      <tr>
+        <td class="rb-a">${money(base)}</td>
+        <td class="rb-b">${IVA_RATE.toFixed(2).replace(".",",")}</td>
+        <td class="rb-c">${money(ivaAmount)}</td>
+      </tr>
+    </table>
     <hr>
     <div class="frow2 strong"><span>TOTAL EUROS</span><span>${money(total)}</span></div>
     ${perPerson != null ? `<div class="frow2"><span>IMPORT PER COMENÇAL</span><span>${money(perPerson)}</span></div>` : ""}
