@@ -2472,13 +2472,15 @@ function printHTML(bodyHtml){
       .muted{color:#444;font-size:10.5px;}
       .line{display:flex;justify-content:space-between;padding:2px 0;}
       .total{font-weight:bold;font-size:14px;}
-      /* filas de artículos: UNIT / DESCRIPCIO / PREU / IMPORT */
-      .frow{display:grid;grid-template-columns:20px 1fr 42px 48px;gap:3px;font-size:10.5px;padding:1.5px 0;}
-      .frow .fprice, .frow .fimport{text-align:right;}
-      .frow.fhead{font-weight:bold;}
       .frow2{display:flex;justify-content:space-between;font-size:11px;padding:2px 0;}
       .frow2.strong{font-weight:bold;font-size:13px;}
-      .frow3{display:flex;justify-content:space-between;font-size:11px;padding:2px 0;}
+      /* filas de artículos (UNIT/DESCRIPCIO/PREU/IMPORT) y BASE/%IVA/IMP.IVA:
+         texto monoespaciado con columnas alineadas por caracteres, en vez de
+         grid/flex, porque el motor de impresión de la impresora fiscal no
+         soporta bien layouts grid/flex de más de 2 columnas y descuadra las filas. */
+      .rline{font-family:'Courier New',monospace;white-space:pre;font-size:10.5px;padding:1.5px 0;}
+      .rline.rhead{font-weight:bold;}
+      .rline3{font-family:'Courier New',monospace;white-space:pre;font-size:11px;padding:2px 0;}
     </style>
     </head><body>${bodyHtml}</body></html>`);
   doc.close();
@@ -2498,6 +2500,37 @@ const IVA_RATE = 10; // % IVA incluido en los precios
 
 // Formatea un número como "1234,56" (sin símbolo de moneda), como en el ticket fiscal.
 function money(n){ return (Math.round((n + Number.EPSILON) * 100) / 100).toFixed(2).replace(".", ","); }
+
+/* Ayudas para construir líneas de texto monoespaciado con columnas alineadas
+   por caracteres (mismo criterio que usa la impresora fiscal real). */
+function escapeHtml(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function padEnd(str, len){
+  str = String(str);
+  return str.length >= len ? str.slice(0, len) : str + " ".repeat(len - str.length);
+}
+function padStart(str, len){
+  str = String(str);
+  return str.length >= len ? str.slice(-len) : " ".repeat(len - str.length) + str;
+}
+// Anchuras de columna de la línea de artículo: UNIT / DESCRIPCIO / PREU / IMPORT
+// (COL_UNIT a 5 para que quepa la cabecera "UNIT." sin cortarse)
+const COL_UNIT = 6, COL_DESC = 18, COL_PREU = 7, COL_IMPORT = 8;
+function line4(a, b, c, d){
+  return padEnd(String(a), COL_UNIT)
+       + padEnd(String(b), COL_DESC)
+       + padStart(String(c), COL_PREU)
+       + padStart(String(d), COL_IMPORT);
+}
+function itemLine(qty, name, price, importe){
+  return line4(qty, String(name).toUpperCase(), money(price), money(importe));
+}
+// Anchuras de columna de la línea BASE / %IVA / IMP.IVA
+const COL_BASE = 13, COL_IVAPCT = 13, COL_IMPIVA = 13;
+function baseLine(a, b, c){
+  return padEnd(String(a), COL_BASE) + padEnd(String(b), COL_IVAPCT) + padStart(String(c), COL_IMPIVA);
+}
 
 // Numeración de tickets: cada mesa/comanda abierta en Caja obtiene un número
 // correlativo (001, 002, 003…) que se mantiene mientras esa comanda siga abierta,
@@ -2537,12 +2570,7 @@ function buildReceiptHTML(opts){
   const ivaAmount = total - base;
   const perPerson = opts.people ? total / opts.people : null;
   const itemsHtml = opts.items.length ? opts.items.map(it=>`
-    <div class="frow">
-      <span class="funit">${it.qty}</span>
-      <span class="fdesc">${String(it.name).toUpperCase()}</span>
-      <span class="fprice">${money(it.price)}</span>
-      <span class="fimport">${money(it.price*it.qty)}</span>
-    </div>
+    <div class="rline">${escapeHtml(itemLine(it.qty, it.name, it.price, it.price*it.qty))}</div>
   `).join("") : `<p class="center muted">Sin artículos</p>`;
 
   let payBlock;
@@ -2570,12 +2598,12 @@ function buildReceiptHTML(opts){
     <div class="frow2"><span>FRA SIM:COMPROBANTE</span><span>HORA:${opts.time}</span></div>
     <div class="frow2"><span>DATA:${opts.date}</span><span></span></div>
     <hr>
-    <div class="frow fhead"><span class="funit">UNIT.</span><span class="fdesc">DESCRIPCIO</span><span class="fprice">PREU</span><span class="fimport">IMPORT</span></div>
+    <div class="rline rhead">${escapeHtml(line4("UNIT.","DESCRIPCIO","PREU","IMPORT"))}</div>
     <hr>
     ${itemsHtml}
     <hr>
-    <div class="frow3"><span>BASE</span><span>%IVA</span><span>IMP.IVA</span></div>
-    <div class="frow3"><span>${money(base)}</span><span>${IVA_RATE.toFixed(2).replace(".",",")}</span><span>${money(ivaAmount)}</span></div>
+    <div class="rline3">${escapeHtml(baseLine("BASE","%IVA","IMP.IVA"))}</div>
+    <div class="rline3">${escapeHtml(baseLine(money(base), IVA_RATE.toFixed(2).replace(".",","), money(ivaAmount)))}</div>
     <hr>
     <div class="frow2 strong"><span>TOTAL EUROS</span><span>${money(total)}</span></div>
     ${perPerson != null ? `<div class="frow2"><span>IMPORT PER COMENÇAL</span><span>${money(perPerson)}</span></div>` : ""}
