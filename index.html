@@ -484,6 +484,15 @@
   .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:0.5;}
 
   .table-actions{display:flex;gap:8px;flex:none;}
+  .variable-btn{
+    flex:none;display:flex;align-items:center;gap:6px;
+    background:linear-gradient(160deg,var(--btn-accent-1),var(--btn-accent-2));
+    color:var(--btn-accent-text);border:none;border-radius:20px;
+    font-weight:800;font-size:12.5px;letter-spacing:0.02em;
+    padding:10px 16px;cursor:pointer;white-space:nowrap;
+    box-shadow:0 3px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .variable-btn:active{transform:translateY(1px);}
   .pay-btn{
     background:linear-gradient(160deg,#7fae6f,#4f7d43);
     border:1px solid rgba(0,0,0,0.15);
@@ -738,6 +747,7 @@
     outline:none;font-family:inherit;
   }
   .note-input:focus{border-color:var(--gold);}
+  .price-input{min-height:auto;height:46px;font-weight:700;font-size:16px;}
   .note-actions{display:flex;gap:10px;margin-top:14px;}
   .note-actions button{
     flex:1;padding:11px 10px;border-radius:8px;font-size:13.5px;
@@ -829,6 +839,7 @@
     .table-actions{width:100%;flex-wrap:wrap;}
     .pay-btn, .clear-mesa-btn, .park-btn-top{flex:1 1 30%;text-align:center;padding:9px 6px;font-size:11.5px;}
     .search-wrap{width:100%;order:10;}
+    .variable-btn{order:9;padding:8px 12px;font-size:11px;}
 
     .cat-rail{
       width:100%;height:auto;border-right:none;border-bottom:1px solid rgba(246,239,225,0.08);
@@ -952,6 +963,7 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" id="search-input" placeholder="Buscar plato, ingrediente…">
       </div>
+      <button class="variable-btn" id="variable-btn">➕ <span id="variable-btn-label">Variable</span></button>
       <div class="table-actions">
         <button class="pay-btn" id="pay-btn">✓ Pagado</button>
         <button class="park-btn-top" id="park-btn">📦 Aparcar</button>
@@ -1562,6 +1574,10 @@ const I18N = {
     kitchenTick: "Marcar como hecho",
     kitchenPending: (n)=> n + (n===1 ? " pendiente" : " pendientes"),
     kitchenAllDone: "Todo hecho ✓",
+    variableBtn: "Variable",
+    variableNamePrompt: "Escribe el nombre del artículo.",
+    variableNamePlaceholder: "Ej. Ración especial, Menú del día…",
+    next: "Siguiente",
     parkBtn: "📦 Aparcar",
     toastNoOrderToPark: "Esta mesa no tiene pedido para aparcar.",
     parkPrompt: "Ponle un nombre a este tiquet (ej. Terraza, Para llevar…).",
@@ -1642,6 +1658,10 @@ const I18N = {
     kitchenTick: "Marcar com a fet",
     kitchenPending: (n)=> n + (n===1 ? " pendent" : " pendents"),
     kitchenAllDone: "Tot fet ✓",
+    variableBtn: "Variable",
+    variableNamePrompt: "Escriu el nom de l'article.",
+    variableNamePlaceholder: "Ex. Ració especial, Menú del dia…",
+    next: "Següent",
     parkBtn: "📦 Aparcar",
     toastNoOrderToPark: "Aquesta taula no té comanda per aparcar.",
     parkPrompt: "Posa un nom a aquest tiquet (ex. Terrassa, Per emportar…).",
@@ -1722,6 +1742,10 @@ const I18N = {
     kitchenTick: "Mark as done",
     kitchenPending: (n)=> n + (n===1 ? " pending" : " pending"),
     kitchenAllDone: "All done ✓",
+    variableBtn: "Custom",
+    variableNamePrompt: "Enter the item name.",
+    variableNamePlaceholder: "E.g. Special portion, Set menu…",
+    next: "Next",
     parkBtn: "📦 Park",
     toastNoOrderToPark: "This table has no order to park.",
     parkPrompt: "Give this ticket a name (e.g. Terrace, Takeaway…).",
@@ -2319,6 +2343,82 @@ function openOptionPicker(promptText, options, onPick, noteCallback){
   });
 }
 
+// Artículo "Variable": nombre y precio libres, para cualquier mesa, sin depender
+// de un combinado con mezclador. Se abre con el botón "➕ Variable" de la comanda.
+function openVariableItemFlow(){
+  const t = I18N[currentLang];
+  const nameOverlay = document.createElement("div");
+  nameOverlay.className = "confirm-overlay";
+  nameOverlay.innerHTML = `
+    <div class="note-box">
+      <h3>${t.variableBtn}</h3>
+      <p>${t.variableNamePrompt}</p>
+      <textarea class="note-input" maxlength="60" placeholder="${t.variableNamePlaceholder}"></textarea>
+      <div class="note-actions">
+        <button class="note-cancel">${t.cancel}</button>
+        <button class="note-save">${t.next}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(nameOverlay);
+  const nameInput = nameOverlay.querySelector(".note-input");
+  setTimeout(()=>nameInput.focus(), 50);
+  const closeName = ()=>nameOverlay.remove();
+  nameOverlay.addEventListener("click", e=>{ if(e.target===nameOverlay) closeName(); });
+  nameOverlay.querySelector(".note-cancel").addEventListener("click", closeName);
+
+  const goToPrice = ()=>{
+    const name = nameInput.value.trim();
+    if(!name) return;
+    nameOverlay.remove();
+
+    const priceOverlay = document.createElement("div");
+    priceOverlay.className = "confirm-overlay";
+    priceOverlay.innerHTML = `
+      <div class="note-box">
+        <h3>${t.total}</h3>
+        <p>${name}</p>
+        <input type="number" class="note-input price-input" step="0.01" min="0" inputmode="decimal" placeholder="0.00">
+        <div class="note-actions">
+          <button class="note-cancel">${t.cancel}</button>
+          <button class="note-save">${t.add}</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(priceOverlay);
+    const priceInput = priceOverlay.querySelector(".price-input");
+    setTimeout(()=>{ priceInput.focus(); }, 50);
+    const closePrice = ()=>priceOverlay.remove();
+    priceOverlay.addEventListener("click", e=>{ if(e.target===priceOverlay) closePrice(); });
+    priceOverlay.querySelector(".note-cancel").addEventListener("click", closePrice);
+
+    const save = ()=>{
+      const raw = priceInput.value.replace(",", ".").trim();
+      const parsed = parseFloat(raw);
+      const finalPrice = (!isNaN(parsed) && parsed >= 0) ? parsed : 0;
+      const variantId = "var-" + Date.now();
+      const variant = {
+        id: variantId,
+        cat: t.variableBtn,
+        group: t.variableBtn,
+        groupKey: null,
+        name: name,
+        desc: "",
+        price: finalPrice,
+        mixers: null,
+        extras: null
+      };
+      FLAT.push(variant);
+      writeQty(currentTable, variant.id, 1);
+      priceOverlay.remove();
+    };
+    priceOverlay.querySelector(".note-save").addEventListener("click", save);
+    priceInput.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); save(); } });
+  };
+  nameOverlay.querySelector(".note-save").addEventListener("click", goToPrice);
+  nameInput.addEventListener("keydown", (e)=>{ if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); goToPrice(); } });
+}
+
 // Selector de mesa/barra genérico (para juntar mesas y recuperar tiquets aparcados).
 function openTablePicker(promptText, onPick, excludeId){
   const overlay = document.createElement("div");
@@ -2397,6 +2497,7 @@ function applyStaticText(){
   document.getElementById("btn-juntar").textContent = t.btnJuntar;
   document.getElementById("back-btn").textContent = t.back;
   document.getElementById("search-input").placeholder = t.searchPh;
+  document.getElementById("variable-btn-label").textContent = t.variableBtn;
   document.getElementById("pay-btn").textContent = t.pay;
   document.getElementById("park-btn").textContent = t.parkBtn;
   document.getElementById("clear-mesa-btn").textContent = t.clear;
@@ -2738,23 +2839,55 @@ function renderItems(){
             variableOverlay.querySelector(".note-save").addEventListener("click", ()=>{
               const text = input.value.trim();
               if(!text) return;
-
-              // Create a custom variant with the text entered in Variable.
-              const variantId = baseItem.id + "-var-" + Date.now();
-              const variant = {
-                id: variantId,
-                cat: baseItem.cat,
-                group: baseItem.group,
-                groupKey: baseItem.groupKey,
-                name: baseItem.name + " · " + text,
-                desc: baseItem.desc,
-                price: baseItem.price,
-                mixers: null,
-                extras: null
-              };
-              FLAT.push(variant);
-              writeQty(currentTable, variant.id, 1);
               variableOverlay.remove();
+
+              // Segundo paso: precio para esta variante "Variable".
+              const priceOverlay = document.createElement("div");
+              priceOverlay.className = "confirm-overlay";
+              priceOverlay.innerHTML = `
+                <div class="note-box">
+                  <h3>Precio</h3>
+                  <p>${baseItem.name} · ${text}</p>
+                  <input type="number" class="note-input price-input" step="0.01" min="0" inputmode="decimal" value="${baseItem.price.toFixed(2)}" placeholder="0.00">
+                  <div class="note-actions">
+                    <button class="note-cancel">${I18N[currentLang].cancel}</button>
+                    <button class="note-save">Añadir</button>
+                  </div>
+                </div>
+              `;
+              document.body.appendChild(priceOverlay);
+              const priceInput = priceOverlay.querySelector(".price-input");
+              setTimeout(()=>{ priceInput.focus(); priceInput.select(); }, 50);
+
+              const closePrice = ()=>priceOverlay.remove();
+              priceOverlay.addEventListener("click", e=>{
+                if(e.target===priceOverlay) closePrice();
+              });
+              priceOverlay.querySelector(".note-cancel").addEventListener("click", closePrice);
+              const savePrice = ()=>{
+                const raw = priceInput.value.replace(",", ".").trim();
+                const parsed = parseFloat(raw);
+                const finalPrice = (!isNaN(parsed) && parsed >= 0) ? parsed : baseItem.price;
+
+                // Create a custom variant with the text and price entered in Variable.
+                const variantId = baseItem.id + "-var-" + Date.now();
+                const variant = {
+                  id: variantId,
+                  cat: baseItem.cat,
+                  group: baseItem.group,
+                  groupKey: baseItem.groupKey,
+                  name: baseItem.name + " · " + text,
+                  desc: baseItem.desc,
+                  price: finalPrice,
+                  mixers: null,
+                  extras: null
+                };
+                FLAT.push(variant);
+                writeQty(currentTable, variant.id, 1);
+                priceOverlay.remove();
+              };
+              priceOverlay.querySelector(".note-save").addEventListener("click", savePrice);
+              priceInput.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); savePrice(); } });
             });
           } : null);
         };
@@ -2838,6 +2971,11 @@ document.getElementById("search-input").addEventListener("input", (e)=>{
   searchTerm = e.target.value;
   renderCatRail();
   renderItems();
+});
+
+document.getElementById("variable-btn").addEventListener("click", ()=>{
+  if(!currentTable) return;
+  openVariableItemFlow();
 });
 
 document.getElementById("pay-btn").addEventListener("click", ()=>{
