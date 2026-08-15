@@ -990,6 +990,7 @@
         </div>
       </div>
       <span class="sync-badge off" id="sync-badge">🔶 Modo local</span>
+      <button class="session-chip" id="connect-drawer-btn" hidden>🗄️ Conectar caja</button>
       <button class="session-chip" id="change-session-btn">
         <span id="session-chip-label">Sesión</span> <b id="current-session-label">----</b> · <span id="change-session-label">Cambiar</span>
       </button>
@@ -2139,6 +2140,8 @@ function updateRoleButtons(){
   document.querySelectorAll(".role-btn").forEach(b=>{
     b.classList.toggle("active", b.dataset.role === appRole);
   });
+  const drawerBtn = document.getElementById("connect-drawer-btn");
+  if(drawerBtn) drawerBtn.hidden = appRole !== "caja";
   const t = I18N[currentLang];
   if(appRole === "cocina" || appRole === "sushi"){
     const isCocina = appRole === "cocina";
@@ -3532,6 +3535,9 @@ document.getElementById("pay-btn").addEventListener("click", ()=>{
       ticketNo, date, time, people: record.people,
       items, total, method, paidAmount, change, pending: false
     }));
+    if(method === "efectivo" && typeof window.openCashDrawer === "function"){
+      window.openCashDrawer();
+    }
     writePay(t, record);
     clearTicketNumberForTable(t);
     showToast(I18N[currentLang].toastPaid(tableLabel(t), eur(total)));
@@ -3853,6 +3859,115 @@ connectFirebase();
       hideKeyboard();
     }, 50);
   });
+})();
+</script>
+
+<!-- ===================== CAJÓN PORTAMONEDAS (USB, vía impresora de tickets) ===================== -->
+<script>
+(function(){
+  "use strict";
+  // La caja está conectada por cable RJ11/RJ12 a la impresora de tickets.
+  // La impresora recibe el comando ESC/POS estándar de "abrir cajón" y
+  // manda el pulso eléctrico que dispara el cajón. Por eso hablamos con la
+  // impresora por USB (WebUSB), no con la caja directamente.
+  const KICK_DRAWER_CMD = new Uint8Array([0x1B, 0x70, 0x00, 0x19, 0xFA]); // ESC p 0 25 250
+
+  let drawerDevice = null;
+  let drawerEndpoint = null;
+  let drawerInterfaceNumber = null;
+
+  function findOutEndpoint(device){
+    for(const conf of device.configurations){
+      for(const iface of conf.interfaces){
+        for(const alt of iface.alternates){
+          const ep = alt.endpoints.find(e=>e.direction === "out");
+          if(ep) return { configurationValue: conf.configurationValue, interfaceNumber: iface.interfaceNumber, endpointNumber: ep.endpointNumber };
+        }
+      }
+    }
+    return null;
+  }
+
+  async function openDeviceForUse(device){
+    const found = findOutEndpoint(device);
+    if(!found) throw new Error("La impresora no tiene un endpoint USB de salida reconocible");
+    await device.open();
+    if(device.configuration === null || device.configuration.configurationValue !== found.configurationValue){
+      await device.selectConfiguration(found.configurationValue);
+    }
+    await device.claimInterface(found.interfaceNumber);
+    drawerDevice = device;
+    drawerEndpoint = found.endpointNumber;
+    drawerInterfaceNumber = found.interfaceNumber;
+    try{ localStorage.setItem("kobe_drawer_paired", "1"); }catch(e){}
+  }
+
+  async function connectDrawerPrinter(showMessages){
+    if(!("usb" in navigator)){
+      if(showMessages) showToast("Este navegador no soporta USB. Usa Chrome o Edge en el ordenador.");
+      return false;
+    }
+    try{
+      const device = await navigator.usb.requestDevice({ filters: [] });
+      await openDeviceForUse(device);
+      if(showMessages) showToast("Impresora / cajón conectados ✓");
+      return true;
+    }catch(err){
+      console.warn("Conexión USB cancelada o fallida:", err);
+      if(showMessages) showToast("No se pudo conectar la impresora");
+      return false;
+    }
+  }
+
+  async function tryAutoReconnectDrawer(){
+    if(!("usb" in navigator)) return;
+    try{
+      const devices = await navigator.usb.getDevices();
+      if(devices.length > 0){
+        await openDeviceForUse(devices[0]);
+      }
+    }catch(err){
+      console.warn("No se pudo reconectar la impresora automáticamente:", err);
+    }
+  }
+
+  async function openCashDrawer(){
+    if(!drawerDevice){
+      let paired = false;
+      try{ paired = localStorage.getItem("kobe_drawer_paired") === "1"; }catch(e){}
+      if(!paired){
+        // Nunca se ha vinculado la impresora: no interrumpimos el cobro con
+        // un diálogo de USB; solo avisamos para que se vincule desde "Conectar caja".
+        showToast("Cajón no vinculado — pulsa 🗄️ Conectar caja");
+        return;
+      }
+      const ok = await connectDrawerPrinter(false);
+      if(!ok){ showToast("No se pudo abrir el cajón (reconecta desde 🗄️ Conectar caja)"); return; }
+    }
+    try{
+      await drawerDevice.transferOut(drawerEndpoint, KICK_DRAWER_CMD);
+    }catch(err){
+      console.warn("No se pudo abrir el cajón:", err);
+      showToast("No se pudo abrir el cajón (revisa el cable USB)");
+    }
+  }
+
+  const connectBtn = document.getElementById("connect-drawer-btn");
+  if(connectBtn){
+    connectBtn.addEventListener("click", ()=> connectDrawerPrinter(true));
+  }
+
+  if("usb" in navigator){
+    navigator.usb.addEventListener("disconnect", (e)=>{
+      if(drawerDevice && e.device === drawerDevice){
+        drawerDevice = null;
+        drawerEndpoint = null;
+      }
+    });
+  }
+
+  window.openCashDrawer = openCashDrawer;
+  tryAutoReconnectDrawer();
 })();
 </script>
 </body>
