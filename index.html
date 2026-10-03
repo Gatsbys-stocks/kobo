@@ -79,7 +79,6 @@
   }
   html.theme-modern .items-heading,
   html.theme-modern .home-head h2,
-  html.theme-modern .login-brand h1,
   html.theme-modern .table-title h2,
   html.theme-modern .history-head h3{
     letter-spacing:0.01em; font-weight:800;
@@ -162,69 +161,6 @@
   .sync-badge.on{color:#8fd39e;border-color:rgba(143,211,158,.35);background:rgba(143,211,158,.08);}
   .sync-badge.off{color:#e0b064;border-color:rgba(224,176,100,.35);background:rgba(224,176,100,.08);}
 
-  .session-chip{
-    display:flex;align-items:center;gap:4px;
-    background:transparent;border:1px solid rgba(246,239,225,0.16);
-    color:var(--text-lo);padding:6px 12px;border-radius:20px;
-    font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;
-  }
-  .session-chip b{color:var(--gold);font-weight:800;}
-  .session-chip:hover{border-color:var(--gold-soft);color:var(--text-hi);}
-  #connect-drawer-btn.drawer-on{color:#8fd39e;border-color:rgba(143,211,158,.35);background:rgba(143,211,158,.08);}
-  #connect-drawer-btn.drawer-off{color:#e0b064;border-color:rgba(224,176,100,.35);background:rgba(224,176,100,.08);}
-  #connect-drawer-btn.drawer-error{color:#e08a7a;border-color:rgba(224,138,122,.4);background:rgba(224,138,122,.1);}
-
-  /* ---------- Login: código de sesión ---------- */
-  #login-view{
-    min-height:100vh;display:flex;align-items:center;justify-content:center;
-    padding:30px 22px;
-    background-color: var(--ink);
-  }
-  .login-wrap{max-width:520px;width:100%;text-align:center;}
-  .login-brand{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:8px;}
-  .login-brand .mark{
-    width:54px;height:54px;border-radius:50%;
-    background:var(--stamp);
-    display:flex;align-items:center;justify-content:center;
-    font-family:var(--font-display);font-weight:800;color:var(--text-hi);
-    font-size:24px;
-    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.15), var(--shadow);
-  }
-  .login-brand h1{font-family:var(--font-display);font-size:28px;margin:0;font-weight:700;}
-  .login-sub{color:var(--text-lo);font-size:13.5px;line-height:1.5;max-width:360px;margin:0 auto 30px;}
-  .login-form{display:flex;flex-direction:column;align-items:center;gap:16px;}
-  .session-input{
-    width:220px;
-    background:rgba(246,239,225,0.05);
-    border:2px solid rgba(246,239,225,0.16);
-    border-radius:14px;
-    color:var(--text-hi);
-    font-family:var(--font-display);
-    font-size:32px;font-weight:700;
-    letter-spacing:0.5em;
-    text-align:center;
-    padding:16px 10px 16px 20px;
-    outline:none;
-  }
-  .session-input::placeholder{color:rgba(246,239,225,0.25);letter-spacing:0.5em;}
-  .session-input:focus{border-color:var(--gold);}
-  .session-submit{
-    background:linear-gradient(160deg,var(--btn-accent-1),var(--btn-accent-2));
-    color:var(--btn-accent-text);border:none;border-radius:30px;
-    font-weight:800;font-size:14px;letter-spacing:0.03em;
-    padding:12px 34px;cursor:pointer;
-    box-shadow:0 4px 10px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.35);
-  }
-  .session-submit:active{transform:translateY(1px);}
-  .login-error{
-    color:#e8a49c;font-size:12.5px;font-weight:600;margin-top:16px;
-  }
-  .login-form.shake{animation:shakeInput .3s;}
-  @keyframes shakeInput{
-    0%,100%{transform:translateX(0);}
-    25%{transform:translateX(-8px);}
-    75%{transform:translateX(8px);}
-  }
   .lang-btn{
     display:flex;align-items:center;gap:6px;
     background:transparent;border:1px solid rgba(246,239,225,0.16);
@@ -250,7 +186,6 @@
   .role-btn.active[data-role="cocina"]{border-color:#e0895a;background:rgba(224,137,90,0.18);color:#f0a97e;}
   .role-btn.active[data-role="sushi"]{border-color:#5aa9a3;background:rgba(90,169,163,0.18);color:#8fd6cd;}
   .role-btn.active[data-role="postre"]{border-color:#d68fc9;background:rgba(214,143,201,0.18);color:#eab4de;}
-  .role-btn.active[data-role="caja"]{border-color:#7fd48a;background:rgba(127,212,138,0.18);color:#a8e8b0;}
 
   /* ---------- Vista de cocina / sushi ---------- */
   #kitchen-view{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;}
@@ -511,26 +446,12 @@
     box-shadow:0 3px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.3);
   }
   .variable-btn:active{transform:translateY(1px);}
-  .pay-btn{
-    background:linear-gradient(160deg,#7fae6f,#4f7d43);
-    border:1px solid rgba(0,0,0,0.15);
-    color:#f4ede1;padding:9px 16px;border-radius:30px;
-    font-size:13px;font-weight:700;cursor:pointer;
-    box-shadow:0 3px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
-  }
-  .pay-btn:hover{filter:brightness(1.08);}
   .park-btn-top{
     background:rgba(199,154,82,0.14);border:1px solid var(--gold-soft);
     color:var(--gold);padding:9px 14px;border-radius:30px;
     font-size:13px;font-weight:700;cursor:pointer;
   }
   .park-btn-top:hover{background:rgba(199,154,82,0.22);}
-  .print-btn-top{
-    background:rgba(90,169,163,0.14);border:1px solid rgba(90,169,163,0.4);
-    color:#8fd6cd;padding:9px 14px;border-radius:30px;
-    font-size:13px;font-weight:700;cursor:pointer;
-  }
-  .print-btn-top:hover{background:rgba(90,169,163,0.22);}
   .clear-mesa-btn{
     background:transparent;border:1px solid rgba(178,58,46,0.4);
     color:#e8a49c;padding:9px 14px;border-radius:30px;font-size:13px;cursor:pointer;
@@ -790,32 +711,13 @@
     cursor:pointer;border:none;background:rgba(0,0,0,0.08);color:#000;
   }
 
-  /* caja: pago (efectivo/tarjeta) y asignar personas */
-  .pay-method-grid{display:flex;gap:10px;margin:6px 0 16px;}
-  .pay-method-btn{
-    flex:1;padding:16px 8px;border-radius:12px;border:1px solid rgba(0,0,0,0.16);
-    background:rgba(0,0,0,0.04);color:#000;font-size:14px;font-weight:800;cursor:pointer;
-    display:flex;flex-direction:column;align-items:center;gap:6px;
-  }
-  .pay-method-btn span.ico{font-size:22px;}
-  .pay-method-btn:hover{border-color:var(--gold);background:rgba(199,154,82,0.1);}
-  .pay-summary-row{display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0;}
-  .pay-summary-row b{font-size:15px;}
-  .pay-change-box{
-    margin-top:10px;padding:10px 12px;border-radius:10px;
-    background:rgba(79,125,67,0.12);border:1px solid rgba(79,125,67,0.35);
-    display:flex;justify-content:space-between;font-size:14px;font-weight:800;color:#3f6b36;
-  }
+  /* asignar personas a una mesa */
   .people-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:6px 0 14px;}
   .people-chip{
     padding:14px 4px;border-radius:10px;border:1px solid rgba(0,0,0,0.16);
     background:rgba(0,0,0,0.04);color:#000;font-size:16px;font-weight:800;cursor:pointer;
   }
   .people-chip:hover{border-color:var(--gold);background:rgba(199,154,82,0.12);}
-  .history-reprint{
-    margin-top:8px;width:100%;padding:9px;border-radius:8px;font-size:12px;font-weight:700;
-    cursor:pointer;border:1px solid rgba(90,169,163,0.4);background:rgba(90,169,163,0.1);color:#2f6a63;
-  }
 
   /* prompt (aparcar tiquet) */
   .prompt-input{
@@ -882,7 +784,6 @@
     .floor{min-width:680px;grid-auto-rows:68px;}
     .floor-toolbar{padding:12px 0 16px;}
     .lang-btn{padding:5px 8px 5px 5px;font-size:10px;}
-    .session-chip{font-size:10px;padding:5px 9px;}
     .sync-badge{font-size:9.5px;padding:4px 8px;}
 
     .table-topbar{padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top));}
@@ -890,7 +791,7 @@
     .table-title .num{width:32px;height:32px;font-size:18px;}
     .back-btn{padding:8px 12px;font-size:12.5px;}
     .table-actions{width:100%;flex-wrap:wrap;}
-    .pay-btn, .clear-mesa-btn, .park-btn-top, .print-btn-top{flex:1 1 30%;text-align:center;padding:9px 6px;font-size:11.5px;}
+    .clear-mesa-btn, .park-btn-top{flex:1 1 30%;text-align:center;padding:9px 6px;font-size:11.5px;}
     .search-wrap{width:100%;order:10;}
     .variable-btn{order:9;padding:8px 12px;font-size:11px;}
 
@@ -910,8 +811,6 @@
     .qty-num{width:26px;font-size:15px;}
     .qty-btn.add-only{padding:0 16px;height:38px;}
 
-    .login-sub{font-size:12.5px;}
-    .session-input{width:100%;max-width:220px;font-size:28px;padding:14px 8px 14px 16px;}
     .history-box{max-height:88vh;}
   }
   @media (max-width: 400px){
@@ -921,7 +820,6 @@
     .tb-btn{flex:1 1 100%;}
   }
   @media (max-height: 480px) and (orientation: landscape){
-    .login-wrap{transform:scale(0.85);}
     .home-head h2{display:none;}
   }
 </style>
@@ -968,23 +866,6 @@
 <body>
 <div id="app">
 
-  <!-- ===== LOGIN: código de sesión ===== -->
-  <div id="login-view">
-    <div class="login-wrap">
-      <div class="login-brand">
-        <div class="mark">神</div>
-        <h1>Kobe BCN</h1>
-      </div>
-      <p class="login-sub" id="login-sub">Introduce el código de tu sesión.</p>
-      <form id="login-form" class="login-form" autocomplete="off">
-        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4"
-               id="session-input" class="session-input" placeholder="····" autocomplete="off">
-        <button type="submit" class="session-submit" id="session-submit">Entrar</button>
-      </form>
-      <p class="login-error" id="login-error" hidden>Código incorrecto.</p>
-    </div>
-  </div>
-
   <!-- ===== HOME: 16 mesas ===== -->
   <div id="home-view" hidden>
     <div class="topbar" style="position:static;border:none;padding:0;background:none;margin-bottom:0;">
@@ -996,16 +877,11 @@
         </div>
       </div>
       <span class="sync-badge off" id="sync-badge">🔶 Modo local</span>
-      <button class="session-chip" id="connect-drawer-btn" hidden>🗄️ Conectar caja</button>
-      <button class="session-chip" id="change-session-btn">
-        <span id="session-chip-label">Sesión</span> <b id="current-session-label">----</b> · <span id="change-session-label">Cambiar</span>
-      </button>
       <div class="role-switch">
         <button class="role-btn" data-role="cocina">🍳 <span id="role-label-cocina">Cocina</span></button>
         <button class="role-btn" data-role="sushi">🍣 <span id="role-label-sushi">Sushi</span></button>
         <button class="role-btn" data-role="postre">🍰 <span id="role-label-postre">Postre</span></button>
         <button class="role-btn active" data-role="comanda">📋 <span id="role-label-comanda">Comanda</span></button>
-        <button class="role-btn" data-role="caja">🧾 <span>Caja</span></button>
       </div>
       <div class="lang-switch" id="lang-switch">
         <button class="lang-btn active" data-lang="es"><span class="flag flag-es"></span>ES</button>
@@ -1037,7 +913,6 @@
       </div>
       <div class="toolbar-btns">
         <button class="tb-btn" id="btn-saldo">Saldo sala</button>
-        <button class="tb-btn" id="btn-historial">📖 Historial</button>
         <button class="tb-btn ghost" id="btn-salon">Salón</button>
         <button class="tb-btn ghost" id="btn-tickets">Tickets aparcados</button>
         <button class="tb-btn ghost" id="btn-juntar">Juntar mesas</button>
@@ -1060,8 +935,6 @@
       </div>
       <button class="variable-btn" id="variable-btn">➕ <span id="variable-btn-label">Variable</span></button>
       <div class="table-actions">
-        <button class="print-btn-top" id="print-btn" hidden>🖨️ Imprimir</button>
-        <button class="pay-btn" id="pay-btn">✓ Pagado</button>
         <button class="park-btn-top" id="park-btn">📦 Aparcar</button>
         <button class="clear-mesa-btn" id="clear-mesa-btn">Vaciar mesa</button>
       </div>
@@ -1105,7 +978,6 @@
         <button class="role-btn" data-role="sushi">🍣 <span>Sushi</span></button>
         <button class="role-btn" data-role="postre">🍰 <span>Postre</span></button>
         <button class="role-btn" data-role="comanda">📋 <span>Comanda</span></button>
-        <button class="role-btn" data-role="caja">🧾 <span>Caja</span></button>
       </div>
     </div>
     <div class="kitchen-body" id="kitchen-body"></div>
@@ -1158,14 +1030,11 @@ const FIREBASE_CONFIG = {
 let firebaseReady = false;
 let db = null;
 
-// Códigos de sesión: cada uno es una "sala" independiente y compartida.
-// Todo el que entre con el mismo código verá las mismas mesas.
-const SESSION_CODES = ["0220", "3040", "6090"];
-// Código para entrar en el rol de Caja (cobros, cierre de día, reimpresión de tickets).
-const CAJA_CODE = "67069";
+// Sala compartida única: todos los dispositivos ven las mismas mesas en
+// tiempo real, sin tener que introducir ningún código para entrar.
+const DEFAULT_SESSION = "0220";
 let currentSession = null;
 let ordersRef = null;
-let historyRef = null;
 let parkedRef = null;
 
 /* ===================== DATA (multi-idioma) ===================== */
@@ -1652,13 +1521,13 @@ const I18N = {
     heading: "Toca una mesa para abrir la comanda",
     legendFree: "Libre", legendBusy: "Con pedido", legendBarra: "Barra",
     keyFree: "Libre", keyBusy: "Ocupada",
-    btnSaldo: "Saldo sala", btnHistorial: "📖 Historial", btnSalon: "Salón",
+    btnSaldo: "Saldo sala", btnSalon: "Salón",
     themeNames: ["🎨 Diseño: Kobe original", "🎨 Diseño: Moderno", "🎨 Diseño: Clásico"],
     btnTickets: "Tickets aparcados", btnJuntar: "Juntar mesas",
     back: "← Mesas",
     comanda: "Comanda", comandaBarra: "Comanda de barra",
     searchPh: "Buscar plato, ingrediente…",
-    pay: "✓ Pagado", clear: "Vaciar mesa",
+    clear: "Vaciar mesa",
     resultsHeading: "Resultados",
     resultsSub: (n,q)=> n + " plato(s) encontrados para “" + q + "”",
     catSub: (n)=> n + " elementos",
@@ -1673,12 +1542,8 @@ const I18N = {
     confirmClear: (label)=> "¿Vaciar todo el pedido de " + label.toLowerCase() + "?",
     clearOk: "Vaciar todo",
     cancel: "Cancelar",
-    confirmPay: (label,total)=> "¿Marcar " + label.toLowerCase() + " como pagada por " + total + "? La mesa quedará libre.",
-    payOk: "Confirmar pago",
     toastTableEmptyAlready: "Esta mesa ya está vacía.",
     toastCleared: "Pedido vaciado.",
-    toastNoOrderToPay: "Esta mesa no tiene pedido para cobrar.",
-    toastPaid: (label,total)=> label + " pagada · " + total,
     toastSaldo: (n,total)=> "Saldo de sala: " + total + " en " + n + " mesa(s)/barra(s) con pedido.",
     toastNoSaldo: "No hay pedidos abiertos en sala.",
     toastTickets: "Tickets aparcados: función no incluida en esta demo.",
@@ -1701,6 +1566,7 @@ const I18N = {
     toastParked: "Tiquet aparcado.",
     parkedTitle: "Tickets aparcados",
     parkedEmpty: "No hay tickets aparcados.",
+    parkedCount: (n)=> n + (n===1 ? " tiquet aparcado" : " tiquets aparcados"),
     parkedResume: "Recuperar",
     parkedDelete: "Eliminar",
     confirmDeleteParked: "¿Eliminar este tiquet aparcado? No se puede deshacer.",
@@ -1715,20 +1581,13 @@ const I18N = {
     toastMerged: (a,b)=> a + " juntada con " + b + ".",
     toastMergeEmptySource: "Esa mesa está vacía, no hay nada que juntar.",
     toastMergeSame: "Elige dos mesas distintas.",
-    historyTitle: "Historial de pagos",
-    historyCount: (n)=> n + " pago(s) registrados",
-    historyEmpty: "Todavía no hay pagos registrados.<br>Cuando marques una mesa como pagada, aparecerá aquí.",
     mesaLabel: "Mesa", barraLabel: "Barra",
     viewOrder: "Ver comanda",
     btnCerrarDia: "🔒 Cerrar día",
-    confirmCloseDay: "¿Cerrar el día? Se vaciarán todas las mesas y la barra, y se borrará todo el historial de pagos de hoy. Esta acción no se puede deshacer.",
+    confirmCloseDay: "¿Cerrar el día? Se vaciarán todas las mesas, la barra y los tickets aparcados. Esta acción no se puede deshacer.",
     closeDayOk: "Cerrar día",
     toastDayClosed: "Día cerrado. Todo reseteado.",
     syncOn: "Sincronizado", syncOff: "Modo local (sin sincronizar)",
-    loginSub: "Introduce el código de tu sesión.",
-    sessionSubmit: "Entrar",
-    loginError: "Código incorrecto.",
-    sessionChipLabel: "Sesión", changeLabel: "Cambiar",
   },
   ca: {
     tagline: "Comanda de sala",
@@ -1736,13 +1595,13 @@ const I18N = {
     heading: "Toca una taula per obrir la comanda",
     legendFree: "Lliure", legendBusy: "Amb comanda", legendBarra: "Barra",
     keyFree: "Lliure", keyBusy: "Ocupada",
-    btnSaldo: "Saldo de sala", btnHistorial: "📖 Historial", btnSalon: "Sala",
+    btnSaldo: "Saldo de sala", btnSalon: "Sala",
     themeNames: ["🎨 Disseny: Kobe original", "🎨 Disseny: Modern", "🎨 Disseny: Clàssic"],
     btnTickets: "Tiquets aparcats", btnJuntar: "Ajuntar taules",
     back: "← Taules",
     comanda: "Comanda", comandaBarra: "Comanda de barra",
     searchPh: "Cerca plat, ingredient…",
-    pay: "✓ Pagat", clear: "Buidar taula",
+    clear: "Buidar taula",
     resultsHeading: "Resultats",
     resultsSub: (n,q)=> n + " plat(s) trobats per “" + q + "”",
     catSub: (n)=> n + " elements",
@@ -1757,12 +1616,8 @@ const I18N = {
     confirmClear: (label)=> "Vols buidar tota la comanda de " + label.toLowerCase() + "?",
     clearOk: "Buidar tot",
     cancel: "Cancel·lar",
-    confirmPay: (label,total)=> "Vols marcar " + label.toLowerCase() + " com a pagada per " + total + "? La taula quedarà lliure.",
-    payOk: "Confirmar pagament",
     toastTableEmptyAlready: "Aquesta taula ja està buida.",
     toastCleared: "Comanda buidada.",
-    toastNoOrderToPay: "Aquesta taula no té comanda per cobrar.",
-    toastPaid: (label,total)=> label + " pagada · " + total,
     toastSaldo: (n,total)=> "Saldo de sala: " + total + " en " + n + " taula(es)/barra(es) amb comanda.",
     toastNoSaldo: "No hi ha comandes obertes a la sala.",
     toastTickets: "Tiquets aparcats: funció no inclosa en aquesta demo.",
@@ -1785,6 +1640,7 @@ const I18N = {
     toastParked: "Tiquet aparcat.",
     parkedTitle: "Tiquets aparcats",
     parkedEmpty: "No hi ha tiquets aparcats.",
+    parkedCount: (n)=> n + (n===1 ? " tiquet aparcat" : " tiquets aparcats"),
     parkedResume: "Recuperar",
     parkedDelete: "Eliminar",
     confirmDeleteParked: "Vols eliminar aquest tiquet aparcat? No es pot desfer.",
@@ -1799,20 +1655,13 @@ const I18N = {
     toastMerged: (a,b)=> a + " ajuntada amb " + b + ".",
     toastMergeEmptySource: "Aquesta taula està buida, no hi ha res per ajuntar.",
     toastMergeSame: "Tria dues taules diferents.",
-    historyTitle: "Historial de pagaments",
-    historyCount: (n)=> n + " pagament(s) registrats",
-    historyEmpty: "Encara no hi ha pagaments registrats.<br>Quan marquis una taula com a pagada, apareixerà aquí.",
     mesaLabel: "Taula", barraLabel: "Barra",
     viewOrder: "Veure comanda",
     btnCerrarDia: "🔒 Tancar el dia",
-    confirmCloseDay: "Vols tancar el dia? Es buidaran totes les taules i la barra, i s'esborrarà tot l'historial de pagaments d'avui. Aquesta acció no es pot desfer.",
+    confirmCloseDay: "Vols tancar el dia? Es buidaran totes les taules, la barra i els tiquets aparcats. Aquesta acció no es pot desfer.",
     closeDayOk: "Tancar el dia",
     toastDayClosed: "Dia tancat. Tot reiniciat.",
     syncOn: "Sincronitzat", syncOff: "Mode local (sense sincronitzar)",
-    loginSub: "Introdueix el codi de la teva sessió.",
-    sessionSubmit: "Entrar",
-    loginError: "Codi incorrecte.",
-    sessionChipLabel: "Sessió", changeLabel: "Canviar",
   },
   en: {
     tagline: "Floor order pad",
@@ -1820,13 +1669,13 @@ const I18N = {
     heading: "Tap a table to open the order",
     legendFree: "Free", legendBusy: "Order open", legendBarra: "Bar",
     keyFree: "Free", keyBusy: "Occupied",
-    btnSaldo: "Floor balance", btnHistorial: "📖 History", btnSalon: "Floor",
+    btnSaldo: "Floor balance", btnSalon: "Floor",
     themeNames: ["🎨 Theme: Kobe original", "🎨 Theme: Modern", "🎨 Theme: Classic"],
     btnTickets: "Parked tickets", btnJuntar: "Merge tables",
     back: "← Tables",
     comanda: "Order", comandaBarra: "Bar order",
     searchPh: "Search dish, ingredient…",
-    pay: "✓ Paid", clear: "Clear table",
+    clear: "Clear table",
     resultsHeading: "Results",
     resultsSub: (n,q)=> n + " dish(es) found for “" + q + "”",
     catSub: (n)=> n + " items",
@@ -1841,12 +1690,8 @@ const I18N = {
     confirmClear: (label)=> "Clear the whole order for " + label.toLowerCase() + "?",
     clearOk: "Clear all",
     cancel: "Cancel",
-    confirmPay: (label,total)=> "Mark " + label.toLowerCase() + " as paid for " + total + "? The table will become free.",
-    payOk: "Confirm payment",
     toastTableEmptyAlready: "This table is already empty.",
     toastCleared: "Order cleared.",
-    toastNoOrderToPay: "This table has no order to charge.",
-    toastPaid: (label,total)=> label + " paid · " + total,
     toastSaldo: (n,total)=> "Floor balance: " + total + " across " + n + " table(s)/bar seat(s) with an open order.",
     toastNoSaldo: "No open orders on the floor.",
     toastTickets: "Parked tickets: not included in this demo.",
@@ -1869,6 +1714,7 @@ const I18N = {
     toastParked: "Ticket parked.",
     parkedTitle: "Parked tickets",
     parkedEmpty: "No parked tickets.",
+    parkedCount: (n)=> n + (n===1 ? " parked ticket" : " parked tickets"),
     parkedResume: "Resume",
     parkedDelete: "Delete",
     confirmDeleteParked: "Delete this parked ticket? This can't be undone.",
@@ -1883,20 +1729,13 @@ const I18N = {
     toastMerged: (a,b)=> a + " merged into " + b + ".",
     toastMergeEmptySource: "That table is empty, nothing to merge.",
     toastMergeSame: "Pick two different tables.",
-    historyTitle: "Payment history",
-    historyCount: (n)=> n + " payment(s) recorded",
-    historyEmpty: "No payments recorded yet.<br>Once you mark a table as paid, it will show up here.",
     mesaLabel: "Table", barraLabel: "Bar",
     viewOrder: "View order",
     btnCerrarDia: "🔒 Close day",
-    confirmCloseDay: "Close the day? All tables and the bar will be cleared, and today's whole payment history will be deleted. This can't be undone.",
+    confirmCloseDay: "Close the day? All tables, the bar, and any parked tickets will be cleared. This can't be undone.",
     closeDayOk: "Close day",
     toastDayClosed: "Day closed. Everything reset.",
     syncOn: "Synced", syncOff: "Local mode (not synced)",
-    loginSub: "Enter your session code.",
-    sessionSubmit: "Enter",
-    loginError: "Incorrect code.",
-    sessionChipLabel: "Session", changeLabel: "Change",
   },
 };
 
@@ -1964,8 +1803,6 @@ function wholeWordIncludes(text, query){
 function isBarra(id){ return id >= 500; }
 function tableLabel(id){ return (isBarra(id) ? I18N[currentLang].barraLabel : I18N[currentLang].mesaLabel) + " " + id; }
 
-let history = [];             // pagos registrados: { id, table, ts, items:[{name,qty,price}], total }
-let historyCounter = 1;
 let parked = [];              // tiquets aparcados: { id, label, ts, items:{itemId:qty}, total }
 let parkedCounter = 1;
 
@@ -2000,20 +1837,6 @@ function updateSyncBadge(on){
   el.textContent = (on ? "🟢 " : "🔶 ") + (on ? I18N[currentLang].syncOn : I18N[currentLang].syncOff);
   el.classList.toggle("on", on);
   el.classList.toggle("off", !on);
-}
-function historyFromSnapshot(val){
-  if(!val) return [];
-  return Object.keys(val).sort().map(k => ({
-    id: k, table: val[k].table, ts: val[k].ts,
-    items: val[k].items || [], total: val[k].total || 0,
-    method: val[k].method || null,
-    paidAmount: val[k].paidAmount != null ? val[k].paidAmount : null,
-    change: val[k].change != null ? val[k].change : null,
-    people: val[k].people || null,
-    date: val[k].date || null,
-    time: val[k].time || null,
-    ticketNo: val[k].ticketNo || null
-  }));
 }
 function parkedFromSnapshot(val){
   if(!val) return [];
@@ -2065,7 +1888,6 @@ function connectFirebase(){
 function attachSessionListeners(code){
   detachSessionListeners();
   ordersRef = db.ref("sessions/" + code + "/orders");
-  historyRef = db.ref("sessions/" + code + "/history");
   parkedRef = db.ref("sessions/" + code + "/parked");
   ordersRef.on("value", snap=>{
     const val = snap.val() || {};
@@ -2074,53 +1896,26 @@ function attachSessionListeners(code){
     orders = next;
     refreshAfterOrdersChange();
   });
-  historyRef.on("value", snap=>{
-    history = historyFromSnapshot(snap.val());
-  });
   parkedRef.on("value", snap=>{
     parked = parkedFromSnapshot(snap.val());
   });
 }
 function detachSessionListeners(){
   if(ordersRef) ordersRef.off();
-  if(historyRef) historyRef.off();
   if(parkedRef) parkedRef.off();
   ordersRef = null;
-  historyRef = null;
   parkedRef = null;
 }
-// Entrar en una sesión (código de sala compartida).
+// Entra en la sala compartida (una única sesión fija, sin código).
 function joinSession(code){
   currentSession = code;
   orders = {};
   ALL_IDS.forEach(id => orders[id] = {});
-  history = [];
   parked = [];
-  document.getElementById("current-session-label").textContent = code;
   if(firebaseReady){
     attachSessionListeners(code);
   }
-  try{ localStorage.setItem("kobe_session_code", code); }catch(e){}
-  document.getElementById("login-view").hidden = true;
   showRoleView();
-}
-// Salir de la sesión y volver a la pantalla de código.
-function leaveSession(){
-  detachSessionListeners();
-  currentSession = null;
-  try{ localStorage.removeItem("kobe_session_code"); }catch(e){}
-  orders = {};
-  ALL_IDS.forEach(id => orders[id] = {});
-  history = [];
-  parked = [];
-  currentTable = null;
-  document.getElementById("home-view").hidden = true;
-  document.getElementById("table-view").hidden = true;
-  document.getElementById("kitchen-view").hidden = true;
-  document.getElementById("mobile-ticket-toggle").hidden = true;
-  document.getElementById("login-view").hidden = false;
-  document.getElementById("login-error").hidden = true;
-  document.getElementById("session-input").value = "";
 }
 
 /* ===================== ROL DEL DISPOSITIVO (Cocina / Sushi / Comanda) ===================== */
@@ -2140,7 +1935,7 @@ function showRoleView(){
     document.getElementById("home-view").hidden = false;
     renderHome();
     const heading = document.getElementById("home-heading");
-    if(heading) heading.textContent = appRole === "caja" ? "Toca una mesa para cobrar" : I18N[currentLang].heading;
+    if(heading) heading.textContent = I18N[currentLang].heading;
   }
   updateRoleButtons();
 }
@@ -2148,8 +1943,6 @@ function updateRoleButtons(){
   document.querySelectorAll(".role-btn").forEach(b=>{
     b.classList.toggle("active", b.dataset.role === appRole);
   });
-  const drawerBtn = document.getElementById("connect-drawer-btn");
-  if(drawerBtn) drawerBtn.hidden = appRole !== "caja";
   const t = I18N[currentLang];
   if(appRole === "cocina" || appRole === "sushi" || appRole === "postre"){
     const marks = { cocina:"🍳", sushi:"🍣", postre:"🍰" };
@@ -2164,20 +1957,13 @@ function setRole(role){
   appRole = role;
   try{
     if(role === "cocina" || role === "sushi" || role === "postre") localStorage.setItem("kobe_role", role);
-    else localStorage.removeItem("kobe_role"); // "comanda" y "caja" no se recuerdan: caja siempre pide código
+    else localStorage.removeItem("kobe_role"); // "comanda" no se recuerda por dispositivo
   }catch(e){}
   if(currentSession) showRoleView();
   else updateRoleButtons();
 }
 document.querySelectorAll(".role-btn").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    const role = btn.dataset.role;
-    if(role === "caja" && appRole !== "caja"){
-      openCajaCodeDialog(()=> setRole("caja"));
-    } else {
-      setRole(role);
-    }
-  });
+  btn.addEventListener("click", ()=> setRole(btn.dataset.role));
 });
 
 // Cola de platos pendientes/preparados para Cocina o Sushi, agrupada por mesa.
@@ -2258,28 +2044,15 @@ function writeClearTable(tableId){
     refreshAfterOrdersChange();
   }
 }
-function writePay(tableId, record){
-  if(firebaseReady && currentSession){
-    db.ref("sessions/" + currentSession + "/history").push(record);
-    db.ref("sessions/" + currentSession + "/orders/" + tableId).remove();
-  } else {
-    record.id = historyCounter++;
-    history.push(record);
-    orders[tableId] = {};
-  }
-}
 function writeCloseDay(){
   if(firebaseReady && currentSession){
     db.ref("sessions/" + currentSession + "/orders").remove();
-    db.ref("sessions/" + currentSession + "/history").remove();
     db.ref("sessions/" + currentSession + "/parked").remove();
   } else {
     orders = {};
     ALL_IDS.forEach(id => orders[id] = {});
-    history = [];
     parked = [];
   }
-  resetTicketCounter();
 }
 function writePark(tableId, label){
   const items = Object.assign({}, orders[tableId]);
@@ -2475,345 +2248,6 @@ function openPeopleAssignDialog(tableId, onDone){
   otherInput.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); submitOther(); } });
 }
 
-// Diálogo de código para entrar en el rol de Caja.
-function openCajaCodeDialog(onOk){
-  const overlay = document.createElement("div");
-  overlay.className = "confirm-overlay";
-  overlay.innerHTML = `
-    <div class="confirm-box">
-      <p>Introduce el código de caja</p>
-      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5"
-             class="prompt-input caja-code-input" placeholder="·····"
-             style="text-align:center;letter-spacing:0.4em;font-size:20px;">
-      <div class="confirm-actions">
-        <button class="confirm-cancel">${I18N[currentLang].cancel}</button>
-        <button class="confirm-ok">Entrar</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  const input = overlay.querySelector(".caja-code-input");
-  setTimeout(()=>input.focus(), 50);
-  const submit = ()=>{
-    const val = input.value.trim();
-    if(val === CAJA_CODE){
-      overlay.remove();
-      onOk();
-    } else {
-      showToast("Código incorrecto");
-      input.value = "";
-      input.focus();
-    }
-  };
-  overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
-  overlay.querySelector(".confirm-cancel").addEventListener("click", ()=>overlay.remove());
-  overlay.querySelector(".confirm-ok").addEventListener("click", submit);
-  input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); submit(); } });
-}
-
-/* ===================== IMPRESIÓN (tickets y cierre de día) ===================== */
-// Manda a imprimir un fragmento HTML usando un iframe oculto (evita bloqueos de pop-ups
-// y no depende de ninguna impresora concreta: usa el diálogo de impresión del dispositivo).
-function printHTML(bodyHtml){
-  const iframe = document.createElement("iframe");
-  iframe.style.position = "fixed";
-  iframe.style.right = "0";
-  iframe.style.bottom = "0";
-  iframe.style.width = "0";
-  iframe.style.height = "0";
-  iframe.style.border = "0";
-  document.body.appendChild(iframe);
-  const doc = iframe.contentWindow.document;
-  doc.open();
-  doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Kobe BCN</title>
-    <style>
-      /* Quita el margen de página que pone el navegador por defecto al
-         imprimir: en un rollo de papel continuo (impresora de tickets) eso
-         se traduce en un hueco en blanco antes de que empiece el texto. */
-      @page{ size:80mm auto; margin:0; }
-      html,body{margin:0;padding:0;}
-      /* 'Matriz_A1': fuente de matriz de puntos (tipo ticket clásico) instalada
-         localmente en el TPV (no es un webfont, no depende de internet). Si
-         algún dispositivo no la tiene instalada, cae en Courier New/monospace. */
-      body{font-family:'Matriz_A1','Courier New',Courier,monospace;font-size:13px;font-weight:700;width:300px;margin:0 auto;padding:6px 10px 10px;color:#000;}
-      h1,h2,h3{text-align:center;margin:4px 0;}
-      p{margin:2px 0;}
-      hr{border:none;border-top:2px dashed #000;margin:6px 0;}
-      .center{text-align:center;}
-      .strong{font-weight:800;font-size:15px;}
-      .muted{color:#333;font-size:12px;}
-      .line{display:flex;justify-content:space-between;padding:2px 0;}
-      .total{font-weight:800;font-size:17px;}
-      .frow2{display:flex;justify-content:space-between;font-size:13px;padding:2px 0;}
-      .frow2.strong{font-weight:800;font-size:17px;}
-      /* filas de artículos (UNIT/DESCRIPCIO/PREU/IMPORT) y BASE/%IVA/IMP.IVA:
-         tabla HTML con anchuras de columna fijas en vez de grid/flex o texto
-         con espacios, porque grid/flex de +2 columnas y el relleno con
-         espacios (que depende de que el dispositivo tenga fuente
-         monoespaciada) no se renderizaban bien en la impresora fiscal. Una
-         tabla con <colgroup> es el método más compatible: alinea igual
-         aunque la fuente no sea monoespaciada.
-         Todo el texto va en negrita (peso 700-800) para que se imprima
-         oscuro y legible; la jerarquía visual (nombre, ticket nº y totales
-         más grandes) se consigue solo con el TAMAÑO de letra, no con pesos
-         intermedios (como 500), que en la impresora fiscal salían demasiado
-         finos y apenas visibles. */
-      table.rtable{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px;font-weight:700;}
-      table.rtable th, table.rtable td{padding:2px 0;vertical-align:top;}
-      table.rtable th{font-weight:800;font-size:13px;}
-      .rt-unit{width:14%;text-align:left;}
-      .rt-desc{width:48%;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:4px;}
-      .rt-preu{width:18%;text-align:right;}
-      .rt-import{width:20%;text-align:right;}
-      .rb-a{width:34%;text-align:left;}
-      .rb-b{width:33%;text-align:left;}
-      .rb-c{width:33%;text-align:right;}
-    </style>
-    </head><body>${bodyHtml}</body></html>`);
-  doc.close();
-  setTimeout(()=>{
-    iframe.contentWindow.focus();
-    iframe.contentWindow.print();
-    setTimeout(()=>{ if(iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 1000);
-  }, 250);
-}
-
-// Datos fiscales del negocio, tal y como aparecen en el ticket impreso.
-const BIZ_NAME = "KOBE";
-const BIZ_ADDRESS = ["CARRER DE BRUNIQUER 51", "08024 BARCELONA"];
-const BIZ_LEGAL = "IBUKA FIVE BROTHERS S.L.";
-const BIZ_CIF = "B10921658";
-const IVA_RATE = 10; // % IVA incluido en los precios
-
-// Formatea un número como "1234,56" (sin símbolo de moneda), como en el ticket fiscal.
-function money(n){ return (Math.round((n + Number.EPSILON) * 100) / 100).toFixed(2).replace(".", ","); }
-
-function escapeHtml(s){
-  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
-
-// Numeración de tickets: cada mesa/comanda abierta en Caja obtiene un número
-// correlativo (001, 002, 003…) que se mantiene mientras esa comanda siga abierta,
-// tanto si se imprime el "pendiente de cobro" como el recibo final ya cobrado.
-let ticketCounter = 1;
-try{
-  const savedTicketCounter = localStorage.getItem("kobe_ticket_counter");
-  if(savedTicketCounter) ticketCounter = parseInt(savedTicketCounter, 10) || 1;
-}catch(e){}
-function saveTicketCounter(){
-  try{ localStorage.setItem("kobe_ticket_counter", String(ticketCounter)); }catch(e){}
-}
-let tableTicketNumbers = {}; // tableId -> nº de ticket asignado a la comanda actual
-function getTicketNumberForTable(tableId){
-  if(!tableTicketNumbers[tableId]){
-    tableTicketNumbers[tableId] = ticketCounter++;
-    saveTicketCounter();
-  }
-  return tableTicketNumbers[tableId];
-}
-function clearTicketNumberForTable(tableId){
-  delete tableTicketNumbers[tableId];
-}
-function resetTicketCounter(){
-  ticketCounter = 1;
-  saveTicketCounter();
-  tableTicketNumbers = {};
-}
-
-// Construye el HTML del ticket con el mismo formato que la impresora fiscal del
-// restaurante: cabecera con datos del negocio, nº de ticket, fecha/hora, líneas de
-// artículos (UNIT./DESCRIPCIO/PREU/IMPORT), desglose de BASE/%IVA/IMP.IVA, total,
-// importe por comensal y, según el caso, "pendiente de cobro" o la forma de pago.
-function buildReceiptHTML(opts){
-  const total = opts.total;
-  const base = total / (1 + IVA_RATE/100);
-  const ivaAmount = total - base;
-  const perPerson = opts.people ? total / opts.people : null;
-  const itemRowsHtml = opts.items.length ? opts.items.map(it=>`
-    <tr>
-      <td class="rt-unit">${it.qty}</td>
-      <td class="rt-desc">${escapeHtml(String(it.name).toUpperCase())}</td>
-      <td class="rt-preu">${money(it.price)}</td>
-      <td class="rt-import">${money(it.price*it.qty)}</td>
-    </tr>
-  `).join("") : `<tr><td colspan="4" class="center muted">Sin artículos</td></tr>`;
-
-  let payBlock;
-  if(opts.pending){
-    payBlock = `<div class="frow2 strong"><span>PENDIENTE DE COBRO</span><span>${money(total)}</span></div>`;
-  } else {
-    payBlock = `
-      <div class="frow2"><span>FORMA DE PAGO</span><span>${opts.method === "efectivo" ? "EFECTIVO" : "TARJETA"}</span></div>
-      ${opts.method === "efectivo" ? `
-        <div class="frow2"><span>ENTREGADO</span><span>${money(opts.paidAmount)}</span></div>
-        <div class="frow2"><span>CAMBIO</span><span>${money(opts.change)}</span></div>
-      ` : ""}
-    `;
-  }
-
-  return `
-    <p class="center strong">*** ${BIZ_NAME} ***</p>
-    <p class="center">${BIZ_ADDRESS[0]}</p>
-    <p class="center">${BIZ_ADDRESS[1]}</p>
-    <p class="center">${BIZ_LEGAL}</p>
-    <p class="center">CIF: ${BIZ_CIF}</p>
-    <hr>
-    <p class="center strong">${String(opts.ticketNo).padStart(3,"0")}</p>
-    <hr>
-    <div class="frow2"><span>FRA SIM:COMPROBANTE</span><span>HORA:${opts.time}</span></div>
-    <div class="frow2"><span>DATA:${opts.date}</span><span></span></div>
-    <hr>
-    <table class="rtable">
-      <thead>
-        <tr>
-          <th class="rt-unit">UNIT.</th>
-          <th class="rt-desc">DESCRIPCIO</th>
-          <th class="rt-preu">PREU</th>
-          <th class="rt-import">IMPORT</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${itemRowsHtml}
-      </tbody>
-    </table>
-    <hr>
-    <table class="rtable">
-      <tr>
-        <td class="rb-a">BASE</td>
-        <td class="rb-b">%IVA</td>
-        <td class="rb-c">IMP.IVA</td>
-      </tr>
-      <tr>
-        <td class="rb-a">${money(base)}</td>
-        <td class="rb-b">${IVA_RATE.toFixed(2).replace(".",",")}</td>
-        <td class="rb-c">${money(ivaAmount)}</td>
-      </tr>
-    </table>
-    <hr>
-    <div class="frow2 strong"><span>TOTAL EUROS</span><span>${money(total)}</span></div>
-    ${perPerson != null ? `<div class="frow2"><span>IMPORT PER COMENÇAL</span><span>${money(perPerson)}</span></div>` : ""}
-    <hr>
-    ${payBlock}
-    <hr>
-    <p class="center">GRACIES PER LA SEVA VISITA</p>
-    <p class="center">${IVA_RATE}% IVA INCLOS</p>
-  `;
-}
-
-// Fecha/hora en el formato del ticket fiscal: DD/MM/AAAA y HH:MM.
-function ticketDateParts(d){
-  const pad = n => String(n).padStart(2,"0");
-  return {
-    date: `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`,
-    time: `${pad(d.getHours())}:${pad(d.getMinutes())}`
-  };
-}
-
-// Imprime el "comprobante" (pendiente de cobro) de la comanda actual de una mesa.
-function printTableTicket(tableId){
-  const items = Object.keys(orders[tableId] || {}).filter(isItemId).map(id=>{
-    const item = FLAT.find(f=>f.id===id);
-    return item ? { name: item.name, qty: orders[tableId][id], price: item.price } : null;
-  }).filter(Boolean);
-  const { date, time } = ticketDateParts(new Date());
-  printHTML(buildReceiptHTML({
-    ticketNo: getTicketNumberForTable(tableId),
-    date, time,
-    people: getTablePeople(tableId),
-    items,
-    total: tableTotal(tableId),
-    pending: true
-  }));
-}
-// Reimprime el ticket final (ya cobrado) de un registro del historial.
-function printHistoryRecord(record){
-  let date = record.date, time = record.time;
-  if(!date || !time){
-    // Registros antiguos (antes de este formato) no guardan date/time por separado;
-    // se usa el texto ya formateado que tuvieran como aproximación.
-    date = record.ts || ""; time = "";
-  }
-  printHTML(buildReceiptHTML({
-    ticketNo: record.ticketNo || "—",
-    date, time,
-    people: record.people || null,
-    items: record.items,
-    total: record.total,
-    method: record.method || null,
-    paidAmount: record.paidAmount != null ? record.paidAmount : null,
-    change: record.change != null ? record.change : null,
-    pending: false
-  }));
-}
-
-// Diálogo de cobro desde Caja: elegir Efectivo/Tarjeta, calcular el cambio e imprimir.
-function openPaymentDialog(tableId, onPaid){
-  const total = tableTotal(tableId);
-  const overlay = document.createElement("div");
-  overlay.className = "confirm-overlay";
-  overlay.innerHTML = `
-    <div class="confirm-box">
-      <p>Cobrar ${tableLabel(tableId)} — <b>${eur(total)}</b></p>
-      <div class="pay-method-grid">
-        <button class="pay-method-btn" data-method="efectivo"><span class="ico">💵</span>Efectivo</button>
-        <button class="pay-method-btn" data-method="tarjeta"><span class="ico">💳</span>Tarjeta</button>
-      </div>
-      <button class="confirm-cancel" style="width:100%;">${I18N[currentLang].cancel}</button>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
-  overlay.querySelector(".confirm-cancel").addEventListener("click", ()=>overlay.remove());
-
-  const finish = (method, paidAmount, change)=>{
-    overlay.remove();
-    onPaid({ method, paidAmount, change });
-  };
-
-  overlay.querySelector('[data-method="tarjeta"]').addEventListener("click", ()=>{
-    finish("tarjeta", total, 0);
-  });
-  overlay.querySelector('[data-method="efectivo"]').addEventListener("click", ()=>{
-    overlay.innerHTML = `
-      <div class="confirm-box">
-        <p>Efectivo — ${tableLabel(tableId)}</p>
-        <div class="pay-summary-row"><span>Total a cobrar</span><b>${eur(total)}</b></div>
-        <input type="text" inputmode="decimal" class="prompt-input cash-paid-input" placeholder="¿Cuánto ha pagado?">
-        <div class="pay-change-box" hidden><span>Cambio</span><span class="cash-change-val">0,00 €</span></div>
-        <div class="confirm-actions">
-          <button class="confirm-cancel">${I18N[currentLang].cancel}</button>
-          <button class="confirm-ok cash-confirm">Cobrar e imprimir</button>
-        </div>
-      </div>
-    `;
-    const input = overlay.querySelector(".cash-paid-input");
-    const changeBox = overlay.querySelector(".pay-change-box");
-    const changeVal = overlay.querySelector(".cash-change-val");
-    setTimeout(()=>input.focus(), 50);
-    const updateChange = ()=>{
-      const paid = parseFloat((input.value||"").replace(",", "."));
-      if(!isNaN(paid) && paid >= total){
-        changeBox.hidden = false;
-        changeVal.textContent = eur(paid - total);
-      } else {
-        changeBox.hidden = true;
-      }
-    };
-    input.addEventListener("input", updateChange);
-    overlay.querySelector(".confirm-cancel").addEventListener("click", ()=>overlay.remove());
-    const submitCash = ()=>{
-      const paid = parseFloat((input.value||"").replace(",", "."));
-      if(isNaN(paid) || paid < total){
-        showToast("Introduce un importe igual o mayor al total");
-        return;
-      }
-      finish("efectivo", paid, paid - total);
-    };
-    overlay.querySelector(".cash-confirm").addEventListener("click", submitCash);
-    input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); submitCash(); } });
-  });
-}
-
 // Selector de opción genérico (refresco de un combinado, o hielo/limón de una bebida):
 // muestra una ventana con botones, uno por opción, y ejecuta onPick(index) al elegir.
 function openOptionPicker(promptText, options, onPick, noteCallback){
@@ -2988,7 +2422,6 @@ document.getElementById("btn-juntar").addEventListener("click", ()=>{
     }, source);
   });
 });
-document.getElementById("btn-historial").addEventListener("click", openHistory);
 
 /* ===================== IDIOMA ===================== */
 function applyStaticText(){
@@ -3002,25 +2435,18 @@ function applyStaticText(){
   document.getElementById("key-free").textContent = t.keyFree;
   document.getElementById("key-busy").textContent = t.keyBusy;
   document.getElementById("btn-saldo").textContent = t.btnSaldo;
-  document.getElementById("btn-historial").textContent = t.btnHistorial;
   document.getElementById("btn-salon").textContent = t.btnSalon;
   document.getElementById("btn-tickets").textContent = t.btnTickets;
   document.getElementById("btn-juntar").textContent = t.btnJuntar;
   document.getElementById("back-btn").textContent = t.back;
   document.getElementById("search-input").placeholder = t.searchPh;
   document.getElementById("variable-btn-label").textContent = t.variableBtn;
-  document.getElementById("pay-btn").textContent = t.pay;
   document.getElementById("park-btn").textContent = t.parkBtn;
   document.getElementById("clear-mesa-btn").textContent = t.clear;
   document.getElementById("ticket-brand-mark").textContent = t.ticketMark;
   document.getElementById("ticket-total-label").textContent = t.total;
   document.getElementById("mobile-ticket-label").textContent = t.viewOrder;
   document.getElementById("btn-cerrar-dia").textContent = t.btnCerrarDia;
-  document.getElementById("login-sub").textContent = t.loginSub;
-  document.getElementById("session-submit").textContent = t.sessionSubmit;
-  document.getElementById("login-error").textContent = t.loginError;
-  document.getElementById("session-chip-label").textContent = t.sessionChipLabel;
-  document.getElementById("change-session-label").textContent = t.changeLabel;
   updateSyncBadge(firebaseReady);
   document.querySelectorAll(".lang-btn").forEach(b=>{
     b.classList.toggle("active", b.dataset.lang === currentLang);
@@ -3057,69 +2483,6 @@ function setLang(lang){
 document.querySelectorAll(".lang-btn").forEach(btn=>{
   btn.addEventListener("click", ()=>setLang(btn.dataset.lang));
 });
-
-/* ===================== HISTORIAL DE PAGOS ===================== */
-function openHistory(){
-  const overlay = document.createElement("div");
-  overlay.className = "confirm-overlay";
-
-  const totalHoy = history.reduce((s,h)=>s+h.total,0);
-
-  const listHtml = history.length === 0
-    ? `<div class="history-empty">${I18N[currentLang].historyEmpty}</div>`
-    : [...history].reverse().map(h => `
-        <div class="history-entry" data-hid="${h.id}">
-          <div class="history-entry-head">
-            <div>
-              <div class="htitle">${h.table}</div>
-              <div class="hmeta">${h.ts}</div>
-            </div>
-            <div class="htotal">${eur(h.total)}</div>
-            <div class="chev">▾</div>
-          </div>
-          <div class="history-entry-detail">
-            ${h.items.map(it => `
-              <div class="hdet-line">
-                <span><span class="q">${it.qty}×</span>${it.name}</span>
-                <span>${eur(it.price * it.qty)}</span>
-              </div>
-            `).join("")}
-            <button class="history-reprint" data-hid="${h.id}">🖨️ Reimprimir ticket</button>
-          </div>
-        </div>
-      `).join("");
-
-  overlay.innerHTML = `
-    <div class="history-box">
-      <div class="history-head">
-        <h3>${I18N[currentLang].historyTitle}</h3>
-        <button id="history-close">✕</button>
-      </div>
-      <div class="history-summary">
-        <span>${I18N[currentLang].historyCount(history.length)}</span>
-        <b>${eur(totalHoy)}</b>
-      </div>
-      <div class="history-list">${listHtml}</div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-
-  overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
-  overlay.querySelector("#history-close").addEventListener("click", ()=>overlay.remove());
-  overlay.querySelectorAll(".history-entry-head").forEach(head=>{
-    head.addEventListener("click", ()=>{
-      head.parentElement.classList.toggle("open");
-    });
-  });
-  overlay.querySelectorAll(".history-reprint").forEach(btn=>{
-    btn.addEventListener("click", (e)=>{
-      e.stopPropagation();
-      const hid = Number(btn.dataset.hid);
-      const record = history.find(h => h.id === hid);
-      if(record) printHistoryRecord(record);
-    });
-  });
-}
 
 function openParkedList(){
   const overlay = document.createElement("div");
@@ -3167,7 +2530,7 @@ function openParkedList(){
         <button id="parked-close">✕</button>
       </div>
       <div class="history-summary">
-        <span>${I18N[currentLang].historyCount(parked.length)}</span>
+        <span>${I18N[currentLang].parkedCount(parked.length)}</span>
       </div>
       <div class="history-list">${listHtml}</div>
     </div>
@@ -3208,10 +2571,10 @@ function openParkedList(){
 
 /* ===================== RENDER: TABLE VIEW ===================== */
 function openTable(n){
-  if(appRole !== "comanda" && appRole !== "caja") return; // Cocina/Sushi no pueden tomar pedidos.
-  // En Comanda, si la mesa está vacía y no tiene personas asignadas todavía,
+  if(appRole !== "comanda") return; // Cocina/Sushi/Postre no pueden tomar pedidos.
+  // Si la mesa está vacía y no tiene personas asignadas todavía,
   // primero se pregunta cuántas son antes de abrir la carta.
-  if(appRole === "comanda" && tableCount(n) === 0 && !getTablePeople(n)){
+  if(tableCount(n) === 0 && !getTablePeople(n)){
     openPeopleAssignDialog(n, ()=> openTableNow(n));
     return;
   }
@@ -3230,11 +2593,6 @@ function openTableNow(n){
   document.getElementById("ticket-mesa-num").textContent = tableLabel(n);
   const localeMap = { es:"es-ES", ca:"ca-ES", en:"en-GB" };
   document.getElementById("ticket-ts").textContent = new Date().toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
-  // El botón de pagar, aparcar e imprimir solo se pueden usar desde Caja.
-  const isCaja = appRole === "caja";
-  document.getElementById("pay-btn").hidden = !isCaja;
-  document.getElementById("park-btn").hidden = !isCaja;
-  document.getElementById("print-btn").hidden = !isCaja;
   renderCatRail();
   renderItems();
   renderTicket();
@@ -3520,56 +2878,7 @@ document.getElementById("variable-btn").addEventListener("click", ()=>{
   openVariableItemFlow();
 });
 
-document.getElementById("pay-btn").addEventListener("click", ()=>{
-  if(appRole !== "caja"){
-    showToast("Solo se puede cobrar desde Caja");
-    return;
-  }
-  const t = currentTable;
-  if(tableCount(t)===0){
-    showToast(I18N[currentLang].toastNoOrderToPay);
-    return;
-  }
-  const total = tableTotal(t);
-  openPaymentDialog(t, ({method, paidAmount, change})=>{
-    const items = Object.keys(orders[t]).filter(isItemId).map(id=>{
-      const item = FLAT.find(f=>f.id===id);
-      return { name:item.name, qty:orders[t][id], price:item.price };
-    });
-    const localeMap = { es:"es-ES", ca:"ca-ES", en:"en-GB" };
-    const now = new Date();
-    const { date, time } = ticketDateParts(now);
-    const ticketNo = getTicketNumberForTable(t);
-    const record = {
-      table: tableLabel(t),
-      ts: now.toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}),
-      date, time, ticketNo,
-      items,
-      total,
-      method,
-      paidAmount,
-      change,
-      people: getTablePeople(t)
-    };
-    printHTML(buildReceiptHTML({
-      ticketNo, date, time, people: record.people,
-      items, total, method, paidAmount, change, pending: false
-    }));
-    if(method === "efectivo" && typeof window.openCashDrawer === "function"){
-      window.openCashDrawer();
-    }
-    writePay(t, record);
-    clearTicketNumberForTable(t);
-    showToast(I18N[currentLang].toastPaid(tableLabel(t), eur(total)));
-    backToHome();
-  });
-});
-
 document.getElementById("park-btn").addEventListener("click", ()=>{
-  if(appRole !== "caja"){
-    showToast("Solo se puede aparcar desde Caja");
-    return;
-  }
   const t = currentTable;
   if(tableCount(t)===0){
     showToast(I18N[currentLang].toastNoOrderToPark);
@@ -3578,15 +2887,9 @@ document.getElementById("park-btn").addEventListener("click", ()=>{
   showPrompt(I18N[currentLang].parkPrompt, I18N[currentLang].parkPlaceholder, I18N[currentLang].parkOk, (label)=>{
     const finalLabel = label || tableLabel(t);
     writePark(t, finalLabel);
-    clearTicketNumberForTable(t);
     showToast(I18N[currentLang].toastParked);
     backToHome();
   });
-});
-
-document.getElementById("print-btn").addEventListener("click", ()=>{
-  if(appRole !== "caja" || !currentTable) return;
-  printTableTicket(currentTable);
 });
 
 document.getElementById("clear-mesa-btn").addEventListener("click", ()=>{
@@ -3596,78 +2899,16 @@ document.getElementById("clear-mesa-btn").addEventListener("click", ()=>{
   }
   showConfirm(I18N[currentLang].confirmClear(tableLabel(currentTable)), I18N[currentLang].clearOk, ()=>{
     writeClearTable(currentTable);
-    clearTicketNumberForTable(currentTable);
     showToast(I18N[currentLang].toastCleared);
   });
 });
 
 document.getElementById("btn-cerrar-dia").addEventListener("click", ()=>{
   showConfirm(I18N[currentLang].confirmCloseDay, I18N[currentLang].closeDayOk, ()=>{
-    printCloseDaySummary();
     writeCloseDay();
     showToast(I18N[currentLang].toastDayClosed);
     backToHome();
   });
-});
-
-// Resumen impreso al cerrar el día: total facturado, nº de tickets, personas
-// atendidas y el plato más pedido. Se calcula con los datos de `history` antes
-// de que writeCloseDay() los borre.
-function printCloseDaySummary(){
-  const totalDay = history.reduce((s,h)=>s+h.total, 0);
-  const numTickets = history.length;
-  const totalPeople = history.reduce((s,h)=>s + (h.people || 0), 0);
-  const dishCounts = {};
-  history.forEach(h=>{
-    (h.items||[]).forEach(it=>{
-      dishCounts[it.name] = (dishCounts[it.name]||0) + it.qty;
-    });
-  });
-  let topDish = null, topQty = 0;
-  Object.keys(dishCounts).forEach(name=>{
-    if(dishCounts[name] > topQty){ topQty = dishCounts[name]; topDish = name; }
-  });
-  const cashTotal = history.filter(h=>h.method==="efectivo").reduce((s,h)=>s+h.total,0);
-  const cardTotal = history.filter(h=>h.method==="tarjeta").reduce((s,h)=>s+h.total,0);
-  const localeMap = { es:"es-ES", ca:"ca-ES", en:"en-GB" };
-  const now = new Date().toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
-  printHTML(`
-    <h2>KOBE BCN</h2>
-    <p class="center muted">Cierre de día — ${now}</p>
-    <hr>
-    <div class="line"><span>Tickets cobrados</span><span>${numTickets}</span></div>
-    <div class="line"><span>Personas atendidas</span><span>${totalPeople || "—"}</span></div>
-    <div class="line"><span>Efectivo</span><span>${eur(cashTotal)}</span></div>
-    <div class="line"><span>Tarjeta</span><span>${eur(cardTotal)}</span></div>
-    <hr>
-    <div class="line total"><span>TOTAL DEL DÍA</span><span>${eur(totalDay)}</span></div>
-    <hr>
-    <p class="center muted">Plato más pedido</p>
-    <p class="center" style="font-weight:800;">${topDish ? topDish + " (" + topQty + "×)" : "—"}</p>
-    <hr>
-  `);
-}
-
-document.getElementById("change-session-btn").addEventListener("click", leaveSession);
-
-document.getElementById("login-form").addEventListener("submit", (e)=>{
-  e.preventDefault();
-  const input = document.getElementById("session-input");
-  const errorEl = document.getElementById("login-error");
-  const code = input.value.trim();
-  if(SESSION_CODES.includes(code)){
-    errorEl.hidden = true;
-    input.value = "";
-    joinSession(code);
-  } else {
-    errorEl.hidden = false;
-    const form = document.getElementById("login-form");
-    form.classList.remove("shake");
-    void form.offsetWidth; // reinicia la animación
-    form.classList.add("shake");
-    input.value = "";
-    input.focus();
-  }
 });
 
 document.getElementById("mobile-ticket-toggle").addEventListener("click", ()=>{
@@ -3677,16 +2918,8 @@ document.getElementById("mobile-ticket-toggle").addEventListener("click", ()=>{
 /* ===================== INIT ===================== */
 applyStaticText();
 connectFirebase();
-
-// Si el dispositivo ya tenía una sesión guardada (código válido), entra
-// directamente sin pedir el código de nuevo.
-(function autoRejoinSession(){
-  let savedCode = null;
-  try{ savedCode = localStorage.getItem("kobe_session_code"); }catch(e){}
-  if(savedCode && SESSION_CODES.includes(savedCode)){
-    joinSession(savedCode);
-  }
-})();
+// Sala única y sin login: entra directo al plano de sala.
+joinSession(DEFAULT_SESSION);
 </script>
 
 <!-- ===================== TECLADO VIRTUAL ===================== -->
@@ -3882,145 +3115,5 @@ connectFirebase();
 })();
 </script>
 
-<!-- ===================== CAJÓN PORTAMONEDAS (USB, vía impresora de tickets) ===================== -->
-<script>
-(function(){
-  "use strict";
-  // La caja está conectada por cable RJ11/RJ12 a la impresora de tickets.
-  // La impresora recibe el comando ESC/POS estándar de "abrir cajón" y
-  // manda el pulso eléctrico que dispara el cajón. Por eso hablamos con la
-  // impresora por USB (WebUSB), no con la caja directamente.
-  const KICK_DRAWER_CMD = new Uint8Array([0x1B, 0x70, 0x00, 0x19, 0xFA]); // ESC p 0 25 250
-
-  let drawerDevice = null;
-  let drawerEndpoint = null;
-  let drawerInterfaceNumber = null;
-
-  // Refleja en el botón "Conectar caja" si la impresora/cajón está realmente
-  // enlazada ahora mismo (verde), vinculada pero sin confirmar aún (ámbar),
-  // o falló la última conexión (rojo) — así se ve de un vistazo sin tener que probar a cobrar.
-  function updateDrawerButtonStatus(state){
-    const btn = document.getElementById("connect-drawer-btn");
-    if(!btn) return;
-    btn.classList.remove("drawer-on", "drawer-off", "drawer-error");
-    if(state === "on"){
-      btn.classList.add("drawer-on");
-      btn.innerHTML = '🗄️ Caja conectada ✓';
-    } else if(state === "error"){
-      btn.classList.add("drawer-error");
-      btn.innerHTML = '🗄️ Caja sin conectar';
-    } else {
-      btn.classList.add("drawer-off");
-      btn.innerHTML = '🗄️ Conectar caja';
-    }
-  }
-
-  function findOutEndpoint(device){
-    for(const conf of device.configurations){
-      for(const iface of conf.interfaces){
-        for(const alt of iface.alternates){
-          const ep = alt.endpoints.find(e=>e.direction === "out");
-          if(ep) return { configurationValue: conf.configurationValue, interfaceNumber: iface.interfaceNumber, endpointNumber: ep.endpointNumber };
-        }
-      }
-    }
-    return null;
-  }
-
-  async function openDeviceForUse(device){
-    const found = findOutEndpoint(device);
-    if(!found) throw new Error("La impresora no tiene un endpoint USB de salida reconocible");
-    await device.open();
-    if(device.configuration === null || device.configuration.configurationValue !== found.configurationValue){
-      await device.selectConfiguration(found.configurationValue);
-    }
-    await device.claimInterface(found.interfaceNumber);
-    drawerDevice = device;
-    drawerEndpoint = found.endpointNumber;
-    drawerInterfaceNumber = found.interfaceNumber;
-    try{ localStorage.setItem("kobe_drawer_paired", "1"); }catch(e){}
-    updateDrawerButtonStatus("on");
-  }
-
-  async function connectDrawerPrinter(showMessages){
-    if(!("usb" in navigator)){
-      if(showMessages) showToast("Este navegador no soporta USB. Usa Chrome o Edge en el ordenador.");
-      return false;
-    }
-    try{
-      const device = await navigator.usb.requestDevice({ filters: [] });
-      await openDeviceForUse(device);
-      if(showMessages) showToast("Impresora / cajón conectados ✓");
-      return true;
-    }catch(err){
-      console.warn("Conexión USB cancelada o fallida:", err);
-      if(showMessages) showToast("No se pudo conectar la impresora");
-      updateDrawerButtonStatus("error");
-      return false;
-    }
-  }
-
-  async function tryAutoReconnectDrawer(){
-    if(!("usb" in navigator)) return;
-    try{
-      const devices = await navigator.usb.getDevices();
-      if(devices.length > 0){
-        await openDeviceForUse(devices[0]);
-      } else {
-        let paired = false;
-        try{ paired = localStorage.getItem("kobe_drawer_paired") === "1"; }catch(e){}
-        updateDrawerButtonStatus(paired ? "error" : "off");
-      }
-    }catch(err){
-      console.warn("No se pudo reconectar la impresora automáticamente:", err);
-      updateDrawerButtonStatus("error");
-    }
-  }
-
-  async function openCashDrawer(){
-    if(!drawerDevice){
-      let paired = false;
-      try{ paired = localStorage.getItem("kobe_drawer_paired") === "1"; }catch(e){}
-      if(!paired){
-        // Nunca se ha vinculado la impresora: no interrumpimos el cobro con
-        // un diálogo de USB; solo avisamos para que se vincule desde "Conectar caja".
-        showToast("Cajón no vinculado — pulsa 🗄️ Conectar caja");
-        return;
-      }
-      const ok = await connectDrawerPrinter(false);
-      if(!ok){ showToast("No se pudo abrir el cajón (reconecta desde 🗄️ Conectar caja)"); return; }
-    }
-    try{
-      await drawerDevice.transferOut(drawerEndpoint, KICK_DRAWER_CMD);
-    }catch(err){
-      console.warn("No se pudo abrir el cajón:", err);
-      showToast("No se pudo abrir el cajón (revisa el cable USB)");
-      updateDrawerButtonStatus("error");
-    }
-  }
-
-  const connectBtn = document.getElementById("connect-drawer-btn");
-  if(connectBtn){
-    connectBtn.addEventListener("click", ()=> connectDrawerPrinter(true));
-  }
-
-  if("usb" in navigator){
-    navigator.usb.addEventListener("disconnect", (e)=>{
-      if(drawerDevice && e.device === drawerDevice){
-        drawerDevice = null;
-        drawerEndpoint = null;
-        showToast("Impresora/cajón desconectados");
-        updateDrawerButtonStatus("error");
-      }
-    });
-  }
-
-  window.openCashDrawer = openCashDrawer;
-  let paired0 = false;
-  try{ paired0 = localStorage.getItem("kobe_drawer_paired") === "1"; }catch(e){}
-  updateDrawerButtonStatus(paired0 ? "error" : "off");
-  tryAutoReconnectDrawer();
-})();
-</script>
 </body>
 </html>
