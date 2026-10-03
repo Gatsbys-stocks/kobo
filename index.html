@@ -454,12 +454,12 @@
     box-shadow:0 3px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.3);
   }
   .variable-btn:active{transform:translateY(1px);}
-  .park-btn-top{
-    background:rgba(199,154,82,0.14);border:1px solid var(--gold-soft);
-    color:var(--gold);padding:9px 14px;border-radius:30px;
+  .paid-btn-top{
+    background:rgba(143,211,158,0.14);border:1px solid rgba(143,211,158,.45);
+    color:#8fd39e;padding:9px 14px;border-radius:30px;
     font-size:13px;font-weight:700;cursor:pointer;
   }
-  .park-btn-top:hover{background:rgba(199,154,82,0.22);}
+  .paid-btn-top:hover{background:rgba(143,211,158,0.22);}
   .clear-mesa-btn{
     background:transparent;border:1px solid rgba(178,58,46,0.4);
     color:#e8a49c;padding:9px 14px;border-radius:30px;font-size:13px;cursor:pointer;
@@ -589,6 +589,8 @@
   }
   .history-summary b{color:#000;font-size:15px;font-family:var(--font-display);}
   .history-list{overflow-y:auto;padding:8px 14px 18px;flex:1;}
+  .history-foot{flex:none;padding:14px 20px;border-top:1px solid var(--paper-line);}
+  .history-foot .tb-btn{width:100%;height:44px;}
   .history-entry{
     border:1px solid var(--paper-2);border-radius:10px;margin:8px 0;overflow:hidden;
   }
@@ -727,7 +729,7 @@
   }
   .people-chip:hover{border-color:var(--gold);background:rgba(199,154,82,0.12);}
 
-  /* prompt (aparcar tiquet) */
+  /* input de texto dentro de un diálogo (p.ej. "otro número" de personas) */
   .prompt-input{
     width:100%;background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.16);
     color:#000;padding:11px 14px;border-radius:10px;font-size:14px;
@@ -735,13 +737,6 @@
   }
   .prompt-input:focus{border-color:var(--gold);}
 
-  /* acciones dentro de un tiquet aparcado */
-  .parked-actions{display:flex;gap:8px;margin-top:10px;}
-  .parked-resume, .parked-delete{
-    flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;
-  }
-  .parked-resume{background:var(--stamp);color:var(--text-hi);}
-  .parked-delete{background:rgba(0,0,0,0.07);color:#000;}
 
   /* scrollbars */
   .cat-rail::-webkit-scrollbar, .items-area::-webkit-scrollbar, .ticket-items::-webkit-scrollbar{width:8px;}
@@ -803,7 +798,7 @@
     .table-title .num{width:32px;height:32px;font-size:18px;}
     .back-btn{padding:8px 12px;font-size:12.5px;}
     .table-actions{width:100%;flex-wrap:wrap;}
-    .clear-mesa-btn, .park-btn-top{flex:1 1 30%;text-align:center;padding:9px 6px;font-size:11.5px;}
+    .clear-mesa-btn, .paid-btn-top{flex:1 1 30%;text-align:center;padding:9px 6px;font-size:11.5px;}
     .search-wrap{width:100%;order:10;}
     .variable-btn{order:9;padding:8px 12px;font-size:11px;}
 
@@ -925,9 +920,8 @@
       <div class="toolbar-btns">
         <button class="tb-btn" id="btn-saldo">Saldo sala</button>
         <button class="tb-btn ghost" id="btn-salon">Salón</button>
-        <button class="tb-btn ghost" id="btn-tickets">Tickets aparcados</button>
+        <button class="tb-btn ghost" id="btn-total-dia">Total día</button>
         <button class="tb-btn ghost" id="btn-juntar">Juntar mesas</button>
-        <button class="tb-btn danger" id="btn-cerrar-dia">🔒 Cerrar día</button>
       </div>
     </div>
   </div>
@@ -946,7 +940,7 @@
       </div>
       <button class="variable-btn" id="variable-btn">➕ <span id="variable-btn-label">Variable</span></button>
       <div class="table-actions">
-        <button class="park-btn-top" id="park-btn">📦 Aparcar</button>
+        <button class="paid-btn-top" id="pagado-btn">✅ Pagado</button>
         <button class="clear-mesa-btn" id="clear-mesa-btn">Vaciar mesa</button>
       </div>
     </div>
@@ -1046,7 +1040,7 @@ let db = null;
 const DEFAULT_SESSION = "0220";
 let currentSession = null;
 let ordersRef = null;
-let parkedRef = null;
+let paidRef = null;
 
 /* ===================== DATA (multi-idioma) ===================== */
 const MENU_SRC = [
@@ -1534,7 +1528,7 @@ const I18N = {
     keyFree: "Libre", keyBusy: "Ocupada",
     btnSaldo: "Saldo sala", btnSalon: "Salón",
     themeNames: ["🎨 Diseño: Kobe original", "🎨 Diseño: Moderno", "🎨 Diseño: Clásico"],
-    btnTickets: "Tickets aparcados", btnJuntar: "Juntar mesas",
+    btnTotalDia: "Total día", btnJuntar: "Juntar mesas",
     back: "← Mesas",
     comanda: "Comanda", comandaBarra: "Comanda de barra",
     searchPh: "Buscar plato, ingrediente…",
@@ -1557,7 +1551,6 @@ const I18N = {
     toastCleared: "Pedido vaciado.",
     toastSaldo: (n,total)=> "Saldo de sala: " + total + " en " + n + " mesa(s)/barra(s) con pedido.",
     toastNoSaldo: "No hay pedidos abiertos en sala.",
-    toastTickets: "Tickets aparcados: función no incluida en esta demo.",
     toastJuntar: "Juntar mesas: función no incluida en esta demo.",
     roleCocina: "Cocina", roleSushi: "Sushi", rolePostre: "Postre", roleComanda: "Comanda",
     kitchenTagline: "Pedidos pendientes",
@@ -1569,22 +1562,14 @@ const I18N = {
     variableNamePrompt: "Escribe el nombre del artículo.",
     variableNamePlaceholder: "Ej. Ración especial, Menú del día…",
     next: "Siguiente",
-    parkBtn: "📦 Aparcar",
-    toastNoOrderToPark: "Esta mesa no tiene pedido para aparcar.",
-    parkPrompt: "Ponle un nombre a este tiquet (ej. Terraza, Para llevar…).",
-    parkPlaceholder: "Nombre del tiquet",
-    parkOk: "Aparcar",
-    toastParked: "Tiquet aparcado.",
-    parkedTitle: "Tickets aparcados",
-    parkedEmpty: "No hay tickets aparcados.",
-    parkedCount: (n)=> n + (n===1 ? " tiquet aparcado" : " tiquets aparcados"),
-    parkedResume: "Recuperar",
-    parkedDelete: "Eliminar",
-    confirmDeleteParked: "¿Eliminar este tiquet aparcado? No se puede deshacer.",
-    deleteOk: "Eliminar",
-    toastParkedDeleted: "Tiquet eliminado.",
-    pickResumeTarget: "Elige la mesa donde quieres recuperar este tiquet.",
-    toastResumed: (label)=> "Tiquet recuperado en " + label + ".",
+    pagadoBtn: "✅ Pagado",
+    toastNoOrderToPay: "Esta mesa no tiene pedido para marcar como pagado.",
+    confirmPay: (label,total)=> "¿Marcar " + label.toLowerCase() + " como pagada? Total: " + total + ". La mesa quedará libre.",
+    payOk: "Pagado",
+    toastPaid: "Mesa marcada como pagada.",
+    paidTodayTitle: "Total día",
+    paidTodayEmpty: "Todavía no hay ninguna mesa pagada hoy.",
+    paidTodayCount: (n)=> n + (n===1 ? " mesa pagada hoy" : " mesas pagadas hoy"),
     pickSourceMerge: "Elige la mesa de ORIGEN (se vaciará).",
     pickDestMerge: "Elige la mesa de DESTINO (se juntará aquí).",
     confirmMerge: (a,b)=> "¿Juntar todo el pedido de " + a.toLowerCase() + " con " + b.toLowerCase() + "? " + a + " quedará libre.",
@@ -1595,7 +1580,7 @@ const I18N = {
     mesaLabel: "Mesa", barraLabel: "Barra",
     viewOrder: "Ver comanda",
     btnCerrarDia: "🔒 Cerrar día",
-    confirmCloseDay: "¿Cerrar el día? Se vaciarán todas las mesas, la barra y los tickets aparcados. Esta acción no se puede deshacer.",
+    confirmCloseDay: "¿Cerrar el día? Se vaciarán todas las mesas y la barra, y se borrará el resumen de hoy (mesas pagadas). Esta acción no se puede deshacer.",
     closeDayOk: "Cerrar día",
     toastDayClosed: "Día cerrado. Todo reseteado.",
     syncOn: "Sincronizado", syncOff: "Modo local (sin sincronizar)",
@@ -1608,7 +1593,7 @@ const I18N = {
     keyFree: "Lliure", keyBusy: "Ocupada",
     btnSaldo: "Saldo de sala", btnSalon: "Sala",
     themeNames: ["🎨 Disseny: Kobe original", "🎨 Disseny: Modern", "🎨 Disseny: Clàssic"],
-    btnTickets: "Tiquets aparcats", btnJuntar: "Ajuntar taules",
+    btnTotalDia: "Total del dia", btnJuntar: "Ajuntar taules",
     back: "← Taules",
     comanda: "Comanda", comandaBarra: "Comanda de barra",
     searchPh: "Cerca plat, ingredient…",
@@ -1631,7 +1616,6 @@ const I18N = {
     toastCleared: "Comanda buidada.",
     toastSaldo: (n,total)=> "Saldo de sala: " + total + " en " + n + " taula(es)/barra(es) amb comanda.",
     toastNoSaldo: "No hi ha comandes obertes a la sala.",
-    toastTickets: "Tiquets aparcats: funció no inclosa en aquesta demo.",
     toastJuntar: "Ajuntar taules: funció no inclosa en aquesta demo.",
     roleCocina: "Cuina", roleSushi: "Sushi", rolePostre: "Postres", roleComanda: "Comanda",
     kitchenTagline: "Comandes pendents",
@@ -1643,22 +1627,14 @@ const I18N = {
     variableNamePrompt: "Escriu el nom de l'article.",
     variableNamePlaceholder: "Ex. Ració especial, Menú del dia…",
     next: "Següent",
-    parkBtn: "📦 Aparcar",
-    toastNoOrderToPark: "Aquesta taula no té comanda per aparcar.",
-    parkPrompt: "Posa un nom a aquest tiquet (ex. Terrassa, Per emportar…).",
-    parkPlaceholder: "Nom del tiquet",
-    parkOk: "Aparcar",
-    toastParked: "Tiquet aparcat.",
-    parkedTitle: "Tiquets aparcats",
-    parkedEmpty: "No hi ha tiquets aparcats.",
-    parkedCount: (n)=> n + (n===1 ? " tiquet aparcat" : " tiquets aparcats"),
-    parkedResume: "Recuperar",
-    parkedDelete: "Eliminar",
-    confirmDeleteParked: "Vols eliminar aquest tiquet aparcat? No es pot desfer.",
-    deleteOk: "Eliminar",
-    toastParkedDeleted: "Tiquet eliminat.",
-    pickResumeTarget: "Tria la taula on vols recuperar aquest tiquet.",
-    toastResumed: (label)=> "Tiquet recuperat a " + label + ".",
+    pagadoBtn: "✅ Pagat",
+    toastNoOrderToPay: "Aquesta taula no té comanda per marcar com a pagada.",
+    confirmPay: (label,total)=> "Vols marcar " + label.toLowerCase() + " com a pagada? Total: " + total + ". La taula quedarà lliure.",
+    payOk: "Pagat",
+    toastPaid: "Taula marcada com a pagada.",
+    paidTodayTitle: "Total del dia",
+    paidTodayEmpty: "Encara no hi ha cap taula pagada avui.",
+    paidTodayCount: (n)=> n + (n===1 ? " taula pagada avui" : " taules pagades avui"),
     pickSourceMerge: "Tria la taula d'ORIGEN (es buidarà).",
     pickDestMerge: "Tria la taula de DESTÍ (s'ajuntarà aquí).",
     confirmMerge: (a,b)=> "Vols ajuntar tota la comanda de " + a.toLowerCase() + " amb " + b.toLowerCase() + "? " + a + " quedarà lliure.",
@@ -1669,7 +1645,7 @@ const I18N = {
     mesaLabel: "Taula", barraLabel: "Barra",
     viewOrder: "Veure comanda",
     btnCerrarDia: "🔒 Tancar el dia",
-    confirmCloseDay: "Vols tancar el dia? Es buidaran totes les taules, la barra i els tiquets aparcats. Aquesta acció no es pot desfer.",
+    confirmCloseDay: "Vols tancar el dia? Es buidaran totes les taules i la barra, i s'esborrarà el resum d'avui (taules pagades). Aquesta acció no es pot desfer.",
     closeDayOk: "Tancar el dia",
     toastDayClosed: "Dia tancat. Tot reiniciat.",
     syncOn: "Sincronitzat", syncOff: "Mode local (sense sincronitzar)",
@@ -1682,7 +1658,7 @@ const I18N = {
     keyFree: "Free", keyBusy: "Occupied",
     btnSaldo: "Floor balance", btnSalon: "Floor",
     themeNames: ["🎨 Theme: Kobe original", "🎨 Theme: Modern", "🎨 Theme: Classic"],
-    btnTickets: "Parked tickets", btnJuntar: "Merge tables",
+    btnTotalDia: "Day total", btnJuntar: "Merge tables",
     back: "← Tables",
     comanda: "Order", comandaBarra: "Bar order",
     searchPh: "Search dish, ingredient…",
@@ -1705,7 +1681,6 @@ const I18N = {
     toastCleared: "Order cleared.",
     toastSaldo: (n,total)=> "Floor balance: " + total + " across " + n + " table(s)/bar seat(s) with an open order.",
     toastNoSaldo: "No open orders on the floor.",
-    toastTickets: "Parked tickets: not included in this demo.",
     toastJuntar: "Merge tables: not included in this demo.",
     roleCocina: "Kitchen", roleSushi: "Sushi", rolePostre: "Desserts", roleComanda: "Orders",
     kitchenTagline: "Pending orders",
@@ -1717,22 +1692,14 @@ const I18N = {
     variableNamePrompt: "Enter the item name.",
     variableNamePlaceholder: "E.g. Special portion, Set menu…",
     next: "Next",
-    parkBtn: "📦 Park",
-    toastNoOrderToPark: "This table has no order to park.",
-    parkPrompt: "Give this ticket a name (e.g. Terrace, Takeaway…).",
-    parkPlaceholder: "Ticket name",
-    parkOk: "Park",
-    toastParked: "Ticket parked.",
-    parkedTitle: "Parked tickets",
-    parkedEmpty: "No parked tickets.",
-    parkedCount: (n)=> n + (n===1 ? " parked ticket" : " parked tickets"),
-    parkedResume: "Resume",
-    parkedDelete: "Delete",
-    confirmDeleteParked: "Delete this parked ticket? This can't be undone.",
-    deleteOk: "Delete",
-    toastParkedDeleted: "Ticket deleted.",
-    pickResumeTarget: "Pick the table to resume this ticket on.",
-    toastResumed: (label)=> "Ticket resumed on " + label + ".",
+    pagadoBtn: "✅ Paid",
+    toastNoOrderToPay: "This table has no order to mark as paid.",
+    confirmPay: (label,total)=> "Mark " + label.toLowerCase() + " as paid? Total: " + total + ". The table will be freed up.",
+    payOk: "Paid",
+    toastPaid: "Table marked as paid.",
+    paidTodayTitle: "Day total",
+    paidTodayEmpty: "No tables paid yet today.",
+    paidTodayCount: (n)=> n + (n===1 ? " table paid today" : " tables paid today"),
     pickSourceMerge: "Pick the SOURCE table (it will be cleared).",
     pickDestMerge: "Pick the DESTINATION table (everything moves here).",
     confirmMerge: (a,b)=> "Merge the whole order from " + a.toLowerCase() + " into " + b.toLowerCase() + "? " + a + " will become free.",
@@ -1743,7 +1710,7 @@ const I18N = {
     mesaLabel: "Table", barraLabel: "Bar",
     viewOrder: "View order",
     btnCerrarDia: "🔒 Close day",
-    confirmCloseDay: "Close the day? All tables, the bar, and any parked tickets will be cleared. This can't be undone.",
+    confirmCloseDay: "Close the day? All tables and the bar will be cleared, and today's summary (paid tables) will be deleted. This can't be undone.",
     closeDayOk: "Close day",
     toastDayClosed: "Day closed. Everything reset.",
     syncOn: "Synced", syncOff: "Local mode (not synced)",
@@ -1814,8 +1781,8 @@ function wholeWordIncludes(text, query){
 function isBarra(id){ return id >= 500; }
 function tableLabel(id){ return (isBarra(id) ? I18N[currentLang].barraLabel : I18N[currentLang].mesaLabel) + " " + id; }
 
-let parked = [];              // tiquets aparcados: { id, label, ts, items:{itemId:qty}, total }
-let parkedCounter = 1;
+let paidToday = [];           // mesas pagadas hoy: { id, label, ts, items:{itemId:qty}, total }
+let paidCounter = 1;
 
 /* ===================== HELPERS ===================== */
 const eur = n => n.toFixed(2).replace(".", ",") + " €";
@@ -1849,7 +1816,7 @@ function updateSyncBadge(on){
   el.classList.toggle("on", on);
   el.classList.toggle("off", !on);
 }
-function parkedFromSnapshot(val){
+function paidFromSnapshot(val){
   if(!val) return [];
   return Object.keys(val).sort().map(k => ({
     id: k, label: val[k].label, ts: val[k].ts,
@@ -1899,7 +1866,7 @@ function connectFirebase(){
 function attachSessionListeners(code){
   detachSessionListeners();
   ordersRef = db.ref("sessions/" + code + "/orders");
-  parkedRef = db.ref("sessions/" + code + "/parked");
+  paidRef = db.ref("sessions/" + code + "/paid");
   ordersRef.on("value", snap=>{
     const val = snap.val() || {};
     const next = {};
@@ -1907,22 +1874,22 @@ function attachSessionListeners(code){
     orders = next;
     refreshAfterOrdersChange();
   });
-  parkedRef.on("value", snap=>{
-    parked = parkedFromSnapshot(snap.val());
+  paidRef.on("value", snap=>{
+    paidToday = paidFromSnapshot(snap.val());
   });
 }
 function detachSessionListeners(){
   if(ordersRef) ordersRef.off();
-  if(parkedRef) parkedRef.off();
+  if(paidRef) paidRef.off();
   ordersRef = null;
-  parkedRef = null;
+  paidRef = null;
 }
 // Entra en la sala compartida (una única sesión fija, sin código).
 function joinSession(code){
   currentSession = code;
   orders = {};
   ALL_IDS.forEach(id => orders[id] = {});
-  parked = [];
+  paidToday = [];
   if(firebaseReady){
     attachSessionListeners(code);
   }
@@ -2058,47 +2025,33 @@ function writeClearTable(tableId){
 function writeCloseDay(){
   if(firebaseReady && currentSession){
     db.ref("sessions/" + currentSession + "/orders").remove();
-    db.ref("sessions/" + currentSession + "/parked").remove();
+    db.ref("sessions/" + currentSession + "/paid").remove();
   } else {
     orders = {};
     ALL_IDS.forEach(id => orders[id] = {});
-    parked = [];
+    paidToday = [];
   }
 }
-function writePark(tableId, label){
+// Marca una mesa como pagada: la apunta en el resumen del día (con lo que
+// llevaba y el total) y la deja libre, igual que "Vaciar mesa" pero con
+// registro. No cobra ni imprime nada, solo sirve para llevar la cuenta.
+function writePaid(tableId){
   const items = Object.assign({}, orders[tableId]);
   const localeMap = { es:"es-ES", ca:"ca-ES", en:"en-GB" };
   const record = {
-    label: label,
+    label: tableLabel(tableId),
     ts: new Date().toLocaleString(localeMap[currentLang],{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}),
     items: items,
     total: tableTotal(tableId)
   };
   if(firebaseReady && currentSession){
-    db.ref("sessions/" + currentSession + "/parked").push(record);
+    db.ref("sessions/" + currentSession + "/paid").push(record);
     db.ref("sessions/" + currentSession + "/orders/" + tableId).remove();
   } else {
-    record.id = "p" + (parkedCounter++);
-    parked.push(record);
+    record.id = "d" + (paidCounter++);
+    paidToday.push(record);
     orders[tableId] = {};
   }
-}
-function writeRemoveParked(key){
-  if(firebaseReady && currentSession){
-    db.ref("sessions/" + currentSession + "/parked/" + key).remove();
-  } else {
-    parked = parked.filter(p => p.id !== key);
-  }
-}
-function resumeParked(key, targetId){
-  const rec = parked.find(p => p.id === key);
-  if(!rec) return;
-  Object.keys(rec.items).forEach(id=>{
-    const addQty = rec.items[id];
-    const cur = orders[targetId][id] || 0;
-    writeQty(targetId, id, cur + addQty);
-  });
-  writeRemoveParked(key);
 }
 function mergeTables(source, dest){
   const items = orders[source] || {};
@@ -2193,33 +2146,6 @@ function showConfirm(msg, okLabel, onYes){
     overlay.remove();
     onYes();
   });
-}
-
-function showPrompt(msg, placeholder, okLabel, onSubmit){
-  const overlay = document.createElement("div");
-  overlay.className = "confirm-overlay";
-  overlay.innerHTML = `
-    <div class="confirm-box">
-      <p>${msg}</p>
-      <input type="text" class="prompt-input" placeholder="${placeholder}" maxlength="30">
-      <div class="confirm-actions">
-        <button class="confirm-cancel">${I18N[currentLang].cancel}</button>
-        <button class="confirm-ok">${okLabel}</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  const input = overlay.querySelector(".prompt-input");
-  setTimeout(()=>input.focus(), 50);
-  const submit = ()=>{
-    const val = input.value.trim();
-    overlay.remove();
-    onSubmit(val);
-  };
-  overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
-  overlay.querySelector(".confirm-cancel").addEventListener("click", ()=>overlay.remove());
-  overlay.querySelector(".confirm-ok").addEventListener("click", submit);
-  input.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); submit(); } });
 }
 
 // Diálogo "¿Cuántas personas son?" — se muestra al abrir desde Comanda una mesa vacía
@@ -2375,7 +2301,7 @@ function openVariableItemFlow(){
   nameInput.addEventListener("keydown", (e)=>{ if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); goToPrice(); } });
 }
 
-// Selector de mesa/barra genérico (para juntar mesas y recuperar tiquets aparcados).
+// Selector de mesa/barra genérico (para juntar mesas).
 function openTablePicker(promptText, onPick, excludeId){
   const overlay = document.createElement("div");
   overlay.className = "confirm-overlay";
@@ -2410,7 +2336,7 @@ document.getElementById("btn-saldo").addEventListener("click", ()=>{
     : I18N[currentLang].toastNoSaldo);
 });
 document.getElementById("btn-salon").addEventListener("click", cycleTheme);
-document.getElementById("btn-tickets").addEventListener("click", openParkedList);
+document.getElementById("btn-total-dia").addEventListener("click", openPaidToday);
 document.getElementById("btn-juntar").addEventListener("click", ()=>{
   openTablePicker(I18N[currentLang].pickSourceMerge, (source)=>{
     if(tableCount(source) === 0){
@@ -2447,17 +2373,16 @@ function applyStaticText(){
   document.getElementById("key-busy").textContent = t.keyBusy;
   document.getElementById("btn-saldo").textContent = t.btnSaldo;
   document.getElementById("btn-salon").textContent = t.btnSalon;
-  document.getElementById("btn-tickets").textContent = t.btnTickets;
+  document.getElementById("btn-total-dia").textContent = t.btnTotalDia;
   document.getElementById("btn-juntar").textContent = t.btnJuntar;
   document.getElementById("back-btn").textContent = t.back;
   document.getElementById("search-input").placeholder = t.searchPh;
   document.getElementById("variable-btn-label").textContent = t.variableBtn;
-  document.getElementById("park-btn").textContent = t.parkBtn;
+  document.getElementById("pagado-btn").textContent = t.pagadoBtn;
   document.getElementById("clear-mesa-btn").textContent = t.clear;
   document.getElementById("ticket-brand-mark").textContent = t.ticketMark;
   document.getElementById("ticket-total-label").textContent = t.total;
   document.getElementById("mobile-ticket-label").textContent = t.viewOrder;
-  document.getElementById("btn-cerrar-dia").textContent = t.btnCerrarDia;
   updateSyncBadge(firebaseReady);
   document.querySelectorAll(".lang-btn").forEach(b=>{
     b.classList.toggle("active", b.dataset.lang === currentLang);
@@ -2495,13 +2420,16 @@ document.querySelectorAll(".lang-btn").forEach(btn=>{
   btn.addEventListener("click", ()=>setLang(btn.dataset.lang));
 });
 
-function openParkedList(){
+// Resumen del día: todas las mesas marcadas como pagadas hoy, lo que
+// llevaba cada una y el total. Desde aquí también se cierra el día.
+function openPaidToday(){
   const overlay = document.createElement("div");
   overlay.className = "confirm-overlay";
 
-  const listHtml = parked.length === 0
-    ? `<div class="history-empty">${I18N[currentLang].parkedEmpty}</div>`
-    : [...parked].reverse().map(p => {
+  const dayTotal = paidToday.reduce((s,p)=>s+p.total,0);
+  const listHtml = paidToday.length === 0
+    ? `<div class="history-empty">${I18N[currentLang].paidTodayEmpty}</div>`
+    : [...paidToday].reverse().map(p => {
         const itemsHtml = Object.keys(p.items).map(id=>{
           const item = FLAT.find(f=>f.id===id);
           if(!item) return "";
@@ -2514,7 +2442,7 @@ function openParkedList(){
           `;
         }).join("");
         return `
-          <div class="history-entry" data-pid="${p.id}">
+          <div class="history-entry">
             <div class="history-entry-head">
               <div>
                 <div class="htitle">${p.label}</div>
@@ -2523,13 +2451,7 @@ function openParkedList(){
               <div class="htotal">${eur(p.total)}</div>
               <div class="chev">▾</div>
             </div>
-            <div class="history-entry-detail">
-              ${itemsHtml}
-              <div class="parked-actions">
-                <button class="parked-resume" data-pid="${p.id}">${I18N[currentLang].parkedResume}</button>
-                <button class="parked-delete" data-pid="${p.id}">${I18N[currentLang].parkedDelete}</button>
-              </div>
-            </div>
+            <div class="history-entry-detail">${itemsHtml}</div>
           </div>
         `;
       }).join("");
@@ -2537,45 +2459,34 @@ function openParkedList(){
   overlay.innerHTML = `
     <div class="history-box">
       <div class="history-head">
-        <h3>${I18N[currentLang].parkedTitle}</h3>
-        <button id="parked-close">✕</button>
+        <h3>${I18N[currentLang].paidTodayTitle}</h3>
+        <button id="paid-today-close">✕</button>
       </div>
       <div class="history-summary">
-        <span>${I18N[currentLang].parkedCount(parked.length)}</span>
+        <span>${I18N[currentLang].paidTodayCount(paidToday.length)}</span>
+        <b>${eur(dayTotal)}</b>
       </div>
       <div class="history-list">${listHtml}</div>
+      <div class="history-foot">
+        <button class="tb-btn danger" id="btn-cerrar-dia">${I18N[currentLang].btnCerrarDia}</button>
+      </div>
     </div>
   `;
   document.body.appendChild(overlay);
 
   overlay.addEventListener("click", (e)=>{ if(e.target===overlay) overlay.remove(); });
-  overlay.querySelector("#parked-close").addEventListener("click", ()=>overlay.remove());
+  overlay.querySelector("#paid-today-close").addEventListener("click", ()=>overlay.remove());
   overlay.querySelectorAll(".history-entry-head").forEach(head=>{
     head.addEventListener("click", ()=>{
       head.parentElement.classList.toggle("open");
     });
   });
-  overlay.querySelectorAll(".parked-resume").forEach(btn=>{
-    btn.addEventListener("click", (e)=>{
-      e.stopPropagation();
-      const pid = btn.dataset.pid;
+  overlay.querySelector("#btn-cerrar-dia").addEventListener("click", ()=>{
+    showConfirm(I18N[currentLang].confirmCloseDay, I18N[currentLang].closeDayOk, ()=>{
+      writeCloseDay();
       overlay.remove();
-      openTablePicker(I18N[currentLang].pickResumeTarget, (targetId)=>{
-        resumeParked(pid, targetId);
-        showToast(I18N[currentLang].toastResumed(tableLabel(targetId)));
-        openTable(targetId);
-      });
-    });
-  });
-  overlay.querySelectorAll(".parked-delete").forEach(btn=>{
-    btn.addEventListener("click", (e)=>{
-      e.stopPropagation();
-      const pid = btn.dataset.pid;
-      showConfirm(I18N[currentLang].confirmDeleteParked, I18N[currentLang].deleteOk, ()=>{
-        writeRemoveParked(pid);
-        overlay.remove();
-        showToast(I18N[currentLang].toastParkedDeleted);
-      });
+      showToast(I18N[currentLang].toastDayClosed);
+      backToHome();
     });
   });
 }
@@ -2889,16 +2800,15 @@ document.getElementById("variable-btn").addEventListener("click", ()=>{
   openVariableItemFlow();
 });
 
-document.getElementById("park-btn").addEventListener("click", ()=>{
+document.getElementById("pagado-btn").addEventListener("click", ()=>{
   const t = currentTable;
   if(tableCount(t)===0){
-    showToast(I18N[currentLang].toastNoOrderToPark);
+    showToast(I18N[currentLang].toastNoOrderToPay);
     return;
   }
-  showPrompt(I18N[currentLang].parkPrompt, I18N[currentLang].parkPlaceholder, I18N[currentLang].parkOk, (label)=>{
-    const finalLabel = label || tableLabel(t);
-    writePark(t, finalLabel);
-    showToast(I18N[currentLang].toastParked);
+  showConfirm(I18N[currentLang].confirmPay(tableLabel(t), eur(tableTotal(t))), I18N[currentLang].payOk, ()=>{
+    writePaid(t);
+    showToast(I18N[currentLang].toastPaid);
     backToHome();
   });
 });
@@ -2911,14 +2821,6 @@ document.getElementById("clear-mesa-btn").addEventListener("click", ()=>{
   showConfirm(I18N[currentLang].confirmClear(tableLabel(currentTable)), I18N[currentLang].clearOk, ()=>{
     writeClearTable(currentTable);
     showToast(I18N[currentLang].toastCleared);
-  });
-});
-
-document.getElementById("btn-cerrar-dia").addEventListener("click", ()=>{
-  showConfirm(I18N[currentLang].confirmCloseDay, I18N[currentLang].closeDayOk, ()=>{
-    writeCloseDay();
-    showToast(I18N[currentLang].toastDayClosed);
-    backToHome();
   });
 });
 
