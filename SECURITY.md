@@ -1,21 +1,38 @@
-# Security Policy
+# Seguridad — Firebase Realtime Database
 
-## Supported Versions
+Esta app usa Firebase (autenticación anónima + Realtime Database) para
+sincronizar los pedidos entre los móviles del personal. No hay contraseñas:
+cualquiera que abra la página entra como usuario anónimo autenticado.
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+## Reglas de la base de datos
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+El archivo [`database.rules.json`](./database.rules.json) en este repo es
+la versión que debería estar publicada en Firebase. Hace dos cosas:
 
-## Reporting a Vulnerability
+1. Deniega todo por defecto, y solo permite leer/escribir dentro de
+   `sessions/{código}` (en vez de toda la base de datos, como estaba antes).
+2. Valida que lo que se guarda en los pedidos tenga la forma esperada
+   (cantidades numéricas, notas de texto cortas, etc.), para evitar que una
+   escritura rara corrompa los datos.
 
-Use this section to tell people how to report a vulnerability.
+Como la app no pide login, estas reglas no distinguen "quién" escribe —
+solo que sea alguien que ha cargado la página (usuario anónimo válido) y
+que escriba dentro de la zona de `sessions`. Es una mejora grande frente a
+dejar toda la base abierta, pero no sustituye a tener un control de acceso
+real si en el futuro se necesita más seguridad (por ejemplo, Firebase App
+Check, para bloquear bots que solo conocen la URL del proyecto).
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+## Cómo publicar un cambio en las reglas
+
+Firebase no lee este archivo automáticamente: hay que pegarlo a mano en la
+consola cada vez que cambie.
+
+1. Abre la consola de Firebase del proyecto:
+   https://console.firebase.google.com/project/kobo-2aea4/database/kobo-2aea4-default-rtdb/rules
+2. Borra el contenido del editor y pega el contenido de `database.rules.json`.
+3. Pulsa **Publicar**.
+
+## Reportar una vulnerabilidad
+
+Si detectas un problema de seguridad en esta app, abre un issue en este
+repositorio describiéndolo.
